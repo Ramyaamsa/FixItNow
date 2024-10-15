@@ -1,0 +1,87 @@
+<div class="col-sm-12 pt-2">
+    <div class="card card-outline card-cyan">
+        <form id="log_report_form" name="log_report_form" method="POST" target="_blank" class="form-horizontal">
+            <div class="card-header">
+                <h3 class="card-title pt-1">Log</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="plant_name">Plant</label>
+                            <select class="select2" id="plant_name" name="plant_name">
+                                <option value="">~~ Select Plant ~~</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="department_name">Department</label>
+                            <select class="select2" id="department_name" name="department_name">
+                                <option value="">~~ Select Department~~</option>
+                                <!-- <option value="all">All</option> -->
+                            </select>
+                        </div>
+                        <!-- <div class="form-group">
+							<label for="location_name">Location</label>
+							<select id="location_name" name="location_name[]" class="multiselect" multiple>
+								<option value="">~~ Select Location ~~</option>
+							</select>
+						</div> -->
+                        <div class="form-group">
+                            <label for="equipment_group_name">Asset Group</label>
+                            <select id="equipment_group_name" name="equipment_group_name[]" multiple
+                                class="multiselect required">
+                                <option value="all" selected>All</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="period_id">Period</label>
+                            <select id="period_id" name="period_id" class="select2">
+                                <option value="from_to" selected>From To</option>
+                                <option value="sel_date">Date</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="asset_code"> Asset Code</label>
+                            <select class="multiselect" id="asset_code" name="asset_code[]"
+                                placeholder="Select Asset Id" multiple>
+                                <option value="all">All</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group from_date_div">
+                            <label class="from_date_label">From Date</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control form-control-sm datepicker" id="from_date"
+                                    name="from_date">
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <i class="far fa-calendar"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group to_date_div">
+                            <label for="to_date_label">To Date</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control form-control-sm datepicker" id="to_date"
+                                    name="to_date">
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-center">
+                <button type="submit" class="btn btn-info btn-sm">View</button>&nbsp;
+                <button type="button" class="btn btn-sm btn-default" id="btn_cancel" (click)="cancel()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>

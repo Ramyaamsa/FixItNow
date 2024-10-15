@@ -1,0 +1,287 @@
+<div class="col-sm-12 pt-2">
+	<div class="card card-outline card-cyan">
+	  <form id="pm_report_form" name="pm_report_form" class="form-horizontal" method="POST" target="_blank"
+		class="form-horizontal">
+		<div class="card-header">
+		  <h3 class="card-title pt-1"> PM </h3>
+		  <div class="card-tools d-flex">
+			<div class="custom-control custom-radio mr-4">
+			  <input class="custom-control-input custom-control-input-success" type="radio" id="report_type_detail"
+				name="report_type" value="detail" (click)="getReportType($event,'')" checked>
+			  <label for="report_type_detail" class="custom-control-label">Detail</label>
+			</div>
+			<div class="custom-control custom-radio mr-4">
+			  <input class="custom-control-input custom-control-input-success" type="radio" id="report_type_summary"
+			  	name="report_type" value="summary" (click)="getReportType($event,'Summary')">
+			  <label for="report_type_summary" class="custom-control-label">Summary</label>
+			</div>
+			<div class="custom-control custom-radio mr-4">
+				<input class="custom-control-input custom-control-input-success" type="radio" id="report_type_cumulative"
+					name="report_type" value="cumulative" (click)="getReportType($event,'Cumulative')">
+				<label for="report_type_cumulative" class="custom-control-label">Cumulative</label>
+			  </div>
+			<div class="custom-control custom-radio ml-2 mr-4">
+			  <input class="custom-control-input custom-control-input-success" type="radio" id="report_type_task"
+				name="report_type" value="task" (click)="getReportType($event,'Task')">
+			  <label for="report_type_task" class="custom-control-label">Task</label>
+			</div>
+			<!-- <div class="custom-control custom-radio ml-2 mr-4">
+			  <input class="custom-control-input custom-control-input-success" type="radio" id="report_type_delete_log"
+				name="report_type" value="delete_log" (click)="getReportType($event,'Delete Log')">
+			  <label for="report_type_delete_log" class="custom-control-label">Delete Log</label>
+			</div> -->
+			<div class="custom-control custom-radio ml-2 mr-4">
+			  <input class="custom-control-input custom-control-input-success" type="radio" id="report_type_spares"
+				name="report_type" value="spares" (click)="getReportType($event,'Spare Consumption')">
+			  <label for="report_type_spares" class="custom-control-label">Spares</label>
+			</div>
+		  </div>
+		</div>
+		<div class="card-body p-2">
+		  <!-- <button type="button" class="btn btn-xs btn-danger float-right btn-flat" id="filter_option" data-toggle="modal"
+			data-target="#modal_filter_options"><i class="fas fa-filter"></i></button> -->
+		  <div class="row">
+			<div class="col-sm-4">
+			  <div class="form-group">
+				<label for="comapny_name">Company</label>
+				<select id="company_name" name="company_name" class="select2 required" style="width:100%;">
+				  <option value="" selected>All</option>
+				  <option *ngFor="let company of companyList" value="{{ company.company_id }}">
+					{{ company.company_code }}-{{ company.company_name }}</option>
+				</select>
+			  </div>
+			  <div class="form-group">
+				<label for="bu_name">Bu</label>
+				<select class="select2 required" id="bu_name" name="bu_name">
+				  <option value="" selected>All</option>
+				  <option *ngFor="let buList of buList" value="{{ buList.bu_id }}">
+					{{ buList.bu_code }}-{{ buList.bu_name }}</option>
+				</select>
+			  </div>
+			  <div class="form-group">
+				<label for="plant_name">Plant</label>
+				<select class="select2 required" id="plant_name" name="plant_name">
+				  <option value="" selected>All</option>
+				  <option *ngFor="let plantList of plantList" value="{{ plantList.plant_id }}"
+					[attr.plant_code]="plantList.plant_code">
+					{{ plantList.plant_code }}-{{ plantList.plant_name }}</option>
+				</select>
+			  </div>
+			  <div class="form-group">
+				<label for="department_name">Department</label>
+				<select class="select2 required" id="department_name" name="department_name">
+				  <option value="" selected>All</option>
+				  <option *ngFor="let departmentList of departmentList" value="{{ departmentList.department_id }}">
+					{{ departmentList.department_code }}-{{ departmentList.department_name }}</option>
+				</select>
+			  </div>
+			  <div class="form-group">
+				<label for="location_name"> Location </label>
+				<select id="location_name" name="location_name" class="select2 required">
+				  <option value="" selected>All</option>
+				  <option *ngFor="let location of locationList" value="{{ location.location_id }}">
+					{{ location.location_code }} - {{ location.location_name }}
+				  </option>
+				</select>
+			  </div>
+			</div>
+			<div class="col-sm-4">
+			  <div class="form-group">
+				<label for="asset_group_name">Asset Group</label>
+				<select id="asset_group_name" name="asset_group_name" class="select2 required">
+				  <option value="" selected>All</option>
+				  <option *ngFor="let eg of assetgroupList" value="{{ eg.asset_group_id }}">
+					{{ eg.asset_group_code }} - {{ eg.asset_group_name }}
+				  </option>
+				</select>
+			  </div>
+			  <!-- <div class="form-group">
+							  <label for="group_by">Group By</label>
+							  <select class="select2 required" id="group_by" name="group_by">
+								  <option value="">~~ Select ~~</option>
+							  </select>
+						  </div> -->
+			  <div class="form-group">
+				<label for="asset_name">Asset</label>
+				<select id="asset_name" name="asset_name" class="select2 required">
+				  <option value="" selected>All</option>
+				  <option *ngFor="let asset of assetList" value="{{ asset.asset_id }}">
+					{{ asset.asset_code }}
+				  </option>
+				</select>
+			  </div>
+			  <div class="form-group" id="spare_div" style="display: none;">
+				<label for="spare_name">Spare</label>
+				<select id="spare_name" name="spare_name" class="select2 required">
+				  <option value="" selected>All</option>
+				  <option *ngFor="let spare of spareList" value="{{ spare.spare_id }}">
+					{{ spare.spare_code }} - {{ spare.spare_name }}
+				  </option>
+				</select>
+			  </div>
+			  <div class="form-group" id="engineer_div">
+				<label for="engineer_name">Engineer</label>
+				<select id="engineer_name" name="engineer_name" class="select2 required">
+				  <option value="" selected>All</option>
+				  <option *ngFor="let engineer of engineerList" value="{{ engineer.employee_id }}">
+					{{ engineer.employee_code }} - {{ engineer.employee_name }}
+				  </option>
+				</select>
+			  </div>
+			  <div class="form-group" id="pm_service_div">
+				<label for="pm_service_name">Service</label>
+				<select id="pm_service_name" name="pm_service_name" class="select2 required">
+					<option value="" selected>All</option>
+					<option *ngFor="let service of serviceList" value="{{ service.service_id }}">
+					  {{ service.service_code }}-{{ service.service_name }}
+					</option>
+				</select>
+			  </div>
+			  <div class="form-group" id="pm_service_task_div">
+				<label for="pm_service_task">Task</label>
+				<select id="pm_service_task" name="pm_service_task" class="select2 required">
+				  <option value="" selected>All</option>
+				  <option *ngFor="let task of TaskList" value="{{ task.task_id }}">
+					{{ task.task_name }}
+				  </option>
+				</select>
+			  </div>
+			</div>
+			<div class="col-sm-4">
+				<div class="form-group" id="group_by_div" style="display: none;">
+					<label for="group_by">Group By</label>
+					<select id="group_by" name="group_by" class="select2">
+						<option value="company">Company</option>
+						<option value="bu">Bu</option>
+						<option value="plant">Plant</option>
+						<option value="department">Department</option>
+						<option value="asset_group">Asset Group</option>
+						<option value="asset" selected>Asset</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label for="period_id">Period</label>
+					<select id="period_id" name="period_id" class="select2">
+					<option value="from_to" selected>From To</option>
+					<option value="date">Date</option>
+					</select>
+				</div>
+				<div class="form-group from_date_div">
+					<label class="from_date_label">From Date</label>
+					<div class="input-group">
+					<input type="text" class="form-control form-control-sm datepicker" id="from_date" name="from_date">
+					<div class="input-group-append">
+						<div class="input-group-text">
+						<i class="far fa-calendar"></i>
+						</div>
+					</div>
+					</div>
+				</div>
+				<div class="form-group to_date_div">
+					<label for="to_date_label">To Date</label>
+					<div class="input-group">
+					<input type="text" class="form-control form-control-sm datepicker" id="to_date" name="to_date">
+					<div class="input-group-append">
+						<div class="input-group-text">
+						<i class="fa fa-calendar"></i>
+						</div>
+					</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-12">
+			  <div class="form-group">
+				<label for="rpt_fields">Report Fields</label>
+				<select name="rpt_fields[]" id="rpt_fields" class="multiselect" multiple>
+				  <option *ngFor="let report of reportFilds" value="{{ report.field_code }}"
+					[attr.selected]="report.is_show === 'yes' ? true : null"> {{ report.field_name }}</option>
+				  <!-- <option *ngFor="let report of reportFilds" value="{{ report.field_code }}"> {{ report.field_name }}</option> -->
+				</select>
+			  </div>
+			</div>
+		  </div>
+		  <!-- Report Filter Modal -->
+		  <div class="modal fade" id="modal_filter_options" data-backdrop="static">
+			<div class="modal-dialog" style="min-width: 80%;">
+			  <div class="modal-content">
+				<div class="modal-header p-2">
+				  <h6 class="modal-title m-0">Filters</h6>
+				  <button type="button" class="close p-0 pr-4 pt-2" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				  </button>
+				</div>
+				<div class="modal-body">
+				  <div class="row">
+					<div class="col-sm-4">
+					  <div class="form-group" id="report_for_div">
+						<label for="report_for">Report For</label>
+						<select id="report_for" name="report_for" class="select2">
+						  <option value="regular" checked>Regular</option>
+						  <option value="exception">Exception</option>
+						</select>
+					  </div>
+					  <div class="form-group">
+						<label for="asset_status">Asset Status</label>
+						<select id="asset_status" name="asset_status" class="select2">
+						  <option value="all">All</option>
+						  <option value="complaint"> Complaint </option>
+						  <option value="stopped"> Stopped </option>
+						</select>
+					  </div>
+					</div>
+					<div class="col-sm-4">
+					  <div class="form-group on_off_time_div" id="condition_div" style="display: none">
+						<label for="on_off_time">Condition</label>
+						<select id="on_off_time" name="on_off_time" class="select2">
+						  <option value="on_time"> On Time </option>
+						  <option value="off_time"> Off Time </option>
+						</select>
+					  </div>
+					  <div class="form-group" id="priority_div">
+						<label for="priority_id">Priority</label>
+						<select id="priority_id" name="priority_id" class="select2">
+						  <option value="all"> All </option>
+						  <option value="1">High</option>
+						  <option value="2">medium</option>
+						  <option value="3">Low</option>
+						</select>
+					  </div>
+					</div>
+					<div class="col-sm-4">
+					  <div class="form-group time_div" id="duration_div" style="display: none">
+						<label for="time">Duration (secs)</label>
+						<input type="text" id="time" name="time" class="form-control form-control-sm numeric" value="">
+					  </div>
+					</div>
+					<div class="col-sm-12">
+					  <div class="form-group row">
+						<label for="rpt_fields" class="col-sm-2">Report Fields</label>
+						<div class="col-sm-10">
+						  <select name="rpt_fields[]" id="rpt_fields" class="multiselect" multiple>
+							<option *ngFor="let report of reportFilds" value="{{ report.field_code }}"
+							  [attr.selected]="report.is_show === 'yes' ? true : null"> {{ report.field_name }}</option>
+							<!-- <option *ngFor="let report of reportFilds" value="{{ report.field_code }}"> {{ report.field_name }}</option> -->
+						  </select>
+						</div>
+					  </div>
+					</div>
+				  </div>
+				</div>
+			  </div>
+			</div>
+		  </div>
+		</div>
+		<div class="card-footer text-center">
+		  <input type="hidden" name="group_name_id" id="group_name_id" value="" />
+		  <input type="hidden" name="report_fields" id="report_fields" value="" />
+		  <input type="hidden" name="service_id_val" id="service_id_val" value="" />
+		  <input type="hidden" name="service_id_val_1" id="service_id_val_1" value="" />
+		  <input type="hidden" name="task_id_val" id="task_id_val" value="" />
+		  <button type="submit" class="btn btn-info btn-sm" id="btn_print"
+			(click)="getPmReport()">View</button>&nbsp;
+		  <button type="button" class="btn btn-sm btn-default" id="btn_cancel" (click)="cancel()">Cancel</button>
+		</div>
+	  </form>
+	</div>
+  </div>
+  

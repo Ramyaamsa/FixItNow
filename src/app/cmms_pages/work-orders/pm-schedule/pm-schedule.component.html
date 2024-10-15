@@ -1,0 +1,402 @@
+<div class="col-sm-12 pt-2">
+  <div class="card card-outline card-cyan" [hidden]="isPMScheduleDtl">
+    <div class="card-header">
+      <h3 class="card-title"> Preventive Maintenance Schedule </h3>
+      <div class="card-tools">
+        <button type="button" class="btn btn-sm btn-outline-info" (click)="addPMSchedule()" *ngIf="masterOperation['add']">
+          <i class="fas fa-plus fa-sm mr-1"></i>PM Schedule
+        </button>
+        <button class="btn btn-secondary btn-sm ml-2" type="button" id="pm_toggle_icon" (click)="toggleList()">
+          <i class="fa fa-toggle-off" id="pmToggleIcon"></i>
+        </button>
+        <button class="btn btn-secondary btn-sm ml-2" type="button" (click)="textWrap()">
+          <i class="fas fa-text-width"></i></button>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group row">
+            <label for="select_month" class="col-sm-4">Month</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control form-control-sm" id="select_month" name="select_month" value="" />
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group row">
+            <label class="col-sm-4" for="select_schedule"> Schedule Type</label>
+            <div class="col-sm-8">
+              <select id="select_schedule" name="select_schedule" class="select2">
+                <option value=""> All </option>
+                <option value="Day"> All Day</option>
+                <option value="Week">Week</option>
+                <option value="Month">Month</option>
+                <option value="Year">Year</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="table-responsive" style="height: 72vh">
+        <table id="pm_schedule_table" class="table table-bordered table-sm">
+          <thead>
+            <tr>
+              <th> Operation </th>
+              <th> Status </th>
+              <th> Asset </th>
+              <th> Service </th>
+              <th> Schedule Type </th>
+              <th> Schedule Date </th>
+            </tr>
+          </thead>
+          <tbody id="pm_schedule_tbody">
+            <tr *ngFor="let list of pmScheduleList">
+              <td>
+                <div class="btn-group">
+                  <button class="btn" (click)="editPmSchedule(list)" title="Edit PM Schedule"
+                    *ngIf="masterOperation['edit']">
+                    <i class="fas fa-pencil-alt"></i>
+                  </button>
+                  <button *ngIf="list.is_assigned=='yes' ? false : masterOperation['delete'] ? true : false" class="btn"
+                    title="Remove PM Schedule" (click)="changePmScheduleStatus(list.schedule_id,'delete')">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </td>
+              <td> <button *ngIf="masterOperation['edit']" class="btn" title="Active/InActive PM Schedule"
+                  (click)="changePmScheduleStatus(list.schedule_id,list.status)">
+                  <i
+                    [ngClass]="list.status == 'active' ? 'far fa-thumbs-up text-success' : 'far fa-thumbs-down text-danger'"></i>
+                </button>
+              </td>
+              <td> {{ list.asset_name }} </td>
+              <td> {{ list.service_name }} </td>
+              <td> {{ list.schedule_type }}</td>
+              <td>{{ list.schedule_date }} </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="list-style: none;" *ngIf="listView">
+        <li class="card p-2">
+          <div class="row">
+            <div class="col-sm-2">
+              <b>Operation</b>
+            </div>
+            <div class="col-sm-2">
+              <b>Status</b>
+            </div>
+            <div class="col-sm-2">
+              <b>Asset</b>
+            </div>
+            <div class="col-sm-2">
+              <b>Service</b>
+            </div>
+            <div class="col-sm-2">
+              <b>Schedule Type</b>
+            </div>
+            <div class="col-sm-2">
+              <b>Schedule Date</b>
+            </div>
+          </div>
+        </li>
+        <li class="callout callout-info p-2" *ngFor="let list of pmScheduleList">
+          <div class="row align-items-center">
+            <div class="col-sm-2">
+              <div class="btn-group">
+                <button class="btn" (click)="editPmSchedule(list)" title="Edit PM Schedule"
+                  *ngIf="masterOperation['edit']">
+                  <i class="fas fa-pencil-alt"></i>
+                </button>
+                <button *ngIf="list.is_assigned == 'yes' ? false : masterOperation['delete'] ? true : false" class="btn"
+                  title="Remove PM Schedule" (click)="changePmScheduleStatus(list.schedule_id,'delete')">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </div>
+            </div>
+            <div class="col-sm-2">
+              <button *ngIf="masterOperation['edit']" class="btn" title="Active/InActive PM Schedule"
+                (click)="changePmScheduleStatus(list.schedule_id, list.status)">
+                <i
+                  [ngClass]="list.status == 'active' ? 'far fa-thumbs-up text-success' : 'far fa-thumbs-down text-danger'"></i>
+              </button>
+            </div>
+            <div class="col-sm-2">
+              <h6 class="m-0">{{ list.asset_name }}</h6>
+            </div>
+            <div class="col-sm-2">
+              <h6 class="m-0">{{ list.service_name }}</h6>
+            </div>
+            <div class="col-sm-2">
+              <h6 class="m-0">{{ list.schedule_type }}</h6>
+            </div>
+            <div class="col-sm-2">
+              <h6 class="m-0">{{ list.schedule_date }}</h6>
+            </div>
+          </div>
+        </li>
+      </div>
+    </div>
+  </div>
+  <div class="card card-outline card-cyan" [hidden]="!isPMScheduleDtl">
+    <div class="card-header">
+      <h3 class="card-title"> Preventive Maintenance Schedule
+      </h3>
+    </div>
+    <form id="pm_schedule_form" name="pm_schedule_form" autocomplete="off">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group row">
+              <label for="created_on" class="col-sm-4"> Created On </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm " id="created_on" name="created_on" value=""
+                  [(ngModel)]="createdOn" disabled />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="modified_on" class="col-sm-4"> Modified On </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm " id="modified_on" name="modified_on" value=""
+                  [(ngModel)]="modifiedOn" disabled />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4" for="company_name"> Company
+                <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+              <div class="col-sm-8">
+                <select id="company_name" name="company_name" class="select2 required">
+                  <option value="">~~ Select ~~</option>
+                  <option *ngFor="let company of companyList" value="{{ company.company_id }}">
+                    {{ company.company_code }}-{{ company.company_name }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="plant_name" class="col-sm-4"> Plant
+                <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+              <div class="col-sm-8">
+                <select name="plant_name" id="plant_name" class="select2 required">
+                  <option value="">~~ Select ~~</option>
+                  <option *ngFor="let plantList of plantList" value="{{ plantList.plant_id }}">
+                    {{ plantList.plant_code }}-{{ plantList.plant_name }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4" for="location"> Location
+                <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+              <div class="col-sm-8">
+                <select id="location_name" name="location_name" class="select2 required">
+                  <option value=""> ~~ Select ~~ </option>
+                  <option *ngFor="let data of locationList" value="{{ data.location_id }}">
+                    {{ data.location_code }} - {{ data.location_name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4" for="asset_name"> Asset
+                <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+              <div class="col-sm-8">
+                <select id="asset_name" name="asset_name" class="multiselect required" multiple style="width:100%;">
+                  <option value=""> ~~ Select ~~ </option>
+                  <option *ngFor="let data of assetList" value="{{ data.asset_id }}">
+                    {{ data.asset_code }} - {{ data.asset_name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="schedule_year" class="col-sm-4">Schedule Year</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm yearPicker" id="schedule_year"
+                  name="schedule_year" value="" />
+              </div>
+            </div>
+            <div class="form-group row" id="year_div" style="display: none;">
+              <label for="schedule_year" class="col-sm-4">Schedule Date</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm datepicker" id="schedule_date"
+                  name="schedule_date" value="" />
+              </div>
+            </div>
+            <div class="form-group row" id="week_div" style="display: none;">
+              <label class="col-sm-4" for="week_day"> Day
+                <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+              <div class="col-sm-8">
+                <select id="week_day" name="week_day" class="select2">
+                  <option value=""> ~~ Select ~~ </option>
+                  <option value="0">Sunday</option>
+                  <option value="1">Monday</option>
+                  <option value="2">Tuesday</option>
+                  <option value="3">Wednesday</option>
+                  <option value="4">Thursday</option>
+                  <option value="5">Friday</option>
+                  <option value="6">Saturday</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row month_div" style="display: none;">
+              <label class="col-sm-4" for="start_month"> Start Month</label>
+              <div class="col-sm-8">
+                <select id="start_month" name="start_month" class="select2">
+                  <option value=""> ~~ Select ~~ </option>
+                  <option value="January">January</option>
+                  <option value="February">February</option>
+                  <option value="March">March</option>
+                  <option value="April">April</option>
+                  <option value="May">May</option>
+                  <option value="June">June</option>
+                  <option value="July">July</option>
+                  <option value="August">August</option>
+                  <option value="September">September</option>
+                  <option value="October">October</option>
+                  <option value="November">November</option>
+                  <option value="December">December</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4" for="estimate_time"> Estimation Time (hr)</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm numeric" id="estimate_time" name="estimate_time"
+                  value="" [(ngModel)]="estimateTime" />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4" for="assigned_owner">Assigned Owner</label>
+              <div class="col-sm-8">
+                <select name="assigned_owner" id="assigned_owner" class="select2">
+                  <option value=""> ~~ Select ~~</option>
+                  <option *ngFor="let data of engineerList" value="{{ data.employee_id }}">
+                    {{ data.employee_code }} - {{ data.employee_name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group row">
+              <label for="created_by" class="col-sm-4"> Created By </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm " id="created_by" name="created_by" value=""
+                  [(ngModel)]="createdBy" disabled />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="modified_by" class="col-sm-4"> Modified By </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm " id="modified_by" name="modified_by" value=""
+                  [(ngModel)]="modifiedBy" disabled />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="branch_name" class="col-sm-4"> BU
+                <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+              <div class="col-sm-8">
+                <select name="bu_name" id="bu_name" class="select2 required">
+                  <option value="">~~ Select ~~</option>
+                  <option *ngFor="let buList of buList" value="{{ buList.bu_id }}">
+                    {{ buList.bu_code }}-{{ buList.bu_name }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4" for="department_name"> Department
+                <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup>
+              </label>
+              <div class="col-sm-8">
+                <select id="department_name" name="department_name" class="select2 required">
+                  <option value=""> ~~ Select ~~ </option>
+                  <option *ngFor="let departmentList of departmentList" value="{{ departmentList.department_id }}">
+                    {{ departmentList.department_code }}-{{ departmentList.department_name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="branch_name" class="col-sm-4"> Asset Group
+                <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup>
+              </label>
+              <div class="col-sm-8">
+                <select id="asset_group_name" name="asset_group_name" class="select2 required">
+                  <option value=""> ~~ Select ~~ </option>
+                  <option *ngFor="let data of assetGroupList" value="{{ data.asset_group_id }}">
+                    {{ data.asset_group_code }} - {{ data.asset_group_name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4" for="service_name"> Service
+                <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+              <div class="col-sm-8">
+                <select id="service_name" name="service_name" class="select2 required">
+                  <option value=""> ~~ Select ~~ </option>
+                  <option *ngFor="let data of serviceList" value="{{ data.service_id }}">
+                    {{ data.service_code }} - {{ data.service_name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4" for="schedule_type"> Schedule Type
+                <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+              <div class="col-sm-8">
+                <select id="schedule_type" name="schedule_type" class="select2 required">
+                  <option value=""> ~~ Select ~~ </option>
+                  <option value="Day"> All Day</option>
+                  <option value="Week">Week</option>
+                  <option value="Month">Month</option>
+                  <option value="Year">Year</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row month_div" style="display: none;">
+              <label class="col-sm-4" for="repeat_month"> Start Date</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm datepicker" id="start_date"
+                  name="start_date" value="" />
+              </div>
+            </div>
+            <div class="form-group row month_div" style="display: none;">
+              <label class="col-sm-4" for="repeat_month"> Repeat Month</label>
+              <div class="col-sm-8">
+                <select id="repeat_month" name="repeat_month" class="select2">
+                  <option value="0"> ~~ Select ~~ </option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="6">6</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4" for="pm_priority"> Priority
+                <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+              <div class="col-sm-8">
+                <select id="pm_priority" name="pm_priority" class="select2 required">
+                  <option value=""> ~~ Select ~~ </option>
+                  <option value="Low">Low</option>
+                  <option value="Medium" selected>Medium</option>
+                  <option value="High">High</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12">
+            <div id="calendar"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer text-center">
+        <button type="submit" class="btn btn-sm btn-info mr-2" (click)="savePmSchedule()"> Save </button>
+        <button type="button" class="btn btn-sm btn-default" (click)="cancel()"> Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

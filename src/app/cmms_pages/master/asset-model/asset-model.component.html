@@ -1,0 +1,225 @@
+<div class="col-md-12 pt-2">
+  <div class="card card-outline card-cyan" [hidden]="assetModelCard">
+    <div class="card-header">
+      <h3 class="card-title"> Asset Model </h3>
+      <div class="card-tools">
+        <button type="button" class="btn btn-sm btn-outline-info" (click)="assetModel()" *ngIf="masterOperation['add']">
+          <i class="fas fa-plus fa-sm mr-1"></i> Asset Model
+        </button>
+        <button class="btn btn-secondary btn-sm ml-2" type="button" id="toggle_icon">
+          <i class="fa fa-toggle-off" id="toggleIcon"></i>
+        </button>
+        <button class="btn btn-secondary btn-sm ml-2" type="button" (click)="textWrap()"><i
+            class="fas fa-text-width"></i></button>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table id="dataTable" class="table table-sm table-bordered">
+          <thead>
+            <tr>
+              <th> Operation </th>
+              <th> Status </th>
+              <th> Company </th>
+              <th> BU </th>
+              <th> Plant </th>
+              <th> Asset Model Code </th>
+              <th> Asset Model Name </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let assetmodel of assetmodelList">
+              <td>
+                <div class="btn-group">
+                  <button class="btn" title="Edit Asset Model" *ngIf="masterOperation['edit']"
+                    (click)="editAssetModel(assetmodel)">
+                    <i class="fas fa-pencil-alt"></i>
+                  </button>
+                  <button *ngIf="assetmodel.is_assigned == 'yes' ? false : masterOperation['delete'] ? true : false"
+                    class="btn" title="Remove Asset Model"
+                    (click)="statusAssetModel(assetmodel.asset_model_id,'delete')">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </td>
+              <td> <button class="btn" title="Active/InActive Asset model"
+                  (click)="statusAssetModel(assetmodel.asset_model_id,assetmodel.status)">
+                  <i
+                    [ngClass]="assetmodel.status == 'active' ? 'far fa-thumbs-up text-success' : 'far fa-thumbs-down text-danger'"></i>
+                </button>
+              </td>
+              <td>{{ assetmodel.company_name }}</td>
+              <td>{{ assetmodel.bu_name }}</td>
+              <td>{{ assetmodel.plant_name }}</td>
+              <td>{{ assetmodel.asset_model_code }}</td>
+              <td>{{ assetmodel.asset_model_name }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="list-style: none;" *ngIf="listView">
+        <li class="card p-2">
+          <div class="row">
+            <div class="col-sm-2">
+              <b>Operation</b>
+            </div>
+            <div class="col-sm-2">
+              <b>Status</b>
+            </div>
+            <div class="col-sm-2">
+              <b>Company</b>
+            </div>
+            <div class="col-sm-2">
+              <b>BU</b>
+            </div>
+            <div class="col-sm-2">
+              <b>Plant</b>
+            </div>
+            <div class="col-sm-2">
+              <b>Asset Model</b>
+            </div>
+          </div>
+        </li>
+        <div style="height: 70vh;overflow-y: auto;">
+          <li class="callout callout-info p-2" *ngFor="let assetmodel of assetmodelList">
+            <div class="row align-items-center">
+              <div class="col-sm-2">
+                <div class="btn-group">
+                  <button class="btn" title="Edit Shift" (click)="editAssetModel(assetmodel)"
+                    *ngIf="masterOperation['edit']">
+                    <i class="fas fa-pencil-alt"></i>
+                  </button>
+                  <button *ngIf="assetmodel.is_assigned == 'yes' ? false : masterOperation['delete'] ? true : false"
+                    class="btn" title="Remove Shift" (click)="statusAssetModel(assetmodel.asset_model_id,'delete')">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="col-sm-2">
+                <button class="btn" title="Active/InActive Shift"
+                  (click)="statusAssetModel(assetmodel.asset_model_id,assetmodel.status)">
+                  <i
+                    [ngClass]="assetmodel.status == 'active' ? 'far fa-thumbs-up text-success' : 'far fa-thumbs-down text-danger'"></i>
+                </button>
+              </div>
+              <div class="col-sm-2">
+                <h6 class="m-0">{{ assetmodel.company_name }}</h6>
+              </div>
+              <div class="col-sm-2">
+                <h6 class="m-0">{{ assetmodel.bu_name }}</h6>
+              </div>
+              <div class="col-sm-2">
+                <h6 class="m-0">{{ assetmodel.plant_name }}</h6>
+              </div>
+              <div class="col-sm-2">
+                <h6 class="m-0">{{ assetmodel.asset_model_code }} - {{ assetmodel.asset_model_name }}</h6>
+              </div>
+            </div>
+          </li>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card card-outline card-cyan" [hidden]="!assetModelCard">
+    <div class="card-header">
+      <h3 class="card-title"> Asset Model </h3>
+    </div>
+    <form id="asset_model_form" autocomplete="off">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group row">
+              <label for="created_on" class="col-sm-4"> Created On
+              </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm required" id="created_on" name="created_on"
+                  value="" [(ngModel)]="created_on" disabled />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="modified_on" class="col-sm-4"> Modified On
+              </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm required" id="modified_on" name="modified_on"
+                  value="" [(ngModel)]="modified_on" disabled />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4" for="company_name"> Company <sup><i
+                    class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+              <div class="col-sm-8">
+                <select id="company_name" name="company_name" class="select2 required" style="width:100%;">
+                  <option value="" selected> ~~ Select ~~ </option>
+                  <option *ngFor="let company of companyList" value="{{ company.company_id }}">
+                    {{ company.company_code }}-{{ company.company_name }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4" for="plant_name"> Plant <sup><i
+                    class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+              <div class="col-sm-8">
+                <select id="plant_name" name="plant_name" class="select2 required">
+                  <option value=""> ~~ Select ~~ </option>
+                  <option *ngFor="let plantList of plantList" value="{{ plantList.plant_id }}"
+                    [attr.plant_code]="plantList.plant_code">
+                    {{ plantList.plant_code }}-{{ plantList.plant_name }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="asset_model_name" class="col-sm-4"> Name <sup><i
+                    class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm required" name="asset_model_name"
+                  id="asset_model_name" value="" [(ngModel)]="asset_model_name" />
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group row">
+              <label for="created_by" class="col-sm-4"> Created By
+              </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm required" id="created_by" name="created_by"
+                  value="" [(ngModel)]="created_by" disabled />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="modified_by" class="col-sm-4"> Modified By
+              </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm required" id="modified_by" name="modified_by"
+                  value="" [(ngModel)]="modified_by" disabled />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4" for="bu_name"> BU <sup><i
+                    class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+              <div class="col-sm-8">
+                <select id="bu_name" name="bu_name" class="select2 required" style="width:100%;">
+                  <option value=""> ~~ Select ~~ </option>
+                  <option *ngFor="let buList of buList" value="{{ buList.bu_id }}">
+                    {{ buList.bu_code }}-{{ buList.bu_name }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="asset_model_code" class="col-sm-4"> Code <sup><i
+                    class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm required" name="asset_model_code"
+                  id="asset_model_code" value="" [(ngModel)]="asset_model_code" (input)="convertToUpperCase()" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer text-center">
+        <button type="submit" class="btn btn-sm btn-info mr-2" (click)="saveAssetModel()"> Save </button>
+        <button type="button" class="btn btn-sm btn-default" (click)="cancel()"> Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

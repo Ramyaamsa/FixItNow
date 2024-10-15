@@ -1,0 +1,497 @@
+.nav-tabs .nav-link {
+  margin-bottom: 0px;
+  border: none;
+  cursor: default;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  padding: 0px 20px 0px 10px;
+  font-size: 0.875rem;
+  background-color: transparent;
+  color: #495057;
+  text-shadow: 0 0 #495057;
+  transition: border-color 5s;
+}
+
+.nav-tabs {
+  border: none;
+}
+
+.nav-tabs .nav-item:last-child .nav-link {
+  border-right: none;
+}
+
+.nav-tabs .nav-item.show .nav-link,
+.nav-tabs .nav-link.active {
+  color: #008aba;
+  text-shadow: 0 0 #0089cc;
+  border-color: transparent;
+  border-bottom: 3px solid #008bab;
+  border-radius: 3px;
+}
+
+.nav-tabs .nav-item {
+  padding: 0px;
+}
+
+/* ---------------------------------- Table Design ---------------------------------- */
+
+.btn-circle{
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+}
+
+/* ------------------------------- TIMELINE OF BREAKDOWN ---------------------------- */
+.timeline::before {
+  left: 13px !important;
+}
+
+.timeline>div>.fa,
+.timeline>div>.fab,
+.timeline>div>.fad,
+.timeline>div>.fal,
+.timeline>div>.far,
+.timeline>div>.fas,
+.timeline>div>.ion,
+.timeline>div>.svg-inline--fa {
+  left: 0 !important;
+}
+
+.timeline>div {
+  margin-right: 0 !important;
+}
+
+.timeline>div>.timeline-item {
+  margin-left: 40px !important;
+  margin-right: 0 !important;
+}
+
+/* -------------------------------- BREAKDOWN DETAIL ----------------------------- */
+.bg-light {
+  background: #dfdfdf !important;
+  font-weight: 600;
+}
+
+.card-title {
+  font-size: 1.1rem;
+}
+
+p {
+  font-weight: 400;
+  color: #00438b;
+  margin-bottom: 0;
+  font-size: 1rem;
+}
+
+h6 {
+  font-weight: 500;
+}
+
+.search_div {
+  position: relative;
+  left: 0;
+}
+
+.search_div i {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  color: #c0c0c0;
+  font-size: 0.75rem;
+}
+
+.pdf_title {
+  background: #178bb8;
+  padding: 8px 0px;
+  margin: 0px;
+  text-align: center;
+  color: #fff;
+  font-size: 1.2rem;
+}
+
+/* table tbody tr th {
+    width: 20%;
+}
+
+table tbody tr td {
+    width: 20%;
+} */
+
+#overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #0008;
+  z-index: 1070;
+  text-align: center;
+}
+
+.disable {
+  background-color: #ccc !important;
+  border: none !important;
+}
+
+/* .table thead th {
+    border-bottom: 2px solid #f3f3f3 !important;
+}
+
+.table td,
+.table th {
+    border-top: none;
+} */
+
+#paging {
+  padding: 0 20px 20px 20px;
+  font-size: 13px;
+  margin-top: 10px;
+  text-align: right;
+}
+
+#paging a {
+  color: #000;
+  background: #e0e0e0;
+  padding: 8px 12px;
+  margin-right: 5px;
+  text-decoration: none;
+}
+
+.hidden {
+  display: none;
+}
+
+#paging a.aktif {
+  background: #000 !important;
+  color: #fff;
+}
+
+.assign_status {
+  cursor: pointer;
+}
+
+.create-ticket {
+  position: absolute;
+  right: 60px;
+  top: 3px;
+  text-align: end;
+}
+
+.view-type {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  text-align: end;
+}
+
+/*----------------------------------- Breakdown Table ---------------------------------*/
+.breakdown-table td,
+.breakdown-table th {
+  border-top: none;
+  vertical-align: middle;
+}
+
+.breakdown-table {
+  border-collapse: separate;
+  border-spacing: 0px 10px;
+}
+
+.breakdown-table thead tr th {
+  background-color: #f4f4f4; /* Background color for header */
+  position: sticky; /* Make header sticky */
+  top: 0; /* Stick to the top of the container */
+  z-index: 1; /* Ensure header is above other rows */
+}
+
+.breakdown-table thead tr th,
+.breakdown-table tbody tr td {
+  font-size: 1rem;
+  border: none;
+}
+
+.breakdown-table thead th,
+.breakdown-table tbody td {
+  border: none;
+}
+
+.breakdown-table thead,
+.breakdown-table thead th i,
+.breakdown-table tbody tr td {
+  text-align: center;
+}
+
+.breakdown-table tbody tr {
+  background-color: #f4f6f9;
+  border: none;
+}
+
+.breakdown-table tbody tr td:first-child {
+  border-radius: 5px 0 0 5px;
+}
+
+.breakdown-table tbody tr td:last-child {
+  border-radius: 0 5px 5px 0;
+}
+
+
+
+/*--- Option Button ---*/
+.view-more {
+  cursor: pointer;
+}
+
+.circles {
+  display: none;
+  position: absolute;
+  top: 0.8rem;
+  right: 75%;
+}
+
+.option-btn {
+  width: 50px;
+  position: relative;
+}
+
+.view-circle {
+  width: 35px;
+  height: 35px;
+  background-color: #22262a;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.2rem;
+}
+
+.view-circle i {
+  color: #fff;
+  cursor: pointer;
+}
+
+@keyframes moveCircles {
+  0% {
+    transform: translateX(0);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.chosen-container-single .chosen-single {
+  background: #fff !important;
+}
+
+/*---theme change ---*/
+.bg-dark {
+  background-color: #22262a !important;
+}
+
+.bg-dark .bg-secondary {
+  background-color: #343a40 !important;
+}
+
+.bg-dark .title {
+  color: #17a2b6;
+}
+
+.bg-dark .card-title {
+  color: #fff;
+}
+
+.bg-dark .card .card-body .card-header {
+  color: #fff;
+}
+
+.dark .info-box-text {
+  color: #fff;
+}
+
+.bg-dark .timeline>div>.timeline-item {
+  color: #fff;
+}
+
+.bg-dark h6,
+.bg-dark p,
+.bg-dark table thead tr th,
+.bg-dark table tbody tr td,
+.bg-dark i,
+.bg-dark ul li a {
+  color: #fff;
+}
+
+.bg-dark .callout {
+  color: #fff;
+}
+
+.bg-dark .close {
+  color: #fff;
+}
+
+.bg-dark .modal-body i {
+  color: #fff;
+}
+
+.bg-dark .select_box {
+  background: #343a40;
+  border: 1px solid #292d31 !important;
+  color: #fff;
+}
+
+.bg-dark .form-control {
+  background-color: #343a40;
+  border: 1px solid #292d31 !important;
+  color: #fff;
+}
+
+.bg-dark .search_result li {
+  background-color: #343a40;
+  box-shadow: 2px 2px 3px #0d0e10 inset, -2px -2px 3px #4d565f inset;
+}
+
+.bg-dark .breakdown-table tbody tr {
+  background-color: #494949;
+}
+
+.light {
+  background-color: #fefefe;
+}
+
+.light .title {
+  color: #17a2b6;
+}
+
+.light .card-title {
+  color: #006574;
+}
+
+.callout h5 {
+  color: #25d6ff;
+}
+
+.light>.card>.card-body>.card {
+  background-color: #f4f6f9;
+}
+
+.chosen-container-single .chosen-single {
+  background: #fff !important;
+}
+
+.light .select_box {
+  background: #ededed;
+  border: 1px solid #e1e1e1 !important;
+}
+
+.light .form-control {
+  background-color: #ededed;
+  border: 1px solid #e1e1e1 !important;
+}
+
+.light .search_result li {
+  background-color: #efefef;
+  box-shadow: 2px 2px 3px #efefef inset, -2px -2px 3px #718394 inset;
+}
+
+.light .search_result li a {
+  color: #2a8e9b;
+}
+
+/* ------------------------------------ TABLE DESIGN ---------------------------- */
+.table.table-sm tr td {
+  vertical-align: middle;
+}
+
+.search_dropdown {
+  list-style: none;
+  padding: 10px;
+}
+
+.search_dropdown li {
+  padding: 8px;
+  padding-left: 15px;
+  font-size: 0.985rem;
+  cursor: pointer;
+  margin-bottom: 3px;
+  background-color: #eee;
+}
+
+.search_dropdown li i {
+  margin-right: 8px;
+}
+
+/*----radio button------*/
+.yes_no {
+  position: relative;
+  margin: 5px 0;
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  font-size: 1rem;
+}
+
+.yes_no input {
+  appearance: none;
+  display: none;
+}
+
+.yes_no span {
+  position: relative;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 15px;
+  transition: 0.5s;
+}
+
+.yes_no span::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 3px;
+  background: #0032ba;
+  transition: 0.5s;
+  box-shadow: 0 -18px 0 #0032ba;
+}
+
+.yes_no input:checked~span.check::before {
+  background: #00a94e;
+  box-shadow: 0 0 0 transparent;
+}
+
+.yes_no input:checked~span.cross::before {
+  background: #f00;
+  box-shadow: 0 0 0 transparent;
+  transform: rotate(-45deg) translate(10px, -5px);
+}
+
+.yes_no span::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 3px;
+  height: 100%;
+  background: #0032ba;
+  transition: 0.5s;
+  box-shadow: 18px 0 #0032ba;
+}
+
+.yes_no input:checked~span.check::after {
+  height: 50%;
+  background: #00a94e;
+  box-shadow: 0 0 0 transparent;
+}
+
+.yes_no input:checked~span.cross::after {
+  background: #f00;
+  box-shadow: 0 0 0 transparent;
+  transform: rotate(-45deg) translate(10px, 7px);
+}
+
+.yes_no input:checked~span.check {
+  transform: rotate(-45deg) translate(7px, -7px);
+}

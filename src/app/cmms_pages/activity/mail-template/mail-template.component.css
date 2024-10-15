@@ -1,0 +1,19 @@
+.form-control[readonly] {
+  background: transparent !important;
+}
+
+.mail_div {
+  scrollbar-width: thin;
+  height: 50vh;
+  overflow-y: auto;
+}
+
+.mail_div::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+  background-color: #F5F5F5;
+}
+
+.mail_div::-webkit-scrollbar-thumb {
+  background-color: #c0c0c0;
+}

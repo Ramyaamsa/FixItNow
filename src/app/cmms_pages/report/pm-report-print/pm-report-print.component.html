@@ -1,0 +1,518 @@
+<div class="col-sm-12 pt-2">
+  <div class="card">
+    <div class="card-header p-2">
+      <h3 class="card-title report-title"> {{ reportTitle }}</h3>
+      <div class="card-tools mr-1">
+        <button type="button" class="btn btn-sm btn-info dropdown-toggle dropdown-icon" data-toggle="dropdown"
+          aria-expanded="true">
+          <i class="fas fa-download mr-2"></i>
+        </button>
+        <div class="dropdown-menu" role="menu">
+          <a class="dropdown-item" (click)="downloadReport('report_csv')">
+            <i class="fas fa-file-csv mr-2"></i> CSV</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" (click)="downloadReport('report_excel')">
+            <i class="fas fa-file-excel mr-2"></i> Excel</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" (click)="downloadReport('report_pdf')">
+            <i class="fas fa-file-pdf mr-2"></i> PDF</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" (click)="downloadReport('report_print')">
+            <i class="fas fa-print mr-2"></i> Print</a>
+        </div>
+      </div>
+      <!-- <div class="card-tools d-flex">
+            </div> -->
+
+      <!-- <div class="tab-container" *ngIf="reportType == '1'">
+                <ul class="nav nav-tabs" style="margin-right: 20px;padding-right: 30px;">
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item" *ngFor="let status of ticketStatusLists">
+                          <a class="nav-link"                             
+                             id="{{ status.name }}_tab" 
+                             data-toggle="pill" 
+                             role="tab" 
+                             (click)="getStatusData(status.name)">
+                            {{ status.name }}
+                          </a>
+                        </li>
+                      </ul>
+                </ul>
+            </div> -->
+    </div>
+    <div class="card-body p-2">
+      <div class="table-responsive" style="height: 450px;">
+        <table class="table table-bordered mb-0" id="detail_table" [attr.data-height]="height" *ngIf="reportType == 'detail'">
+          <thead>
+            <tr>
+              <th> S.No</th>
+              <th data-field="date" [attr.data-visible]="rpt['date']"> Date </th>
+              <th data-field="company" [attr.data-visible]="rpt['company']"> Company </th>
+              <th data-field="bu" [attr.data-visible]="rpt['bu']"> BU </th>
+              <th data-field="plant" [attr.data-visible]="rpt['plant']"> Plant </th>
+              <th data-field="department" [attr.data-visible]="rpt['department']"> Department </th>
+              <th data-field="location" [attr.data-visible]="rpt['location']"> Location </th>
+              <th data-field="asset_group" [attr.data-visible]="rpt['asset_group']"> Asset Group </th>
+              <th data-field="asset" [attr.data-visible]="rpt['asset']"> Asset </th>
+              <th data-field="service" [attr.data-visible]="rpt['service']"> Service </th>
+              <th data-field="schedule_type" [attr.data-visible]="rpt['schedule_type']"> Schedule Type </th>
+              <th data-field="assigned_owner" [attr.data-visible]="rpt['assigned_owner']"> Assigneed Owner </th>
+              <th data-field="estimate_time" [attr.data-visible]="rpt['estimate_time']"> Estimate Time </th>
+              <th data-field="completion_time" [attr.data-visible]="rpt['completion_time']"> Completion Time </th>
+              <th data-field="fixed_by" [attr.data-visible]="rpt['fixed_by']"> Fixed By </th>
+              <th data-field="fixedtime" [attr.data-visible]="rpt['fixedtime']"> Fixed Time </th>
+            </tr>
+          </thead>
+          <tbody *ngIf="pmReportLists.length > 0; else noData">
+            <tr *ngFor="let service of pmReportLists; let i = index">
+              <td>{{ i+1 }}</td>
+              <td>{{ service.assigned_on | date:'dd-MM-yyyy' }}</td>
+              <td>{{ service.company_name }}</td>
+              <td>{{ service.bu_name }}</td>
+              <td>{{ service.plant_name }}</td>
+              <td>{{ service.department_name }}</td>
+              <td>{{ service.location_name }}</td>
+              <td>{{ service.asset_group_name }}</td>
+              <td>{{ service.asset_name }}</td>
+              <td>{{ service.service_name }}</td>
+              <td>{{ service.task_name }}</td>
+              <td>{{ service.assigned_owner }}</td>
+              <td>{{ service.estimate_time }}</td>
+              <td>{{ service.complete_duration }}</td>
+              <td>{{ service.fixed_by }}</td>
+              <td>{{ service.fixed_on === "1991-01-01T00:00:00" ? '' : (service.fixed_on | date:'dd-MM-yyyy') }}</td>
+              <!-- <td>{{ service.fixed_on | date:'dd-MM-yyyy' }}</td> -->
+            </tr>
+            <tr class='sort_hide'>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+          <ng-template #noData>
+            <tbody>
+              <tr>
+                <td colspan="18" class="text-center">No Data Available </td>
+              </tr>
+            </tbody>
+          </ng-template>
+        </table>
+        <table class="table table-bordered mb-0" id="summary_table" [attr.data-height]="height" *ngIf="reportType == 'summary'">
+          <thead>
+            <tr>
+              <th> S.No</th>
+              <th data-field="date" [attr.data-visible]="rpt['date']"> Date </th>
+              <th data-field="company" [attr.data-visible]="rpt['company']"> Company </th>
+              <th data-field="bu" [attr.data-visible]="rpt['bu']"> BU </th>
+              <th data-field="plant" [attr.data-visible]="rpt['plant']"> Plant </th>
+              <th data-field="department" [attr.data-visible]="rpt['department']"> Department </th>
+              <th data-field="asset_group" [attr.data-visible]="rpt['asset_group']"> Asset Group </th>
+              <th data-field="asset" [attr.data-visible]="rpt['asset']"> Asset </th>
+              <!-- <th data-field="service" [attr.data-visible]="rpt['service']"> Service </th>
+              <th data-field="task_name" [attr.data-visible]="rpt['task_name']"> Task </th> -->
+              <th data-field="total_pm" [attr.data-visible]="rpt['total_pm']"> Total Pm </th>
+              <th data-field="open" [attr.data-visible]="rpt['open']"> Open </th>
+              <th data-field="assign" [attr.data-visible]="rpt['assign']"> Assign </th>
+              <th data-field="reassign" [attr.data-visible]="rpt['reassign']"> Reassign </th>
+              <th data-field="check_in" [attr.data-visible]="rpt['check_in']"> Check In </th>
+              <th data-field="check_out" [attr.data-visible]="rpt['check_out']"> Check Out </th>
+              <th data-field="overdue" [attr.data-visible]="rpt['overdue']"> Overdue </th>
+              <th data-field="on_hold" [attr.data-visible]="rpt['on_hold']"> On Hold </th>
+              <th data-field="pending" [attr.data-visible]="rpt['pending']"> Pending </th>
+              <th data-field="spare_request" [attr.data-visible]="rpt['spare_request']"> Spare Request </th>
+              <th data-field="spares_acknowledge" [attr.data-visible]="rpt['spares_acknowledge']"> Spares Acknowledge </th>
+              <th data-field="completed" [attr.data-visible]="rpt['completed']"> Completed </th>
+              <th data-field="fixed" [attr.data-visible]="rpt['fixed']"> Fixed </th>
+              <th data-field="upcoming" [attr.data-visible]="rpt['upcoming']"> Upcoming </th>
+              <th data-field="cancel" [attr.data-visible]="rpt['cancel']"> Cancel </th>
+              <th data-field="delete" [attr.data-visible]="rpt['delete']"> Delete </th>
+              
+            </tr>
+          </thead>
+          <tbody *ngIf="pmReportLists.length > 0; else noData">
+            <tr *ngFor="let service of pmReportLists; let i = index">
+              <td>{{ i+1 }}</td>
+              <td>{{ service.date}}</td>
+              <td>{{ service.company_name }}</td>
+              <td>{{ service.bu_name }}</td>
+              <td>{{ service.plant_name }}</td>
+              <td>{{ service.department_name }}</td>
+              <td>{{ service.asset_group_name }}</td>
+              <td>{{ service.asset_name }}</td>
+              <!-- <td>{{ service.service_name }}</td>
+              <td>{{ service.task_name }}</td> -->
+              <td>{{ service.pm_checklist_count + service.pm_schedule_count}} </td>
+              <td>{{ service.open}} </td>
+              <td>{{ service.assign}} </td>
+              <td>{{ service.reassign}} </td>
+              <td>{{ service.check_in}} </td>
+              <td>{{ service.check_out}} </td>
+              <td>{{ service.overdue}} </td>
+              <td>{{ service.on_hold}} </td>
+              <td>{{ service.pending}} </td>
+              <td>{{ service.spare_request}} </td>
+              <td>{{ service.spares_acknowledge}} </td>
+              <td>{{ service.completed}} </td>
+              <td>{{ service.fixed}} </td>
+              <td>{{ service.upcoming}} </td>
+              <td>{{ service.cancel}} </td>
+              <td>{{ service.delete}} </td>
+            </tr>
+            <tr class='sort_hide'>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <!-- <td></td>
+              <td></td> -->
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+          <ng-template #noData>
+            <tbody>
+              <tr>
+                <td colspan="18" class="text-center">No Data Available </td>
+              </tr>
+            </tbody>
+          </ng-template>
+        </table>
+        <table class="table table-bordered mb-0" id="cumulative_table" [attr.data-height]="height" *ngIf="reportType == 'cumulative'">
+          <thead>
+            <tr>
+              <th> S.No</th>
+              <th data-field="company" [attr.data-visible]="rpt['company']"> Company </th>
+              <th data-field="bu" [attr.data-visible]="rpt['bu']"> BU </th>
+              <th data-field="plant" [attr.data-visible]="rpt['plant']"> Plant </th>
+              <th data-field="department" [attr.data-visible]="rpt['department']"> Department </th>
+              <th data-field="asset_group" [attr.data-visible]="rpt['asset_group']"> Asset Group </th>
+              <th data-field="asset" [attr.data-visible]="rpt['asset']"> Asset </th>
+              <!-- <th data-field="service" [attr.data-visible]="rpt['service']"> Service </th>
+              <th data-field="task_name" [attr.data-visible]="rpt['task_name']"> Task </th> -->
+              <th data-field="total_pm" [attr.data-visible]="rpt['total_pm']"> Total Pm </th>
+              <th data-field="open" [attr.data-visible]="rpt['open']"> Open </th>
+              <th data-field="assign" [attr.data-visible]="rpt['assign']"> Assign </th>
+              <th data-field="reassign" [attr.data-visible]="rpt['reassign']"> Reassign </th>
+              <th data-field="check_in" [attr.data-visible]="rpt['check_in']"> Check In </th>
+              <th data-field="check_out" [attr.data-visible]="rpt['check_out']"> Check Out </th>
+              <th data-field="overdue" [attr.data-visible]="rpt['overdue']"> Overdue </th>
+              <th data-field="on_hold" [attr.data-visible]="rpt['on_hold']"> On Hold </th>
+              <th data-field="pending" [attr.data-visible]="rpt['pending']"> Pending </th>
+              <th data-field="spare_request" [attr.data-visible]="rpt['spare_request']"> Spare Request </th>
+              <th data-field="spares_acknowledge" [attr.data-visible]="rpt['spares_acknowledge']"> Spares Acknowledge </th>
+              <th data-field="completed" [attr.data-visible]="rpt['completed']"> Completed </th>
+              <th data-field="fixed" [attr.data-visible]="rpt['fixed']"> Fixed </th>
+              <th data-field="upcoming" [attr.data-visible]="rpt['upcoming']"> Upcoming </th>
+              <th data-field="cancel" [attr.data-visible]="rpt['cancel']"> Cancel </th>
+              <th data-field="delete" [attr.data-visible]="rpt['delete']"> Delete </th>
+              
+            </tr>
+          </thead>
+          <tbody *ngIf="pmReportLists.length > 0; else noData">
+            <tr *ngFor="let service of pmReportLists; let i = index">
+              <td>{{ i+1 }}</td>
+              <td>{{ service.company_name }}</td>
+              <td>{{ service.bu_name }}</td>
+              <td>{{ service.plant_name }}</td>
+              <td>{{ service.department_name }}</td>
+              <td>{{ service.asset_group_name }}</td>
+              <td>{{ service.asset_name }}</td>
+              <!-- <td>{{ service.service_name }}</td>
+              <td>{{ service.task_name }}</td> -->
+              <td>{{ service.pm_count}} </td>
+              <td>{{ service.open}} </td>
+              <td>{{ service.assign}} </td>
+              <td>{{ service.reassign}} </td>
+              <td>{{ service.check_in}} </td>
+              <td>{{ service.check_out}} </td>
+              <td>{{ service.overdue}} </td>
+              <td>{{ service.on_hold}} </td>
+              <td>{{ service.pending}} </td>
+              <td>{{ service.spare_request}} </td>
+              <td>{{ service.spares_acknowledge}} </td>
+              <td>{{ service.completed}} </td>
+              <td>{{ service.fixed}} </td>
+              <td>{{ service.upcoming}} </td>
+              <td>{{ service.cancel}} </td>
+              <td>{{ service.delete}} </td>
+            </tr>
+            <tr class='sort_hide'>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <!-- <td></td>
+              <td></td> -->
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+          <ng-template #noData>
+            <tbody>
+              <tr>
+                <td colspan="18" class="text-center">No Data Available </td>
+              </tr>
+            </tbody>
+          </ng-template>
+        </table>
+        <table class="table table-bordered mb-0" id="task_table" [attr.data-height]="height" *ngIf="reportType == 'task'">
+          <thead>
+            <tr>
+              <th> S.No</th>
+              <th data-field="date" [attr.data-visible]="rpt['date']"> Date </th>
+              <th data-field="company" [attr.data-visible]="rpt['company']"> Company </th>
+              <th data-field="bu" [attr.data-visible]="rpt['bu']"> BU </th>
+              <th data-field="plant" [attr.data-visible]="rpt['plant']"> Plant </th>
+              <th data-field="department" [attr.data-visible]="rpt['department']"> Department </th>
+              <th data-field="asset_group" [attr.data-visible]="rpt['asset_group']"> Asset Group </th>
+              <th data-field="asset" [attr.data-visible]="rpt['asset']"> Asset </th>
+              <th data-field="service" [attr.data-visible]="rpt['service']"> Service </th>
+              <th data-field="schedule_type" [attr.data-visible]="rpt['schedule_type']"> Schedule Type </th>
+              <th data-field="assigned_owner" [attr.data-visible]="rpt['assigned_owner']"> Assigned Owner </th>
+              <th data-field="pm_estimate_time" [attr.data-visible]="rpt['pm_estimate_time']"> PM Estimate Time </th>
+              <th data-field="pm_completion_time" [attr.data-visible]="rpt['pm_completion_time']"> PM Completion Duration </th>
+              <th data-field="task_name" [attr.data-visible]="rpt['task_name']"> Task Name </th>
+              <th data-field="task_type" [attr.data-visible]="rpt['task_type']"> Task Type </th>
+              <th data-field="task_description" [attr.data-visible]="rpt['task_description']"> Task Description </th>
+              <th data-field="task_condition" [attr.data-visible]="rpt['task_condition']"> Task Condition </th>
+              <th data-field="task_value" [attr.data-visible]="rpt['task_value']"> Task Value </th>
+              <th data-field="task_max_value" [attr.data-visible]="rpt['task_max_value']"> Task Max Value </th>
+              <th data-field="assigned_engineer" [attr.data-visible]="rpt['assigned_engineer']"> Assigned Engineer </th>
+              <th data-field="task_status_operation" [attr.data-visible]="rpt['task_status_operation']"> Task Status Operation </th>
+              <th data-field="task_actual_value" [attr.data-visible]="rpt['task_actual_value']"> Task Actual Value </th>
+              <th data-field="task_remarks" [attr.data-visible]="rpt['task_remarks']"> Task Remarks </th>
+              <th data-field="task_status" [attr.data-visible]="rpt['task_status']"> Task Status </th>
+              <th data-field="task_duration" [attr.data-visible]="rpt['task_duration']"> Task Duration </th>
+              <th data-field="check_in_time" [attr.data-visible]="rpt['check_in_time']"> Check In Time </th>
+              <th data-field="complete_time" [attr.data-visible]="rpt['complete_time']"> Complete Time </th>
+              <th data-field="cancel_comment" [attr.data-visible]="rpt['cancel_comment']"> Cancel Comment </th>
+            </tr>
+          </thead>
+          <tbody *ngIf="pmReportLists.length > 0; else noData">
+            <tr *ngFor="let task of pmReportLists; let i = index">
+              <td> {{ i+1 }}</td>
+              <td> {{ task.date}}</td>
+              <td> {{ task.company_name }}</td>
+              <td> {{ task.bu_name }}</td>
+              <td> {{ task.plant_name }}</td>
+              <td> {{ task.department_name }}</td>
+              <td> {{ task.asset_group_name }}</td>
+              <td> {{ task.asset_name }}</td>
+              <td> {{ task.service_name }}</td>
+              <td> {{ task.schedule_type }}</td>
+              <td> {{ task.assigned_owner }}</td>
+              <td> {{ task.task_estimation_time }}</td>
+              <td> {{ task.task_completion_time }}</td>
+              <td> {{ task.task_name }} </td>
+              <td> {{ task.task_type }} </td>
+              <td> {{ task.task_description }} </td>
+              <td> {{ task.condition }} </td>
+              <td> {{ task.task_value }} </td>
+              <td> {{ task.max_value }} </td>
+              <td> {{ task.assigned_by }} </td>
+              <td> {{ task.operation_value }} </td>
+              <td> {{ task.task_actual_value }} </td>
+              <td> {{ task.task_remarks }} </td>
+              <td> {{ task.task_status_val }} </td>
+              <td> {{ task.task_completion_time }} </td>
+              <!-- <td> {{ task.task_checkin_time }} </td> -->
+              <td>{{  task.task_checkin_time === "1900-01-01T00:00:00" ? '00-00-0000 00-00-00' : (task.task_checkin_time | date:'dd-MM-yyyy HH:mm:ss') }}</td>
+              <td>{{  task.task_complete_time === "1900-01-01T00:00:00" ? '00-00-0000 00-00-00' : (task.task_complete_time | date:'dd-MM-yyyy HH:mm:ss') }}</td>
+              <!-- <td> {{ task.task_complete_time }} </td> -->
+              <td> {{ task.cancel_complete_comment }} </td>
+            </tr>
+            <tr class='sort_hide'>                
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+          <ng-template #noData>
+            <tbody>
+              <tr>
+                <td colspan="28" class="text-center">No Data Available </td>
+              </tr>
+            </tbody>
+          </ng-template>
+        </table>
+        <table class="table table-bordered mb-0" id="spare_table" [attr.data-height]="height" *ngIf="reportType == 'spares'">
+          <thead>
+            <tr>
+              <th> S.No</th>
+              <th data-field="date" [attr.data-visible]="rpt['date']"> Date </th>
+              <th data-field="company" [attr.data-visible]="rpt['company']"> Company </th>
+              <th data-field="bu" [attr.data-visible]="rpt['bu']"> BU </th>
+              <th data-field="plant" [attr.data-visible]="rpt['plant']"> Plant </th>
+              <th data-field="department" [attr.data-visible]="rpt['department']"> Department </th>
+              <th data-field="asset_group" [attr.data-visible]="rpt['asset_group']"> Asset Group </th>
+              <th data-field="asset" [attr.data-visible]="rpt['asset']"> Asset </th>
+              <th data-field="service" [attr.data-visible]="rpt['service']"> Service </th>
+              <th data-field="schedule_type" [attr.data-visible]="rpt['schedule_type']"> Schedule Type </th>
+              <th data-field="assigned_owner" [attr.data-visible]="rpt['assigned_owner']"> Assigned Owner </th>
+              <th data-field="pm_estimate_time" [attr.data-visible]="rpt['pm_estimate_time']"> PM Estimate Time </th>
+              <th data-field="pm_completion_time" [attr.data-visible]="rpt['pm_completion_time']"> PM Completion Duration </th>
+              <th data-field="task_name" [attr.data-visible]="rpt['task_name']"> Task Name </th>
+              <th data-field="task_type" [attr.data-visible]="rpt['task_type']"> Task Type </th>
+              <th data-field="spare_name" [attr.data-visible]="rpt['spare_name']"> Spare Name </th>
+              <th data-field="utilized_by" [attr.data-visible]="rpt['utilized_by']"> Utilized By </th>
+              <th data-field="spare_utilization_qty" [attr.data-visible]="rpt['spare_utilization_qty']"> Spare Utilization Qty </th>
+              <th data-field="unit_price" [attr.data-visible]="rpt['unit_price']"> Unit Price </th>
+              <th data-field="total_price" [attr.data-visible]="rpt['total_price']"> Total Price </th>
+            </tr>
+          </thead>
+          <tbody *ngIf="pmReportLists.length > 0; else noData">
+            <tr *ngFor="let spares of pmReportLists; let i = index">
+              <td> {{ i+1 }}</td>
+              <td> {{ spares.date }}</td>
+              <td> {{ spares.company_name }}</td>
+              <td> {{ spares.bu_name }}</td>
+              <td> {{ spares.plant_name }}</td>
+              <td> {{ spares.department_name }}</td>
+              <td> {{ spares.asset_group_name }}</td>
+              <td> {{ spares.asset_name }}</td>
+              <td> {{ spares.service_name }}</td>
+              <td> {{ spares.schedule_type }}</td>
+              <td> {{ spares.assigned_owner }}</td>
+              <td> {{ spares.task_estimation_time }}</td>
+              <td> {{ spares.task_completion_time }}</td>
+              <td> {{ spares.task_name }} </td>
+              <td> {{ spares.task_type }} </td>
+              <th> {{ spares.spare_name }} </th>
+              <th> {{ spares.assigned_owner }} </th>
+              <th> {{ spares.consumed_qty }} </th>
+              <th> {{ spares.spare_unit_price }} </th>
+              <th> {{ spares.total_price }} </th>
+            </tr>
+            <tr class='sort_hide'>                
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+          <ng-template #noData>
+            <tbody>
+              <tr>
+                <td colspan="20" class="text-center">No Data Available </td>
+              </tr>
+            </tbody>
+          </ng-template>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="bd_ticket">
+    <div class="modal-dialog">
+      <div class="modal-content bg-dark">
+        <div class="modal-header p-2 pl-2 pr-3">
+          <h5 class="modal-title"> Ticket Status </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="modal_close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body text-center">
+          <div class="content">
+            <div class="box">
+              <div class="column">
+                <div class="item" *ngFor="let status of ticketStatusLists">
+                  <input type="checkbox" class="bd_ticket" id="bd{{ status.id }}" data-target="#bd_open">
+                  <label for="bd{{ status.id }}">
+                    <div class="tick"></div>
+                  </label>
+                  <span (click)="getStatusData(status.id,$event)">{{ status.name }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

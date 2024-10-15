@@ -1,0 +1,110 @@
+<div class="col-sm-12 pt-2">
+  <div class="card card-info card-outline card-outline-tabs bg-dark">
+    <div class="card-header p-0 border-bottom-0">
+      <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" data-toggle="pill" href="#home_div" role="tab"
+            (click)="periodChange('today','date')">Today</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="pill" href="#home_div" role="tab" (click)="periodChange('previous','date')">Previous
+            Day</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="pill" href="#home_div" role="tab" (click)="periodChange('week','from_to')">This
+            Week</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="pill" href="#home_div" role="tab" (click)="periodChange('month','from_to')">This
+            Month</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="pill" href="#home_div" role="tab" (click)="periodChange('year','from_to')">This
+            Year</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="pill" href="#home_div" role="tab" (click)="periodChange('custom','from_to')">Custom</a>
+        </li>
+      </ul>
+    </div>
+    <div class="card-body p-2">
+      <div class="tab-content">
+        <div class="row mb-1" id="from_to_input_div" style="display: none;">
+          <div class="col-sm-3">
+            <div class="input-group date">
+              <input type="text" class="form-control form-control-sm" id="from_to_date" name="from_to_date" value=""
+                style="background-color: #fff;" />
+              <div class="input-group-append">
+                <div class="input-group-text">
+                  <i class="far fa-calendar-alt"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-pane fade show active" id="home_div">
+          <div class="table-responsive"
+            style="margin-bottom: 0px;box-shadow: 5px 5px 7px #1c1f22, -4px -4px 7px #4b545c">
+            <input type="hidden" id="dril_company_default" value="">
+            <input type="hidden" id="dril_company_ip" value="">
+            <input type="hidden" id="dril_bu_ip" value="">
+            <table class="table" id="extension_table" style="width:100%;">
+              <thead class="text-nowrap">
+                <tr>
+                  <th> S.No </th>
+                  <th> Name </th>
+                  <th> Total Asset </th>
+                  <th> Total Ticket </th>
+                  <th> Open </th>
+                  <th> In Progress </th>
+                  <th> Closed </th>
+                  <th> Others </th>
+                </tr>
+              </thead>
+              <tbody id="table_data_c_b_p">
+              </tbody>
+            </table>
+          </div>
+          <h5 class="title"><i class="fas fa-ticket-alt"></i> Breakdown - {{ dashboardTitle }} </h5>
+          <div class="row">
+            <div class="col-sm-3" style="margin-top: 75px">
+              <div class="info-box spare bg-secondary" style="height: 100px">
+                <div class="info-box-content">
+                  <span class="info-box-text" style="font-size: 1.2rem">Spare Cost</span>
+                  <span class="info-box-number" style="font-size: 1.7rem">
+                    {{ breakdownSpareQty }}
+                  </span>
+                </div>
+              </div>
+              <div class="info-box spare bg-secondary" style="height: 100px">
+                <div class="info-box-content">
+                  <span class="info-box-text" style="font-size: 1.2rem">Spare
+                    Quantity</span>
+                  <span class="info-box-number" style="font-size: 1.7rem">
+                    {{ breakdownSpareCost }}
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-9">
+              <div class="card bg-secondary">
+                <div class="card-header">
+                  <h3 class="card-title">Plant Wise Breakdown</h3>
+                </div>
+                <div class="card-body p-0" style="height: 350px">
+                  <div id="plant_chart"></div>
+                  <div class="justify-content-center align-items-center" id="no_plant_chart" style="height: 100%;">
+                    <h3 class="text-center text-yellow">
+                      <i class="far fa-frown mb-1" style="font-size: 4rem;"></i> <br />
+                      No Data Found
+                    </h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

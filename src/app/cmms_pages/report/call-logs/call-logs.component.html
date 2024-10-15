@@ -1,0 +1,65 @@
+<div class="col-sm-12 pt-2">
+	<div class="card card-outline card-cyan">
+		<div class="card-header">
+			<h3 class="card-title pt-1"> Call Log</h3>
+		</div>
+		<form id="report_form" name="report_form" method="POST" target="_blank" class="form-horizontal" autocomplete='off'>
+			<div class="card-body">
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group row">
+							<label class="col-sm-4"> Company </label>
+							<div class="col-sm-8">
+								<select id="company_name" name="company_name" class="select2">
+										<option value=""> ~~Select~~ </option>
+										<option value="all"> Company </option>
+										<option value=""></option> 
+								</select>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-4"> Plant </label>
+							<div class="col-sm-8">
+								<select id="plant_name" name="plant_name" class="select2">
+									<option value="all"> Plant </option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group row">
+							<label class="col-sm-4"> BU </label>
+							<div class="col-sm-8">
+								<select id="bu_name" name="bu_name" class="select2">
+									<option value="all"> BU </option>
+								</select>
+							</div>
+						</div>
+						<div class="from_date_div">
+							<div class="form-group row">
+								<label class="col-sm-4 from_date_label">Year</label>
+								<div class="col-sm-8">
+									<div class="input-group">
+										<input type="text" class="form-control form-control-sm datepicker" id="from_date" name="from_date">
+										<div class="input-group-append">
+											<div class="input-group-text">
+												<i class="fa fa-calendar"></i>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="card-footer text-center">
+				<input type="hidden" value="0" id="pdf" name="pdf">
+				<button type="button" class="btn btn-sm btn-info" id="btn_print">View</button>&nbsp;<!-- 
+				<button type="button" class="btn btn-primary" id="btn_pdf">PDF</button>&nbsp;&nbsp;
+				<button type="button" class="btn btn-primary" id="btn_excel">Excel</button>&nbsp;&nbsp; -->
+				<button type="button" class="btn btn-sm btn-default" id="btn_cancel" (click)="cancel()">Cancel</button>
+			</div>
+		</form>
+	</div>
+</div>

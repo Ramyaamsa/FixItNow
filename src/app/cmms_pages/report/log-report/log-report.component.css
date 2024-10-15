@@ -1,0 +1,62 @@
+.dashboardcode-bsmultiselect div.dropdown-menu {
+    width: 80vw !important;
+    height: 300px;
+    min-height: 80vh;
+    overflow-y: auto;
+    position: fixed !important;
+    left: 10vw !important;
+    top: 10% !important;
+    transform: translate(0, 0) !important;
+}
+
+.select_all,
+.deselect_all {
+    display: inline;
+    padding: 10px 5px;
+    margin-right: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+.select_all {
+    color: #009900;
+}
+
+.deselect_all {
+    color: #990000;
+}
+
+.dashboardcode-bsmultiselect .form-control {
+    padding: 0.3rem 0.375rem 0px 0.375rem;
+    max-height: calc(5rem + 2px);
+    overflow: auto;
+    scrollbar-width: thin;
+}
+
+.dashboardcode-bsmultiselect .form-control::-webkit-scrollbar {
+    width: 5px;
+    height: 2px;
+    background-color: #505050;
+}
+
+.dashboardcode-bsmultiselect div.dropdown-menu>ul>li .custom-control {
+    white-space: break-spaces;
+}
+
+.btn-flat {
+    position: absolute;
+    top: 3.1rem;
+    right: 0px;
+    width: 36px;
+    z-index: 1000;
+}
+
+.card-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+label {
+    font-size: 1rem;
+}

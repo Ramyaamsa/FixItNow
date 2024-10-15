@@ -1,0 +1,336 @@
+<div class="col-sm-12 pt-2">
+  <div class="card">
+    <div class="card-header p-2">
+      <h3 class="card-title report-title"> {{ reportTitle }}</h3>
+      <div class="card-tools mr-1">
+        <button type="button" class="btn btn-sm btn-info dropdown-toggle dropdown-icon" data-toggle="dropdown"
+          aria-expanded="true">
+          <i class="fas fa-download mr-2"></i>
+        </button>
+        <div class="dropdown-menu" role="menu">
+          <a class="dropdown-item" (click)="downloadReport('report_csv')">
+            <i class="fas fa-file-csv mr-2"></i> CSV</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" (click)="downloadReport('report_excel')">
+            <i class="fas fa-file-excel mr-2"></i> Excel</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" (click)="downloadReport('report_pdf')">
+            <i class="fas fa-file-pdf mr-2"></i> PDF</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" (click)="downloadReport('report_print')">
+            <i class="fas fa-print mr-2"></i> Print</a>
+        </div>
+      </div>
+      <!-- <div class="card-tools d-flex">
+            </div> -->
+
+      <!-- <div class="tab-container" *ngIf="reportType == '1'">
+                <ul class="nav nav-tabs" style="margin-right: 20px;padding-right: 30px;">
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item" *ngFor="let status of ticketStatusLists">
+                          <a class="nav-link"                             
+                             id="{{ status.name }}_tab" 
+                             data-toggle="pill" 
+                             role="tab" 
+                             (click)="getStatusData(status.name)">
+                            {{ status.name }}
+                          </a>
+                        </li>
+                      </ul>
+                </ul>
+            </div> -->
+    </div>
+    <div class="card-body p-2">
+      <div class="table-responsive" style="height: 450px;">
+        <table class="table table-bordered mb-0" id="table" [attr.data-height]="height" >
+          <thead>
+            <tr>
+              <th>S.No</th>
+              <th data-field="date" [attr.data-visible]="rpt['date']!== undefined ? rpt['date'] : false">Date</th>           
+              <th data-field="company_name" [attr.data-visible]="rpt['company_name']!== undefined ? rpt['company_name'] : false">Company</th>            
+              <th data-field="bu_name" [attr.data-visible]="rpt['bu_name']!== undefined ? rpt['bu_name'] : false">BU</th>           
+              <th data-field="plant_name" [attr.data-visible]="rpt['plant_name']!== undefined ? rpt['plant_name'] : false">Plant</th>            
+              <th data-field="department_name" [attr.data-visible]="rpt['department_name']!== undefined ? rpt['department_name'] : false">Department</th>           
+              <th data-field="location_name" [attr.data-visible]="rpt['location_name']!== undefined ? rpt['location_name'] : false">Location</th>           
+              <th data-field="asset_group_name" [attr.data-visible]="rpt['asset_group_name']!== undefined ? rpt['asset_group_name'] : false">Asset Group</th>            
+              <th data-field="asset_model_name" [attr.data-visible]="rpt['asset_model_name']!== undefined ? rpt['asset_model_name'] : false">Asset Model</th>    
+              <th data-field="asset_name" [attr.data-visible]="rpt['asset_name']!== undefined ? rpt['asset_name'] : false">Asset</th>   
+              <th data-field="asset_status" [attr.data-visible]="rpt['asset_status']!== undefined ? rpt['asset_status'] : false">Asset Status</th>           
+              <th data-field="breakdown_category_name" [attr.data-visible]="rpt['breakdown_category_name']!== undefined ? rpt['breakdown_category_name'] : false">Breakdown Category</th>           
+              <th data-field="breakdown_sub_category_name" [attr.data-visible]="rpt['breakdown_sub_category_name']!== undefined ? rpt['breakdown_sub_category_name'] : false">Breakdown</th>            
+              <th data-field="ticket_no" [attr.data-visible]="rpt['ticket_no']!== undefined ? rpt['ticket_no'] : false">Ticket </th>            
+              <th data-field="priority" [attr.data-visible]="rpt['priority']!== undefined ? rpt['priority'] : false">Priority</th>           
+              <th data-field="status" [attr.data-visible]="rpt['status']!== undefined ? rpt['status'] : false">Status</th>           
+              <th data-field="assign_type" [attr.data-visible]="rpt['assign_type']!== undefined ? rpt['assign_type'] : false">Assign Type</th>            
+              <th data-field="stop_begin_time" [attr.data-visible]="rpt['stop_begin_time']!== undefined ? rpt['stop_begin_time'] : false">Raised Time</th>            
+              <th data-field="raised_by" [attr.data-visible]="rpt['raised_by']!== undefined ? rpt['raised_by'] : false">Raised By</th>            
+              <th data-field="assign_begin_time" [attr.data-visible]="rpt['assign_begin_time']!== undefined ? rpt['assign_begin_time'] : false">Assigned Time</th>            
+              <th data-field="head_response_hr" [attr.data-visible]="rpt['head_response_hr']!== undefined ? rpt['head_response_hr'] : false">Head Response (HH:MM:SS)</th>           
+              <th data-field="attend_by" [attr.data-visible]="rpt['attend_by']!== undefined ? rpt['attend_by'] : false">Assigned To</th>            
+              <th data-field="operator_1_name" [attr.data-visible]="rpt['operator_1_name']!== undefined ? rpt['operator_1_name'] : false">Support Engineer 1</th>           
+              <th data-field="operator_2_name" [attr.data-visible]="rpt['operator_2_name']!== undefined ? rpt['operator_2_name'] : false">Support Engineer 2</th>           
+              <th data-field="accepted_time" [attr.data-visible]="rpt['accepted_time']!== undefined ? rpt['accepted_time'] : false">Accepted Time</th>            
+              <th data-field="engineer_response_hr" [attr.data-visible]="rpt['engineer_response_hr']!== undefined ? rpt['engineer_response_hr'] : false">Engineer Response (HH:MM:SS)</th>           
+              <th data-field="first_check_in_time" [attr.data-visible]="rpt['first_check_in_time']!== undefined ? rpt['first_check_in_time'] : false">Check In Time</th>            
+              <th data-field="last_check_out_time" [attr.data-visible]="rpt['last_check_out_time']!== undefined ? rpt['last_check_out_time'] : false">Check Out Time</th>           
+              <th data-field="downtime_duration" [attr.data-visible]="rpt['downtime_duration']!== undefined ? rpt['downtime_duration'] : false">Downtime Duration (HH:MM:SS)</th>           
+              <th data-field="fixed_by_name" [attr.data-visible]="rpt['fixed_by_name']!== undefined ? rpt['fixed_by_name'] : false">Acknowledged By</th>            
+              <th data-field="fixed_begin_time" [attr.data-visible]="rpt['fixed_begin_time']!== undefined ? rpt['fixed_begin_time'] : false">Acknowledged Time</th>            
+              <th data-field="complete_duration" [attr.data-visible]="rpt['complete_duration']!== undefined ? rpt['complete_duration'] : false">Complete Duration (HH:MM:SS)</th>           
+              <th data-field="why1" [attr.data-visible]="rpt['why1']!== undefined ? rpt['why1'] : false">Why 1</th>            
+              <th data-field="action1" [attr.data-visible]="rpt['action1']!== undefined ? rpt['action1'] : false">Action 1</th>           
+              <th data-field="why2" [attr.data-visible]="rpt['why2']!== undefined ? rpt['why2'] : false">Why 2</th>            
+              <th data-field="action2" [attr.data-visible]="rpt['action2']!== undefined ? rpt['action2'] : false">Action 2</th>           
+              <th data-field="why3" [attr.data-visible]="rpt['why3']!== undefined ? rpt['why3'] : false">Why 3</th>            
+              <th data-field="action3" [attr.data-visible]="rpt['action3']!== undefined ? rpt['action3'] : false">Action 3</th>           
+              <th data-field="why4" [attr.data-visible]="rpt['why4']!== undefined ? rpt['why4'] : false">Why 4</th>            
+              <th data-field="action4" [attr.data-visible]="rpt['action4']!== undefined ? rpt['action4'] : false">Action 4</th>           
+              <th data-field="why5" [attr.data-visible]="rpt['why5']!== undefined ? rpt['why5'] : false">Why 5</th>            
+              <th data-field="action5" [attr.data-visible]="rpt['action5']!== undefined ? rpt['action5'] : false">Action 5</th>           
+              <th data-field="root_cause" [attr.data-visible]="rpt['root_cause']!== undefined ? rpt['root_cause'] : false">Root Cause</th>           
+              <th data-field="solution" [attr.data-visible]="rpt['solution']!== undefined ? rpt['solution'] : false">Solution</th>           
+              <th data-field="remarks" [attr.data-visible]="rpt['remarks']!== undefined ? rpt['remarks'] : false">Remarks</th>
+              <th data-field="total_ticket" [attr.data-visible]="rpt['total_ticket']!== undefined ? rpt['total_ticket'] : false">Total Ticket</th>
+              <th data-field="open" [attr.data-visible]="rpt['open']!== undefined ? rpt['open'] : false">Open Ticket</th>
+              <th data-field="assign" [attr.data-visible]="rpt['assign']!== undefined ? rpt['assign'] : false">Assigned Ticket</th>
+              <th data-field="accept" [attr.data-visible]="rpt['accept']!== undefined ? rpt['accept'] : false">Accepted Ticket</th>
+              <th data-field="in_progress_tickets" [attr.data-visible]="rpt['in_progress_tickets']!== undefined ? rpt['in_progress_tickets'] : false">In Progress Ticket</th>
+              <th data-field="on_hold" [attr.data-visible]="rpt['on_hold']!== undefined ? rpt['on_hold'] : false">Hold Ticket</th>
+              <th data-field="pending" [attr.data-visible]="rpt['pending']!== undefined ? rpt['pending'] : false">Pending Ticket</th>
+              <th data-field="completed" [attr.data-visible]="rpt['completed']!== undefined ? rpt['completed'] : false">Completed Ticket</th>
+              <th data-field="fixed" [attr.data-visible]="rpt['fixed']!== undefined ? rpt['fixed'] : false">Fixed Ticket</th>
+              <th data-field="cancel" [attr.data-visible]="rpt['cancel']!== undefined ? rpt['cancel'] : false">Cancel Ticket</th>
+              <th data-field="delete" [attr.data-visible]="rpt['delete']!== undefined ? rpt['delete'] : false">Delete Ticket</th>
+              <th data-field="mttr" [attr.data-visible]="rpt['mttr']!== undefined ? rpt['mttr'] : false">MTTR</th>
+              <th data-field="mtbf" [attr.data-visible]="rpt['mtbf']!== undefined ? rpt['mtbf'] : false">MTBF</th>         
+              <th data-field="cancelled_by" [attr.data-visible]="rpt['cancelled_by']!== undefined ? rpt['cancelled_by'] : false">Cancelled By</th>           
+              <th data-field="cancel_comment" [attr.data-visible]="rpt['cancel_comment']!== undefined ? rpt['cancel_comment'] : false">Cancelled Reason</th>
+              <th data-field="spare_name" [attr.data-visible]="rpt['spare_name']!== undefined ? rpt['spare_name'] : false"> Spare Name</th>
+              <th data-field="consumed_qty" [attr.data-visible]="rpt['consumed_qty']!== undefined ? rpt['consumed_qty'] : false"> Replaced By</th>
+              <th data-field="spare_unit_price" [attr.data-visible]="rpt['spare_unit_price']!== undefined ? rpt['spare_unit_price'] : false"> Consumed Quantity</th>
+              <th data-field="total_cost" [attr.data-visible]="rpt['total_cost']!== undefined ? rpt['total_cost'] : false"> Total Cost</th>
+              <th data-field="mttr_name" [attr.data-visible]="rpt['mttr_name']!== undefined ? rpt['mttr_name'] : false">MTTR Name</th>
+              <th data-field="mttr_value" [attr.data-visible]="rpt['mttr_value']!== undefined ? rpt['mttr_value'] : false">MTTR </th> 
+              <th data-field="delete_on" [attr.data-visible]="rpt['delete_on']!== undefined ? rpt['delete_on'] : false">Delete Time</th>
+              <th data-field="delete_by" [attr.data-visible]="rpt['delete_by']!== undefined ? rpt['delete_by'] : false">Delete By</th>
+              <th data-field="delete_comment" [attr.data-visible]="rpt['delete_comment']!== undefined ? rpt['delete_comment'] : false">Delete Reason</th>          
+            </tr>
+          </thead>
+          <tbody *ngIf="breakdownReportLists.length > 0; else noData">
+            <tr *ngFor="let breakdown of breakdownReportLists; let i = index">
+              <td>{{ i+1 }}</td>
+              <td *ngIf="reportType == 'detail'">
+                {{ breakdown.current_stop_begin_time | date:'dd-MM-yyyy' }}
+              </td>
+              <td *ngIf="reportType != 'detail'">
+                {{ breakdown.date }}
+              </td>
+              <td>{{ breakdown.company_name }}</td>
+              <td>{{ breakdown.bu_name }}</td>
+              <td>{{ breakdown.plant_name }}</td>
+              <td>{{ breakdown.department_name }}</td>
+              <td>{{ breakdown.location_name }}</td>
+              <td>{{ breakdown.asset_group_name }}</td>
+              <td>{{ breakdown.asset_model_name }}</td>
+              <td>{{ breakdown.asset_name }}</td>
+              <td>{{ breakdown.asset_status }}</td>
+              <td>{{ breakdown.breakdown_category_name }}</td>
+              <td>{{ breakdown.breakdown_sub_category_name }}</td>
+              <td>{{ breakdown.ticket_no }}</td>
+              <td>{{ breakdown.priority }}</td>
+              <td>{{ breakdown.status }}</td>
+              <td>{{ breakdown.assign_type }}</td>
+              <td>{{ breakdown.current_stop_begin_time | date:'dd-MM-yyyy HH:mm:ss'}}</td>
+              <td>{{ breakdown.raised_by }}</td>
+              <td>{{ breakdown.assign_begin_time === "1900-01-01T00:00:00" ? '00-00-0000 00-00-00' : (breakdown.assign_begin_time | date:'dd-MM-yyyy HH:mm:ss') }}</td>
+              <td>{{ breakdown.head_response_hr}}</td>
+              <td>{{ breakdown.attend_by_name }}</td>
+              <td>{{ breakdown.operator_1_name }}</td>
+              <td>{{ breakdown.operator_2_name }}</td>
+              <td>{{ breakdown.ack_begin_time === "1900-01-01T00:00:00" ? '00-00-0000 00-00-00' : (breakdown.ack_begin_time | date:'dd-MM-yyyy HH:mm:ss') }}</td>
+              <td>{{ breakdown.engineer_response_hr }}</td>
+              <td>{{ breakdown.first_check_in_time === "1900-01-01 00:00:00" ? '00-00-0000 00-00-00' : (breakdown.first_check_in_time | date:'dd-MM-yyyy HH:mm:ss') }}</td>
+              <td>{{ breakdown.last_check_out_time === "1900-01-01T00:00:00" ? '00-00-0000 00-00-00' : (breakdown.last_check_out_time | date:'dd-MM-yyyy HH:mm:ss') }}</td>
+              <td>{{ breakdown.downtime_duration}}</td>                 
+              <td>{{ breakdown.fixed_by_name }}</td>
+              <td>{{ breakdown.fixed_begin_time === "1900-01-01T00:00:00" ? '00-00-0000 00-00-00' : (breakdown.fixed_begin_time | date:'dd-MM-yyyy HH:mm:ss') }}</td>
+              <td>{{ breakdown.complete_duration }}</td>
+              <td>{{ breakdown.why1 }}</td>
+              <td>{{ breakdown.action1 }}</td>
+              <td>{{ breakdown.why2 }}</td>
+              <td>{{ breakdown.action2 }}</td>
+              <td>{{ breakdown.why3 }}</td>
+              <td>{{ breakdown.action3 }}</td>
+              <td>{{ breakdown.why4 }}</td>
+              <td>{{ breakdown.action4 }}</td>
+              <td>{{ breakdown.why5 }}</td>
+              <td>{{ breakdown.action5 }}</td>
+              <td>{{ breakdown.root_cause }}</td>
+              <td>{{ breakdown.solution }}</td>
+              <td>{{ breakdown.remarks }}</td>
+              <td>{{ breakdown.ticket_count }}</td>
+              <td>{{ breakdown.open }}</td>
+              <td>{{ breakdown.assign }}</td>
+              <td>{{ breakdown.accept }}</td>
+              <td>{{ breakdown.in_progress_tickets }}</td>
+              <td>{{ breakdown.on_hold }}</td>
+              <td>{{ breakdown.pending }}</td>
+              <td>{{ breakdown.completed }}</td>
+              <td>{{ breakdown.fixed }}</td>
+              <td>{{ breakdown.cancel }}</td>
+              <td>{{ breakdown.delete }}</td>
+              <td>{{ breakdown.mttr }}</td>
+              <td>{{ breakdown.mtbf }}</td>
+              <td>{{ breakdown.cancel_by }}</td>
+              <td>{{ breakdown.cancel_reason }}</td>
+              <td>{{ breakdown.spare_name }}</td>
+              <td>{{ breakdown.attend_by_name }}</td>
+              <td>{{ breakdown.consumed_qty }}</td>
+              <td>{{ breakdown.total_cost }}</td>
+              <td>{{ breakdown.mttr_name }}</td>
+              <td>{{ breakdown.mttr_value }}</td>
+              <td></td>
+              <td></td>
+              <td>{{ breakdown.delete_comment }}</td>
+            </tr>
+            <tr class='sort_hide'>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>           
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>Total Downtime</td>
+              <td class="text-bold" style="color:red">{{totalDowntime}}</td>
+              <td></td>         
+              <td>Total Completion</td>
+              <td class="text-bold" style="color:green">{{totalCompleteDuration}}</td>
+              <td></td>
+              <td></td>
+              <td></td>      
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>      
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+          <ng-template #noData>
+            <tbody>
+              <tr>
+                <td colspan="45" class="text-center">No Data Available </td>
+              </tr>
+            </tbody>
+          </ng-template>
+        </table>
+      </div>
+    </div>
+  </div>
+  <!-- Solution Bank -->
+  <div class="modal fade" id="modal-action_taken_status">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header p-1">
+          <h5 class="modal-title pl-3">Solution Bank</h5>
+          <button type="button" class="close mr-1" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <h4> Issue : <span id="issue_text" style="color: #17a2b8;"></span></h4>
+          <div class="table-responsive" style="height: 500px;overflow-y:auto">
+            <table class="table table-striped modal-table">
+              <thead>
+                <tr>
+                  <th>Why</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="action_taken_data">
+              </tbody>
+            </table>
+            <h5> Root Cause : <span id="root_cause_text" style="color: #17a2b8;"></span></h5>
+            <h5> Solution : <span id="solution_text" style="color: #17a2b8;"></span></h5>
+            <h5> Remarks : <span id="remarks_text" style="color: #17a2b8;"></span></h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="bd_ticket">
+    <div class="modal-dialog">
+      <div class="modal-content bg-dark">
+        <div class="modal-header p-2 pl-2 pr-3">
+          <h5 class="modal-title"> Ticket Status </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="modal_close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body text-center">
+          <div class="content">
+            <div class="box">
+              <div class="column">
+                <div class="item" *ngFor="let status of ticketStatusLists">
+                  <input type="checkbox" class="bd_ticket" id="bd{{ status.id }}" data-target="#bd_open">
+                  <label for="bd{{ status.id }}">
+                    <div class="tick"></div>
+                  </label>
+                  <span (click)="getStatusData(status.id,$event)">{{ status.name }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,112 @@
+.card-title {
+    font-size: 1.1rem;
+}
+
+.table td, .table th {
+    vertical-align: middle;
+    font-size: 1rem !important;
+}
+
+.page-link {
+    padding: 0.3rem .6rem;
+    color: #17a2b8;
+}
+
+.page-item.active .page-link {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+}
+
+.fixed-table-toolbar {
+    width: calc(100% - 76px);
+}
+
+.master_table_btn .btn {
+    width: 33.75px;
+}
+
+.btn {
+    margin-right: 6px;
+    font-size: 1rem !important;
+}
+
+label {
+    font-weight: 400 !important;
+    font-size: 1rem !important;
+}
+
+#modal-master .modal {
+    padding-right: 17px;
+    display: block;
+}
+
+#modal-master .modal-header {
+    background-color: #17a2b8;
+    color: #fff;
+}
+
+#modal-master .modal-header button {
+    margin-top: -3px;
+}
+
+#modal_master_dataTable thead tr th, #modal_master_dataTable tbody tr td {
+    vertical-align: middle;
+}
+
+.master-form-control {
+    background-color: transparent;
+    border: none;
+    padding: 0px;
+    border-radius: 0px;
+    transition: all 1s ease;
+}
+
+.callout {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.bottom_border {
+    font-weight: 600;
+}
+
+.table th {
+    padding: 5px;
+    width: 80px;
+    min-width: 130px;
+    position: sticky;
+    top: 0;
+}
+
+.table td {
+    padding: 5px;
+    width: 80px;
+    min-width: 80px;
+}
+
+.table th:nth-child(1),
+.table td:nth-child(1) {
+    position: sticky;
+    left: 0;
+    width: 150px;
+    min-width: 150px;
+}
+
+.table th:nth-child(2),
+.table td:nth-child(2) {
+    position: sticky;
+    left: 161px;
+    width: 50px;
+}
+
+.table td:nth-child(1),
+.table td:nth-child(2) {
+    background: #fff;
+}
+
+.table th:nth-child(1),
+.table th:nth-child(2) {
+    z-index: 2;
+    background: #fff;
+}

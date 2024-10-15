@@ -1,0 +1,197 @@
+<div class="col-sm-12 pt-2">
+    <div class="card card-outline card-cyan" id="company_master">
+        <div class="card-header">
+            <h3 class="card-title pt-1"> Client List </h3>
+            <div class="card-tools">
+                <button class="btn btn-secondary btn-sm ml-2" type="button" name="toggle" id="toggle_icon">
+                    <i class="fa fa-toggle-off" id="toggleIcon"></i>
+                </button>
+                <button class="btn btn-secondary btn-sm ml-2" type="button" (click)="textWrap()"><i
+                        class="fas fa-text-width"></i></button>
+                <button class="btn btn-sm btn-secondary ml-2" type="button" title="Table Column Visibility"
+                    ref_type="table" data-toggle="modal" data-target="#modal-master" ref_id="8"> <i
+                        class="fas fa-list"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <table id="dataTable" class="table table-bordered table-sm table-responsive" style="width: 100%;">
+                <thead>
+                    <tr>
+                        <th> S.No </th>
+                        <th> Company Name </th>
+                        <th> Referred </th>
+                        <th> Email Id </th>
+                        <th> Phone No </th>
+                        <th> User No </th>
+                        <th> Multiple Companies </th>
+                        <th> Status </th>
+                        <th> Operation </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>ewrgvwscsvcsa</td>
+                        <td>jqflkmc;lmda;lkmmcd</td>
+                        <td>dqelkmq;lml;m</td>
+                        <td>xadatyfyua,x</td>
+                        <td>wgiuqgiuhsadcsfwtgsxcsdfww</td>
+                        <td>egtg</td>
+                        <td>yjjny</td>
+                        <td>
+                            <a title="Active Company" class="btn status active_status">
+                                <i Class="far fa-thumbs-up text-green"></i></a>
+                            <a title="InActive Company" class="btn status inactive_status">
+                                <i Class="far fa-thumbs-down text-red"></i></a>
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <button class="btn tip edit_plant master_access_edit" title="Edit asset">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </button>
+                                <button class="btn tip remove_plant master_access_delete" title="Remove asset">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>ewrgvwscsvcsa</td>
+                        <td>jqflkmc;lmda;lkmmcd</td>
+                        <td>dqelkmq;lml;m</td>
+                        <td>xadatyfyua,x</td>
+                        <td>wgiuqgiuhsadcsfwtgsxcsdfww</td>
+                        <td>sfrt</td>
+                        <td>shyrw</td>
+                        <td>
+                            <a title="Active Company" class="btn active_status">
+                                <i Class="far fa-thumbs-up text-green"></i></a>
+                            <a title="InActive Company" class="btn inactive_status">
+                                <i Class="far fa-thumbs-down text-red"></i></a>
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <button class="btn tip edit_plant master_access_edit" title="Edit asset">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </button>
+                                <button class="btn tip remove_plant master_access_delete" title="Remove asset">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="list_view" style="display: none;list-style: none;">
+                <li class="callout card-inside callout-info">
+                    <div class="text-center">
+                        <p class="mb-1 bottom_border"> Company Code </p>
+                        <h6 class="m-0" style="color: #15d5db;"> Aurolab </h6>
+                    </div>
+                    <div class="text-center">
+                        <p class="mb-1 bottom_border"> Referred </p>
+                        <h6 class="m-0" style="color: #15d5db;"> Aurolab </h6>
+                    </div>
+                    <div class="text-center">
+                        <p class="mb-1 bottom_border"> Email Id </p>
+                        <h6 class="m-0" style="color: #15d5db;"> Aurolab@gmail.com </h6>
+                    </div>
+                    <div class="text-center">
+                        <p class="mb-1 bottom_border"> Phone No </p>
+                        <h6 class="m-0" style="color: #15d5db;"> 6879600318 </h6>
+                    </div>
+                    <div class="text-center">
+                        <p class="mb-1 bottom_border"> Status </p>
+                        <a title="Active Company" class="btn status active_status">
+                            <i Class="far fa-thumbs-up text-green"></i></a>
+                        <a title="InActive Company" class="btn status inactive_status">
+                            <i Class="far fa-thumbs-down text-red"></i></a>
+                    </div>
+                    <div class="text-center">
+                        <p class="mb-1 bottom_border"> Operation </p>
+                        <div class="btn-group">
+                            <button class="btn tip edit_plant master_access_edit" title="Edit asset">
+                                <i class="fas fa-pencil-alt"></i>
+                            </button>
+                            <button class="btn tip remove_plant master_access_delete" title="Remove asset">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                </li>
+                <li class="callout card-inside callout-info">
+                    <div class="text-center">
+                        <p class="mb-1 bottom_border"> Company Code </p>
+                        <h6 class="m-0" style="color: #15d5db;"> Aurolab </h6>
+                    </div>
+                    <div class="text-center">
+                        <p class="mb-1 bottom_border"> Referred </p>
+                        <h6 class="m-0" style="color: #15d5db;"> Aurolab </h6>
+                    </div>
+                    <div class="text-center">
+                        <p class="mb-1 bottom_border"> Email Id </p>
+                        <h6 class="m-0" style="color: #15d5db;"> Aurolab@gmail.com </h6>
+                    </div>
+                    <div class="text-center">
+                        <p class="mb-1 bottom_border"> Phone No </p>
+                        <h6 class="m-0" style="color: #15d5db;"> 6879600318 </h6>
+                    </div>
+                    <div class="text-center">
+                        <p class="mb-1 bottom_border"> Status </p>
+                        <a title="Active Company" class="btn status active_status">
+                            <i Class="far fa-thumbs-up text-green"></i></a>
+                        <a title="InActive Company" class="btn status inactive_status">
+                            <i Class="far fa-thumbs-down text-red"></i></a>
+                    </div>
+                    <div class="text-center">
+                        <p class="mb-1 bottom_border"> Operation </p>
+                        <div class="btn-group">
+                            <button class="btn tip edit_plant master_access_edit" title="Edit asset">
+                                <i class="fas fa-pencil-alt"></i>
+                            </button>
+                            <button class="btn tip remove_plant master_access_delete" title="Remove asset">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                </li>
+                <li class="callout card-inside callout-info">
+                    <div class="text-center">
+                        <p class="mb-1 bottom_border"> Company Code </p>
+                        <h6 class="m-0" style="color: #15d5db;"> Aurolab </h6>
+                    </div>
+                    <div class="text-center">
+                        <p class="mb-1 bottom_border"> Referred </p>
+                        <h6 class="m-0" style="color: #15d5db;"> Aurolab </h6>
+                    </div>
+                    <div class="text-center">
+                        <p class="mb-1 bottom_border"> Email Id </p>
+                        <h6 class="m-0" style="color: #15d5db;"> Aurolab@gmail.com </h6>
+                    </div>
+                    <div class="text-center">
+                        <p class="mb-1 bottom_border"> Phone No </p>
+                        <h6 class="m-0" style="color: #15d5db;"> 6879600318 </h6>
+                    </div>
+                    <div class="text-center">
+                        <p class="mb-1 bottom_border"> Status </p>
+                        <a title="Active Company" class="btn status active_status">
+                            <i Class="far fa-thumbs-up text-green"></i></a>
+                        <a title="InActive Company" class="btn status inactive_status">
+                            <i Class="far fa-thumbs-down text-red"></i></a>
+                    </div>
+                    <div class="text-center">
+                        <p class="mb-1 bottom_border"> Operation </p>
+                        <div class="btn-group">
+                            <button class="btn tip edit_plant master_access_edit" title="Edit asset">
+                                <i class="fas fa-pencil-alt"></i>
+                            </button>
+                            <button class="btn tip remove_plant master_access_delete" title="Remove asset">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                </li>
+            </div>
+        </div>
+    </div>
+</div>

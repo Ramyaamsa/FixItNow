@@ -1,0 +1,61 @@
+.nav-pills .nav-item {
+    width: 24%;
+}
+
+.nav-pills .nav-item a {
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 0 5px 5px;
+    background-color: #e3e3e3;
+}
+
+.nav-pills .nav-link.active,
+.nav-pills .show>.nav-link {
+    border-color: #17a2b8;
+    background-color: #17a2b8 !important;
+    color: white !important;
+}
+
+.table th {
+    padding: 5px;
+    width: 80px;
+    min-width: 110px;
+    position: sticky;
+    top: 0;
+}
+
+.table td {
+    padding: 5px;
+    width: 80px;
+    min-width: 80px;
+}
+
+.table th:nth-child(1),
+.table td:nth-child(1) {
+    position: sticky;
+    left: 0;
+    width: 150px;
+    min-width: 150px;
+}
+
+.table th:nth-child(2),
+.table td:nth-child(2) {
+    position: sticky;
+    left: 161px;
+    width: 50px;
+}
+
+.table td:nth-child(1),
+.table td:nth-child(2) {
+    background: #fff;
+}
+
+.table th:nth-child(1),
+.table th:nth-child(2) {
+    z-index: 2;
+    background: #fff;
+}

@@ -1,0 +1,283 @@
+<div class="col-sm-12 pt-2">
+    <div class="card card-outline card-cyan">
+        <form id="report_form" name="report_form" class="form-horizontal" method="POST"
+            target="_blank" class="form-horizontal">
+            <div class="card-header">
+                <h3 class="card-title pt-1">Reports</h3>
+                <div class="card-tools d-flex" style="display: none !important;">
+                    <div class="custom-control custom-radio mr-4">
+                        <input class="custom-control-input custom-control-input-success" type="radio"
+                            id="report_type_detail" name="report_type" value="Detail" checked>
+                        <label for="report_type_detail" class="custom-control-label">Detailed</label>
+                    </div>
+                    <div class="custom-control custom-radio ml-2 mr-4">
+                        <input class="custom-control-input custom-control-input-success" type="radio"
+                            id="report_type_summary" name="report_type" value="Summary">
+                        <label for="report_type_summary" class="custom-control-label">Summary</label>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body p-2">
+                <button type="button" class="btn btn-xs btn-danger float-right btn-flat" id="filter_option"
+                    data-toggle="modal" data-target="#modal_filter_options" style="display: none;"><i class="fas fa-filter"></i></button>
+                <div class="row">
+                    <div class="col-sm-4" id="company_div">
+                        <div class="form-group">
+                            <label for="company_name">Company</label>
+                            <select class="select2" id="company_name" name="company_name">
+                                <option value="">~~ Select Company ~~</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-4" id="bu_div">
+                        <div class="form-group">
+                            <label for="bu_name">BU</label>
+                            <select class="select2" id="bu_name" name="bu_name">
+                                <option value="">~~ Select BU ~~</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-4" id="plant_div">
+                        <div class="form-group">
+                            <label for="plant_name">Plant</label>
+                            <select class="select2" id="plant_name" name="plant_name">
+                                <option value="">~~ Select Plant ~~</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-4" id="department_div">
+                        <div class="form-group">
+                            <label for="department_name">Department</label>
+                            <select class="select2" id="department_name" name="department_name">
+                                <option value="">~~ Select Department ~~</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-4" id="location_div">
+                        <div class="form-group">
+                            <label for="location_name"> Location </label>
+                            <select id="location_name" name="location_name[]" class="multiselect" multiple>
+                                <option value=""> ~~ Select Location ~~ </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-4" id="report_div">
+                        <div class="form-group">
+                            <label for="report_name"> Report Type </label>
+                            <select id="report_name" name="report_name[]" class="select2">
+                                <option value=""> ~~ Select Report Type ~~ </option>
+                                <option value="Transaction"> Transaction Report </option>
+                                <option value="Call Log"> Maintenance Call Log Report </option>
+                                <option value="Spare"> Spare Report </option>
+                                <option value="PM"> PM Report </option>
+                                <option value="Asset Scrap"> Asset Scrap Report </option>
+                                <option value="Log"> Log Report </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-4" id="asset_group_div" style="display: none;">
+                        <div class="form-group">
+                            <label for="asset_group_name">Asset Group</label>
+                            <select id="asset_group_name" name="asset_group_name[]" class="multiselect" multiple>
+                                <option value="">~~ Select Asset Group ~~</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-4" id="asset_div" style="display: none;">
+                        <div class="form-group">
+                            <label for="equipment_name">Asset</label>
+                            <select id="equipment_name" name="equipment_name[]" class="multiselect" multiple>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-4" id="group_by_div" style="display: none;">
+                        <div class="form-group">
+                            <label for="group_by">Group By</label>
+                            <select class="select2" id="group_by" name="group_by">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-4" id="asset_code_div" style="display: none;">
+                        <div class="form-group">
+                            <label for="asset_code"> Asset Code</label>
+                            <select class="multiselect" id="asset_code" name="asset_code[]"
+                                placeholder="Select Asset Id" multiple>
+                                <option value="all">All</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-4" id="depend_group_div" style="display: none;">
+                        <div class="form-group">
+                            <label id="depend_group_label">Depend Group</label>
+                            <select id="depend_group_value" name="depend_group_value" class="multiselect" multiple>
+                                <option value="all">All</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-4" id="spares_div" style="display: none;">
+                        <div class="form-group">
+                            <label for="spare_name">Spares</label>
+                            <select id="spare_name" name="spare_id[]" class="multiselect" multiple>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-4" id="service_div" style="display: none;">
+						<div class="form-group">
+							<label for="service_id"> Service </label>
+							<select class="multiselect" id="service_id" name="service_id[]" multiple>
+							</select>
+						</div>
+                    </div>
+                    <div class="col-sm-4" id="issue_div" style="display: none;">
+                        <div class="form-group">
+                            <label for="sub_category_id"> Issue </label>
+                            <select class="multiselect" id="sub_category_id" name="sub_category_id[]" multiple>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-4" id="workorder_div" style="display: none;">
+                        <div class="form-group">
+                            <label for="work_order_category">Work Order Caregory</label>
+                            <select id="work_order_category" name="work_order_category" class="select2">
+                                <option value="all" selected>All</option>
+                                <option value="pm">PM</option>
+                                <option value="breakdown">Breakdown</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-4" id="year_div" style="display: none;">
+                        <div class="form-group">
+                            <label class="from_date_label">Year</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control form-control-sm datepicker" id="from_date"
+                                    name="from_date">
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4" id="peroid_div" style="display: none;">
+                        <div class="form-group">
+                            <label for="period_id">Period</label>
+                            <select id="period_id" name="period_id" class="select2">
+                                <option value="from_to" selected>From To</option>
+                                <option value="sel_date">Date</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-4" id="from_date_div" style="display: none;">
+                        <div class="form-group from_date_div">
+                            <label class="from_date_label">From Date</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control form-control-sm datepicker" id="from_date"
+                                    name="from_date">
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <i class="far fa-calendar"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4" id="to_date_div" style="display: none;">
+                        <div class="form-group to_date_div">
+                            <label for="to_date_label">To Date</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control form-control-sm datepicker" id="to_date"
+                                    name="to_date">
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Report Filter Modal -->
+                <div class="modal fade" id="modal_filter_options" data-backdrop="static">
+                    <div class="modal-dialog" style="min-width: 80%;">
+                        <div class="modal-content">
+                            <div class="modal-header p-2">
+                                <h6 class="modal-title m-0">Filters</h6>
+                                <button type="button" class="close p-0 pr-4 pt-2" data-dismiss="modal"
+                                    aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-sm-4 transaction">
+                                        <div class="form-group" id="report_for_div">
+                                            <label for="report_for">Report For</label>
+                                            <select id="report_for" name="report_for" class="select2">
+                                                <option value="regular">Regular</option>
+                                                <option value="exception">Exception</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="asset_status">Asset Status</label>
+                                            <select id="asset_status" name="asset_status" class="select2">
+                                                <option value="all">All</option>
+                                                <option value="complaint"> Complaint </option>
+                                                <option value="stopped"> Stopped </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4 transaction">
+                                        <div class="form-group on_off_time_div" id="condition_div"
+                                            style="display: none">
+                                            <label for="on_off_time">Condition</label>
+                                            <select id="on_off_time" name="on_off_time" class="select2">
+                                                <option value="on_time"> On Time </option>
+                                                <option value="off_time"> Off Time </option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group" id="priority_div">
+                                            <label for="priority_id">Priority</label>
+                                            <select id="priority_id" name="priority_id" class="select2">
+                                                <option value="all"> All </option>
+                                                <option value="high">High</option>
+                                                <option value="low">Low</option>
+                                                <option value="medium">medium</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4 transaction">
+                                        <div class="form-group time_div" id="duration_div" style="display: none">
+                                            <label for="time">Duration (secs)</label>
+                                            <input type="text" id="time" name="time"
+                                                class="form-control form-control-sm numeric" value="">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="form-group row">
+                                            <label for="rpt_fields" class="col-sm-2">Report Fields</label>
+                                            <div class="col-sm-10">
+                                                <select name="rpt_fields[]" id="rpt_fields" class="multiselect" multiple>
+                                                    <option value="all">All</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-center">
+                <input type="hidden" name="group_name_id" id="group_name_id" value="" />
+                <input type="hidden" name="report_fields" id="report_fields" value="" />
+                <input type="hidden" name="category_id_val" id="category_id_val" value="" />
+                <input type="hidden" name="category_id_val_1" id="category_id_val_1" value="" />
+                <input type="hidden" name="sub_category_id_val" id="sub_category_id_val" value="" />
+                <button type="submit" class="btn btn-info btn-sm" id="btn_print">View</button>&nbsp;
+                <button type="button" class="btn btn-sm btn-default" id="btn_cancel" (click)="cancel()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>

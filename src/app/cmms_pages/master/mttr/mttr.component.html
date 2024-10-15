@@ -1,0 +1,248 @@
+<div class="col-sm-12 pt-2">
+  <div class="card card-outline card-cyan" [hidden]="mttrCard">
+    <div class="card-header">
+      <h3 class="card-title pt-1"> MTTR </h3>
+      <div class="card-tools">
+        <button type="button" class="btn btn-sm btn-outline-info" (click)="addMttr()" *ngIf="masterOperation['add']">
+          <i class="fas fa-plus fa-sm mr-1"></i> MTTR
+        </button>
+        <button class="btn btn-secondary btn-sm ml-2" type="button" id="toggle_icon">
+          <i class="fa fa-toggle-off" id="toggleIcon"></i>
+        </button>
+        <button class="btn btn-secondary btn-sm ml-2" type="button" (click)="textWrap()">
+          <i class="fas fa-text-width"></i>
+        </button>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table id="dataTable" class="table table-sm table-bordered">
+          <thead>
+            <tr>
+              <th> Operation </th>
+              <th> Status </th>
+              <th> MTTR Code </th>
+              <th> MTTR Name </th>
+              <th> Company </th>
+              <th> Bu </th>
+              <th> Plant </th>
+              <th> Department </th>
+              <th> Asset Group </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let mttrList of mttrList">
+              <td>
+                <div class="btn-group">
+                  <button class="btn" title="Edit MTTR" (click)="editMttr(mttrList)" *ngIf="masterOperation['edit']">
+                    <i class="fas fa-pencil-alt"></i>
+                  </button>
+                  <button *ngIf="mttrList.is_assigned == 'yes' ? false : masterOperation['delete'] ? true : false"
+                    class="btn" title="Remove MTTR" (click)="statusMttr(mttrList.mttr_id,'delete')">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </td>
+              <td>
+                <button class="btn" title="Active/InActive MTTR" (click)="statusMttr(mttrList.mttr_id,mttrList.status)">
+                  <i
+                    [ngClass]="mttrList.status == 'active' ? 'far fa-thumbs-up text-success' : 'far fa-thumbs-down text-danger'"></i>
+                </button>
+              </td>
+              <td>{{ mttrList.mttr_code }}</td>
+              <td>{{ mttrList.mttr_name }}</td>
+              <td>{{ mttrList.company }}</td>
+              <td>{{ mttrList.bu }}</td>
+              <td>{{ mttrList.plant }}</td>
+              <td>{{ mttrList.department }}</td>
+              <td>{{ mttrList.asset_group }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="list-style: none;" *ngIf="listView">
+        <li class="card p-2">
+          <div class="row">
+            <div class="col-sm-2">
+              <b> Operation </b>
+            </div>
+            <div class="col-sm-2">
+              <b> Status </b>
+            </div>
+            <div class="col-sm-2">
+              <b> Company </b>
+            </div>
+            <div class="col-sm-2">
+              <b> Asset Group </b>
+            </div>
+            <div class="col-sm-2">
+              <b> MTTR Code </b>
+            </div>
+            <div class="col-sm-2">
+              <b> MTTR Name </b>
+            </div>
+          </div>
+        </li>
+        <div style="height: 70vh;overflow-y: auto;">
+          <li class="callout callout-info p-2" *ngFor="let mttrList of mttrList">
+            <div class="row align-items-center">
+              <div class="col-sm-2">
+                <div class="btn-group">
+                  <button class="btn" title="Edit MTTR" (click)="editMttr(mttrList)" *ngIf="masterOperation['edit']">
+                    <i class="fas fa-pencil-alt"></i>
+                  </button>
+                  <button *ngIf="mttrList.is_assigned == 'yes' ? false : masterOperation['delete'] ? true : false"
+                    class="btn" title="Remove MTTR" (click)="statusMttr(mttrList.mttr_id,'delete')"> <i
+                      class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="col-sm-2">
+                <button class="btn" title="Active/InActive MTTR" (click)="statusMttr(mttrList.mttr_id,mttrList.status)">
+                  <i
+                    [ngClass]="mttrList.status == 'active' ? 'far fa-thumbs-up text-success' : 'far fa-thumbs-down text-danger'"></i>
+                </button>
+              </div>
+              <div class="col-sm-2">
+                <h6 class="m-0">{{ mttrList.company_name }}</h6>
+              </div>
+              <div class="col-sm-2">
+                <h6 class="m-0">{{ mttrList.asset_group_name }}</h6>
+              </div>
+              <div class="col-sm-2">
+                <h6 class="m-0">{{ mttrList.mttr_code }}</h6>
+              </div>
+              <div class="col-sm-2">
+                <h6 class="m-0">{{ mttrList.mttr_name }}</h6>
+              </div>
+            </div>
+          </li>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card card-outline card-cyan" [hidden]="!mttrCard">
+    <div class="card-header">
+      <h3 class="card-title pt-1"> MTTR </h3>
+    </div>
+    <form id="mttr_form" autocomplete="off">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group row">
+              <label for="created_on" class="col-sm-4"> Created On </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm" id="created_on" name="created_on" value=""
+                  [(ngModel)]="created_on" disabled />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="modified_on" class="col-sm-4"> Modified On </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm" id="modified_on" name="modified_on" value=""
+                  [(ngModel)]="modified_on" disabled />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4" for="company_name"> Company <sup><i
+                    class="fas fa-asterisk fa-xs text-red"></i></sup>
+              </label>
+              <div class="col-sm-8">
+                <select id="company_name" name="company_name" class="select2 required" style="width:100%;">
+                  <option value=""> ~~ Select ~~ </option>
+                  <option *ngFor="let company of companyList" value="{{ company.company_id }}">
+                    {{ company.company_code }}-{{ company.company_name }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4" for="plant_name"> Plant <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup>
+              </label>
+              <div class="col-sm-8">
+                <select id="plant_name" name="plant_name" class="select2 required" style="width:100%;">
+                  <option value=""> ~~ Select ~~ </option>
+                  <option *ngFor="let plantList of plantList" value="{{ plantList.plant_id }}"
+                    [attr.plant_code]="plantList.plant_code">
+                    {{ plantList.plant_code }}-{{ plantList.plant_name }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4" for="equipment_group"> Asset
+                Group <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup>
+              </label>
+              <div class="col-sm-8">
+                <select id="equipment_group" name="equipment_group" class="select2 required" style="width:100%;">
+                  <option value=""> ~~ Select ~~ </option>
+                  <option *ngFor="let asset_groupList of asset_groupList" value="{{ asset_groupList.asset_group_id }}">
+                    {{ asset_groupList.asset_group_code }}-{{ asset_groupList.asset_group_name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="mttr_name" class="col-sm-4"> Name <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup>
+              </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm required" name="mttr_name" id="mttr_name"
+                  value="" [(ngModel)]="mttr_name" />
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group row">
+              <label for="created_by" class="col-sm-4"> Created By </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm" id="created_by" name="created_by" value=""
+                  [(ngModel)]="created_by" disabled />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="modified_by" class="col-sm-4"> Modified By </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm" id="modified_by" name="modified_by" value=""
+                  [(ngModel)]="modified_by" disabled />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4" for="bu_name"> BU
+                <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup>
+              </label>
+              <div class="col-sm-8">
+                <select id="bu_name" name="bu_name" class="select2 required" style="width:100%;">
+                  <option value=""> ~~ Select ~~ </option>
+                  <option *ngFor="let buList of buList" value="{{ buList.bu_id }}">
+                    {{ buList.bu_code }}-{{ buList.bu_name }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4" for="department_name"> Department <sup><i
+                    class="fas fa-asterisk fa-xs text-red"></i></sup>
+              </label>
+              <div class="col-sm-8">
+                <select id="department_name" name="department_name" class="select2 required" style="width:100%;">
+                  <option value=""> ~~ Select ~~ </option>
+                  <option *ngFor="let departmentList of departmentList" value="{{ departmentList.department_id }}">
+                    {{ departmentList.department_code }}-{{ departmentList.department_name }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="mttr_code" class="col-sm-4"> Code <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup>
+              </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm required" name="mttr_code" id="mttr_code"
+                  value="" [(ngModel)]="mttr_code" (input)="convertToUpperCase()" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer text-center">
+        <button type="submit" class="btn btn-sm btn-info mr-2" (click)="saveMttr()">save</button>
+        <button type="button" class="btn btn-sm btn-default" (click)="cancel()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,21 @@
+.nav-pills .nav-item {
+    width: 200px;
+}
+
+.nav-pills .nav-item a {
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 0 5px 5px;
+    background-color: #e3e3e3;
+}
+
+.nav-pills .nav-link.active,
+.nav-pills .show>.nav-link {
+    border-color: #009ab3;
+    background-color: #009ab3 !important;
+    color: white !important;
+}

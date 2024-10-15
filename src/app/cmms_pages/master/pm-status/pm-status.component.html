@@ -1,0 +1,202 @@
+<div class="col-md-12 pt-2">
+	<div class="card card-outline card-cyan" id="pm_status_master" [hidden]="showCard1">
+		<div class="card-header">
+			<h3 class="card-title"> PM Status </h3>
+			<div class="card-tools">
+				<button type="button" class="btn btn-sm btn-outline-info master_access_add" id="btn_add_pm_status"
+					(click)="addpmStatus()" *ngIf="masterOperation['add']">
+					<i class="fas fa-plus fa-sm mr-1"></i> PM Status
+				</button>
+				<button class="btn btn-secondary btn-sm ml-2" type="button" name="toggle" id="toggle_icon">
+					<i class="fa fa-toggle-off" id="toggleIcon"></i>
+				</button>
+				<button class="btn btn-secondary btn-sm ml-2" type="button" (click)="textWrap()"><i
+						class="fas fa-text-width"></i></button>
+				<button class="btn btn-sm btn-secondary ml-2" type="button" title="Table Column Visibility"
+					ref_type="table" data-toggle="modal" data-target="#modal-master" ref_id="8"> <i
+						class="fas fa-list"></i>
+				</button>
+			</div>
+		</div>
+		<div class="card-body">
+			<table id="dataTable" class="table table-bordered table-sm">
+				<thead>
+					<tr>
+						<th> Operation </th>
+						<th> Status </th>
+						<th> PM Status Name </th>
+						<th> Company </th>
+						<th> BU </th>
+						<th> Plant </th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<div class="btn-group">
+								<button class="btn tip edit_plant master_access_edit" title="Edit Maintenance Category"
+									*ngIf="masterOperation['edit']">
+									<i class="fas fa-pencil-alt"></i>
+								</button>
+								<!-- <button *ngIf="data.is_assigned == 'yes' ? false : masterOperation['delete'] ? true : false" class="btn tip remove_plant master_access_delete" -->
+								<button class="btn tip remove_plant master_access_delete"
+									title="Remove Maintenance Category">
+									<i class="fas fa-trash-alt"></i>
+								</button>
+							</div>
+						</td>
+						<td> <a class="btn" title="Active/InActive ">
+								<i Class="far fa-thumbs-up text-success"></i></a>
+						</td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="list_view" style="display: none;list-style: none;">
+				<li class="callout card-inside callout-info d-flex justify-content-between">
+					<div class="text-center">
+						<p class="mb-1 bottom_border"> Company Name </p>
+						<h6 class="m-0" style="color: #15d5db;"> Aurolab </h6>
+					</div>
+					<div class="text-center">
+						<p class="mb-1 bottom_border"> BU Name </p>
+						<h6 class="m-0" style="color: #15d5db;"> Aurolab </h6>
+					</div>
+					<div class="text-center">
+						<p class="mb-1 bottom_border"> Plant Name </p>
+						<h6 class="m-0" style="color: #15d5db;"> Aurolab </h6>
+					</div>
+					<div class="text-center">
+						<p class="mb-1 bottom_border"> Asset Name </p>
+						<h6 class="m-0" style="color: #15d5db;"> Aurolab </h6>
+					</div>
+					<div class="text-center">
+						<p class="mb-1 bottom_border"> Asset Name </p>
+						<h6 class="m-0" style="color: #15d5db;"> Aurolab </h6>
+					</div>
+					<div class="text-center">
+						<p class="mb-1 bottom_border"> Status </p>
+						<a title="Active Company" class="btn status active_status">
+							<i Class="far fa-thumbs-up text-green"></i></a>
+						<a title="InActive Company" class="btn status inactive_status">
+							<i Class="far fa-thumbs-down text-red"></i></a>
+					</div>
+					<div class="text-center">
+						<p class="mb-1 bottom_border"> Operation </p>
+						<div class="btn-group">
+							<button class="btn tip edit_plant master_access_edit" title="Edit asset">
+								<i class="fas fa-pencil-alt"></i>
+							</button>
+							<button class="btn tip remove_plant master_access_delete" title="Remove asset">
+								<i class="fas fa-trash-alt"></i>
+							</button>
+						</div>
+					</div>
+				</li>
+			</div>
+		</div>
+	</div>
+	<div class="card card-outline card-cyan" id="pm_status_master_dt1" [hidden]="!showCard1">
+		<div class="card-header">
+			<h3 class="card-title"> PM Status </h3>
+			<div class="card-tools">
+				<button type="button" class="btn btn-sm btn-outline-info btn_master" data-toggle="modal"
+					data-target="#modal-master" ref_id="13" ref_type="master">
+					<i class="fas fa-eye fa-sm"></i>&nbsp; Master Rights
+				</button>
+			</div>
+		</div>
+		<form id="pm_status_master_form" autocomplete="off">
+			<div class="card-body">
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="form-group row" id="pm_status_created_on_div">
+							<label for="created_on" class="col-sm-4" id="pm_status_created_on_label"> Created
+								On </label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control form-control-sm " id="created_on"
+									name="created_on" value="" disabled />
+							</div>
+						</div>
+						<div class="form-group row" id="pm_status_modified_on_div">
+							<label for="modified_on" class="col-sm-4" id="pm_status_modified_on_label">
+								Modified On </label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control form-control-sm " id="modified_on"
+									name="modified_on" value="" disabled />
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-form-label required col-sm-4" for="company_name"
+								id="pm_status_company_name_label"> Company <span id="equipment_group_label"></span>
+								<sup><i class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+							<div class="col-sm-8">
+								<select id="company_name" name="company_name" class="select2 required"
+									style="width:100%;">
+									<option value="" id="hide"> ~~ Select ~~ </option>
+									<option value=""></option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="plant_name" class="col-sm-4" id="pm_status_plant_name_label"> Plant
+								<span id="equipment_group_label"></span> <sup><i
+										class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+							<div class="col-sm-8">
+								<select name="plant_name" id="plant_name" class="select2 required" style="width:100%;">
+									<option value="">~~ Select ~~</option>
+									<option value=""></option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="form-group row" id="pm_status_created_by_div">
+							<label for="created_by" class="col-sm-4" id="pm_status_created_by_label"> Created
+								By </label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control form-control-sm " id="created_by"
+									name="created_by" value="" disabled />
+							</div>
+						</div>
+						<div class="form-group row" id="pm_status_modified_by_div">
+							<label for="modified_by" class="col-sm-4" id="pm_status_modified_by_label">
+								Modified By </label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control form-control-sm " id="modified_by"
+									name="modified_by" value="" disabled />
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="branch_name" class="col-sm-4" id="pm_status_bu_name_label"> BU
+								<span id="equipment_group_label"></span> <sup><i
+										class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+							<div class="col-sm-8">
+								<select name="bu_name" id="bu_name" class="select2 required" style="width:100%;">
+									<option value="">~~ Select ~~</option>
+									<option value=""></option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="branch_name" class="required col-sm-4" id="pm_status_name_label">
+								Name </label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control form-control-sm required" name="pm_status_name"
+									id="pm_status_name" value="" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="card-footer text-center">
+				<button type="submit" class="btn btn-sm btn-info mr-2"> Save </button>
+				<button type="button" id="cancel_button" class="btn btn-sm btn-default"> Cancel
+				</button>
+			</div>
+		</form>
+	</div>
+</div>

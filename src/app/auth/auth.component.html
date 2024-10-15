@@ -1,0 +1,56 @@
+<div class="container-fluid">
+  <div id="login">
+    <div id="login-body">
+      <div class="row">
+        <div class="col-sm-12" style="text-align: center;">
+          <img src="assets/images/fixitnow-logo.png" alt="Murugappa" width="100%" />
+        </div>
+        <h3 class="quote">"An ounce of prevention is worth a pound of cure"</h3>
+      </div>
+    </div>
+    <div id="login-content">
+      <img src="assets/images/ti_black.png" alt="FixItNow" height="70px" style="margin-top: 5px;" />
+      <h4 style="font-family: Audiowide;font-size: 1.rem;margin-top: 15px;font-weight: bold;">Welcome</h4>
+      <form id="login_form" name="login_form" autocomplete="off" style="padding-bottom: 9px;">
+        <div id="input-form">
+          <input type="text" placeholder="Username" id="login_username" name="login_username" class="required"
+            (keydown.enter)="login()" />
+          <label> <i class="fa fa-user" style="font-size:15px" aria-hidden="true"></i> </label>
+        </div>
+        <div id="input-form">
+          <input type="password" placeholder="Password" id="login_password" name="login_password" class="required"
+            (keydown.enter)="login()" />
+          <label> <i class="fa fa-unlock-alt" style="font-size:15px" aria-hidden="true"></i> </label>
+          <label class="icon m-0">
+            <input type="checkbox" id="password_show" style="display: none" (click)="passwordShow($event)"> <i
+              id="password_icon" class="fas fa-eye"></i>
+          </label>
+        </div>
+        <div class="securityCode" *ngIf="isShow">
+          <p id="code">{{captcha}}</p>
+          <div class="icons">
+            <span class="changeText" (click)="getCaptcha()">
+              <i class="fas fa-sync-alt"></i>
+            </span>
+          </div>
+        </div>
+        <div class="userInput" *ngIf="isShow">
+          <input type="text" id="captcha" (blur)="onBlur($event)" placeholder="Enter the captcha">
+        </div>
+        <button type="button" (click)="login()" [disabled]="isDisable">
+          <i class="fas fa-sign-in-alt" style="font-size:20px" aria-hidden="true"> </i>
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="success_gif" *ngIf="isNotification">
+  <img class="success_img" src="assets/images/success.gif" alt="Success" width="400px" height="auto" *ngIf="isSuccess">
+  <div class="invalid_img" *ngIf="!isSuccess">
+    <img src="assets/images/invalid.gif" alt="Invaild" width="400px" height="auto" />
+    <h2 id="error_text">INVALID LOGIN</h2>
+  </div>
+</div>
+<div class="footer">
+  <p class="mb-0"> Powered by </p> &nbsp; <img src="assets/images/aa_logo.png" width="10%" height="auto" />
+</div>

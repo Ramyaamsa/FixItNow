@@ -1,0 +1,382 @@
+<div class="col-sm-12 pt-2">
+  <div class="card card-outline card-cyan" [hidden]="spareCard">
+    <div class="card-header">
+      <h3 class="card-title">Spares</h3>
+      <div class="card-tools">
+        <button type="button" class="btn btn-sm btn-outline-info" (click)="addSpare()" *ngIf="masterOperation['add']">
+          <i class="fas fa-plus fa-sm mr-1"></i> Spares
+        </button>
+        <button class="btn btn-secondary btn-sm ml-2" type="button" id="toggle_icon">
+          <i class="fa fa-toggle-off" id="toggleIcon"></i>
+        </button>
+        <button class="btn btn-secondary btn-sm ml-2" type="button" (click)="textWrap()"><i
+            class="fas fa-text-width"></i></button>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table id="dataTable" class="table table-sm table-bordered">
+          <thead>
+            <tr>
+              <th> Operation </th>
+              <th> Status </th>
+              <th> Plant </th>
+              <th> Department </th>
+              <th> Spare Code </th>
+              <th> Spare Name </th>
+              <th> Location </th>
+              <th> Reorder Level </th>
+              <th> UOM </th>
+              <th> Unit price </th>
+              <th> Stock </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of spareList">
+              <td>
+                <div class="btn-group">
+                  <button class="btn" title="Edit Spare" (click)="editSpareLists(data)" *ngIf="masterOperation['edit']">
+                    <i class="fas fa-pencil-alt"></i>
+                  </button>
+                  <button *ngIf="data.is_assigned == 'yes' ? false : masterOperation['delete'] ? true : false"
+                    class="btn" title="Remove Spare" (click)="statusSpare(data.spare_id,'delete')"> <i
+                      class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </td>
+              <td> <button class="btn" title="Active/InActive Spare" (click)="statusSpare(data.spare_id,data.status)">
+                  <i
+                    [ngClass]="data.status == 'active' ? 'far fa-thumbs-up text-success' : 'far fa-thumbs-down text-danger'"></i>
+                </button>
+              </td>
+              <td>{{ data.plant }}</td>
+              <td>{{ data.department }}</td>
+              <td>{{ data.spare_code }}</td>
+              <td>{{ data.spare_name }}</td>
+              <td>{{ data.spare_location }}</td>
+              <td>{{ data.spare_reorder_level }}</td>
+              <td>{{ data.uom }}</td>
+              <td>{{ data.spare_unit_price }}</td>
+              <td>{{ data.spare_stock }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="list-style: none;" *ngIf="listView">
+        <li class="card p-2">
+          <div class="row">
+            <div class="col-sm-2">
+              <b> Operation </b>
+            </div>
+            <div class="col-sm-2">
+              <b> Status </b>
+            </div>
+            <div class="col-sm-2">
+              <b> Spare Code </b>
+            </div>
+            <div class="col-sm-2">
+              <b> Spare Name </b>
+            </div>
+            <div class="col-sm-2">
+              <b> Spare Unit Price </b>
+            </div>
+            <div class="col-sm-2">
+              <b> Spare UOM </b>
+            </div>
+          </div>
+        </li>
+        <div style="height: 70vh;overflow-y: auto;">
+          <li class="callout callout-info p-2" *ngFor="let data of spareList">
+            <div class="row align-items-center">
+              <div class="col-sm-2">
+                <div class="btn-group">
+                  <button class="btn" title="Edit Spare" (click)="editSpareLists(data)" *ngIf="masterOperation['edit']">
+                    <i class="fas fa-pencil-alt"></i>
+                  </button>
+                  <button *ngIf="data.is_assigned == 'yes' ? false : masterOperation['delete'] ? true : false"
+                    class="btn" title="Remove Spare" (click)="statusSpare(data.spare_id,'delete')"> <i
+                      class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="col-sm-2">
+                <button class="btn" title="Active/InActive Spare" (click)="statusSpare(data.spare_id,data.status)">
+                  <i
+                    [ngClass]="data.status == 'active' ? 'far fa-thumbs-up text-success' : 'far fa-thumbs-down text-danger'"></i>
+                </button>
+              </div>
+              <div class="col-sm-2">
+                <h6 class="m-0">{{ data.spare_code }}</h6>
+              </div>
+              <div class="col-sm-2">
+                <h6 class="m-0">{{ data.spare_name }}</h6>
+              </div>
+              <div class="col-sm-2">
+                <h6 class="m-0">{{ data.spare_unit_price }}</h6>
+              </div>
+              <div class="col-sm-2">
+                <h6 class="m-0">{{ data.uom }}</h6>
+              </div>
+            </div>
+          </li>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card card-outline card-cyan" [hidden]="!spareCard">
+    <div class="card-header">
+      <h3 class="card-title">Spares</h3>
+    </div>
+    <form id="spares_form" autocomplete="off">
+      <div class="card-body" id="spares_dtl">
+        <ul class="nav nav-pills m-t-10 m-b-10">
+          <li class="nav-item">
+            <a href="#company" class="nav-link active" data-toggle="tab" aria-expanded="false"> Company </a>
+          </li>
+          <li class="nav-item">
+            <a href="#spares" class="nav-link" data-toggle="tab" aria-expanded="false"> Spares </a>
+          </li>
+          <li class="nav-item">
+            <a href="#uploads" class="nav-link" data-toggle="tab" aria-expanded="false"> Uploads </a>
+          </li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane active" id="company">
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group row">
+                  <label for="created_on" class="col-sm-4"> Created On </label>
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control form-control-sm" id="created_on" name="created_on" value=""
+                      [(ngModel)]="created_on" disabled />
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="modified" class="col-sm-4"> Modified On </label>
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control form-control-sm" id="modified_on" name="modified_on" value=""
+                      [(ngModel)]="modified_on" disabled />
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-sm-4" for="company_name"> Company
+                    <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+                  <div class="col-sm-8">
+                    <select id="company_name" name="company_name" class="select2 required" style="width:100%;">
+                      <option value=""> ~~ Select Company ~~ </option>
+                      <option *ngFor="let company of companyList" value="{{ company.company_id }}">
+                        {{ company.company_code }}-{{ company.company_name }}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-sm-4" for="plant_name"> Plant <sup><i
+                        class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+                  <div class="col-sm-8">
+                    <select id="plant_name" name="plant_name" class="select2 required" style="width:100%;">
+                      <option value=""> ~~ Select Plant ~~ </option>
+                      <option *ngFor="let plantList of plantList" value="{{ plantList.plant_id }}"
+                        [attr.plant_code]="plantList.plant_code">
+                        {{ plantList.plant_code }}-{{ plantList.plant_name }}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group row">
+                  <label for="created_on" class="col-sm-4"> Created By </label>
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control form-control-sm" id="created_by" name="created_by" value=""
+                      [(ngModel)]="created_by" disabled />
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="modified_by" class="col-sm-4"> Modified By </label>
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control form-control-sm" id="modified_by" name="modified_by" value=""
+                      [(ngModel)]="modified_by" disabled />
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-sm-4" for="bu_name"> BU <sup><i
+                        class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+                  <div class="col-sm-8">
+                    <select id="bu_name" name="bu_name" class="select2 required" style="width:100%;">
+                      <option value=""> ~~ Select BU ~~ </option>
+                      <option *ngFor="let buList of buList" value="{{ buList.bu_id }}">
+                        {{ buList.bu_code }}-{{ buList.bu_name }}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-sm-4" for="department_name"> Department</label>
+                  <div class="col-sm-8">
+                    <select id="department_name" name="department_name" class="select2" style="width:100%;">
+                      <option value="0"> ~~ Select Department ~~ </option>
+                      <option *ngFor="let departmentList of departmentList" value="{{ departmentList.department_id }}">
+                        {{ departmentList.department_code }}-{{ departmentList.department_name }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane" id="spares">
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group row">
+                  <label for="spare_code" class="col-sm-4"> Code <sup><i
+                        class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control form-control-sm required" id="spare_code" name="spare_code"
+                      value="" [(ngModel)]="spare_code" (input)="convertToUpperCase()" />
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="spares_name" class="col-sm-4"> Name <sup><i
+                        class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control form-control-sm required" id="spares_name" name="spares_name"
+                      value="" [(ngModel)]="spare_name" />
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="spare_location" class="col-sm-4"> Location </label>
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control form-control-sm" id="spare_location" name="spare_location"
+                      value="" [(ngModel)]="spare_location" />
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="spares_hsn" class="col-sm-4"> HSN Code
+                  </label>
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control form-control-sm numeric" id="spares_hsn" name="spares_hsn"
+                      value="" [(ngModel)]="spare_hsn_code" />
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="spares_model" class="col-sm-4"> Model
+                  </label>
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control form-control-sm" id="spares_model" name="spares_model"
+                      value="" [(ngModel)]="spare_model" />
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="spares_make" class="col-sm-4"> Make </label>
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control form-control-sm" id="spares_make" name="spares_make" value=""
+                      [(ngModel)]="spare_make" />
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group row" id="spare_uom_div">
+                  <label for="spares_uom" class="col-sm-4"> UOM <sup><i
+                        class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+                  <div class="col-sm-8">
+                    <select id="spare_uom" name="spare_uom" class="select2 required" style="width:100%;">
+                      <option value="">~~ Select Uom ~~</option>
+                      <option *ngFor="let uomlist of uomList" value="{{ uomlist.uom_id }}">
+                        {{ uomlist.uom_code }}-{{ uomlist.uom_name }}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="min_qty" class="col-sm-4"> Min Qty</label>
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control form-control-sm numeric" id="min_qty" name="min_qty" value=""
+                      [(ngModel)]="spare_min_qty" />
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="reorder_level" class="col-sm-4"> Reorder Level <sup><i
+                        class="fas fa-asterisk fa-xs text-red"></i></sup> </label>
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control form-control-sm numeric_dot required" id="reorder_level"
+                      name="reorder_level" value="" [(ngModel)]="spare_reorder_level" />
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="unit_price" class="col-sm-4"> Unit Price <sup><i
+                        class="fas fa-asterisk fa-xs text-red"></i></sup> </label>
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control form-control-sm numeric required" id="unit_price"
+                      name="unit_price" value="" [(ngModel)]="spare_unit_price" />
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="spare_gst" class="col-sm-4"> GST (%)</label>
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control form-control-sm numeric" id="spare_gst" name="spare_gst"
+                      value="" [(ngModel)]="spare_gst" />
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="spare_actual_qty" class="col-sm-4"> Stock <sup><i
+                        class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control form-control-sm numeric_dot required" id="spare_actual_qty"
+                      name="spare_actual_qty" value="" [(ngModel)]="spare_stock" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane" id="uploads">
+            <div class="row">
+              <div class="col-sm-3"></div>
+              <div class="col-sm-6">
+                <div class="form-group row">
+                  <label for="spares_image" class="col-sm-4"> Image
+                  </label>
+                  <div class="col-sm-8">
+                    <div class="custom-file custom-file-sm">
+                      <input type="file" class="form-control custom-file-input" id="spares_image" name="spares_image"
+                        (change)="spareImage($event)">
+                      <label class="custom-file-label" for="spares_image" id="spares_image_name">
+                        Choose file </label>
+                    </div>
+                    <span class="text-orange text-xs"><b> * Accept Images alone. Upto: 1200 *
+                        600</b></span>
+                  </div>
+                  <div class="col-sm-4"></div>
+                  <div class="col-sm-8 mt-2">
+                    <img id="pre_spare_image" [src]="spare_image_file" alt="Spare image"
+                      style="height: 150px; width: 200px;" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer text-center">
+        <button type="submit" class="btn btn-sm btn-info mr-2" (click)="saveSpare()"> Save </button>
+        <button type="button" class="btn btn-sm btn-default" (click)="cancel()"> Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="modal fade" id="modal-image">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header p-1 pl-2 pr-2">
+        <h4 class="modal-title"> Image </h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">
+            &times;
+          </span>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        <img id="image_data" [src]="model_image" alt="Spare image" height="150px" width="300px" />
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>

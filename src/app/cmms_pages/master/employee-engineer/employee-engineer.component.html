@@ -1,0 +1,219 @@
+<div class="col-sm-12 pt-2">
+	<div class="card card-outline card-cyan" [hidden]="engineerCard">
+		<div class="card-header">
+			<h3 class="card-title"> Assign Department Engineer </h3>
+			<div class="card-tools">
+				<button type="button" class="btn btn-sm btn-outline-info" (click)="employeeEngineer()"
+					*ngIf="masterOperation['add']">
+					<i class="fas fa-plus fa-sm mr-1"></i> Assign Engineer
+				</button>
+				<button class="btn btn-secondary btn-sm ml-2" type="button" id="toggle_icon">
+					<i class="fa fa-toggle-off" id="toggleIcon"></i>
+				</button>
+				<button class="btn btn-secondary btn-sm ml-2" type="button" (click)="textWrap()"><i
+						class="fas fa-text-width"></i></button>
+			</div>
+		</div>
+		<div class="card-body">
+			<div class="table-responsive">
+				<table id="dataTable" class="table table-sm table-bordered">
+					<thead>
+						<tr>
+							<th> Operation </th>
+							<th> Status </th>
+							<th> Company</th>
+							<th> BU </th>
+							<th> Plant </th>
+							<th> Department </th>
+							<th> Employee Name </th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr *ngFor="let engineerList of engineerList">
+							<td>
+								<div class="btn-group">
+									<button class="btn" title="Edit Engineer" (click)="editEngineer(engineerList)"
+										*ngIf="masterOperation['edit']">
+										<i class="fas fa-pencil-alt"></i>
+									</button>
+									<button class="btn" title="Remove Engineer"
+										*ngIf="engineerList.is_assigned == 'yes' ? false : masterOperation['delete'] ? true : false"
+										(click)="activeInactive(engineerList.department_engineer_id,'')">
+										<i class="fas fa-trash-alt"></i>
+									</button>
+								</div>
+							</td>
+							<td> <a class="btn" title="Active/InActive Engineer"
+									(click)="activeInactive(engineerList.department_engineer_id,engineerList.status)">
+									<i
+										[ngClass]="engineerList.status == 'active' ? 'far fa-thumbs-up text-success' : 'far fa-thumbs-down text-danger'"></i></a>
+							</td>
+							<td>{{engineerList.company_name}}</td>
+							<td>{{engineerList.bu_name}}</td>
+							<td>{{engineerList.plant_name}}</td>
+							<td>{{engineerList.department_name}}</td>
+							<td>{{engineerList.employee}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div style="list-style: none;" *ngIf="listView">
+				<li class="card p-2">
+					<div class="row">
+						<div class="col-sm-2">
+							<b> Operation </b>
+						</div>
+						<div class="col-sm-2">
+							<b> Status </b>
+						</div>
+						<div class="col-sm-2">
+							<b> Company </b>
+						</div>
+						<div class="col-sm-2">
+							<b> BU </b>
+						</div>
+						<div class="col-sm-2">
+							<b> Plant </b>
+						</div>
+						<div class="col-sm-2">
+							<b> Employee Name </b>
+						</div>
+					</div>
+				</li>
+				<li class="callout callout-info p-2" *ngFor="let engineerList of engineerList">
+					<div class="row align-items-center">
+						<div class="col-sm-2">
+							<div class="btn-group">
+								<button class="btn" title="Edit Shift" (click)="editEngineer(engineerList)"
+									*ngIf="masterOperation['edit']">
+									<i class="fas fa-pencil-alt"></i>
+								</button>
+								<button class="btn" title="Remove Shift"
+									*ngIf="engineerList.is_assigned == 'yes' ? false : masterOperation['delete'] ? true : false"
+									(click)="activeInactive(engineerList.department_engineer_id,'')">
+									<i class="fas fa-trash-alt"></i>
+								</button>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<button class="btn" title="Active/InActive Shift"
+								(click)="activeInactive(engineerList.department_engineer_id,engineerList.status)">
+								<i
+									[ngClass]="engineerList.status == 'active' ? 'far fa-thumbs-up text-success' : 'far fa-thumbs-down text-danger'"></i>
+							</button>
+						</div>
+						<div class="col-sm-2">
+							<h6 class="m-0">{{ engineerList.company_name }}</h6>
+						</div>
+						<div class="col-sm-2">
+							<h6 class="m-0">{{ engineerList.bu_name }}</h6>
+						</div>
+						<div class="col-sm-2">
+							<h6 class="m-0">{{ engineerList.plant_name }}</h6>
+						</div>
+						<div class="col-sm-2">
+							<h6 class="m-0">{{ engineerList.employee }}</h6>
+						</div>
+					</div>
+				</li>
+			</div>
+		</div>
+	</div>
+	<div class="card card-outline card-cyan" [hidden]="!engineerCard">
+		<div class="card-header">
+			<h3 class="card-title"> Assign Department Engineer </h3>
+		</div>
+		<form id="engineer_form" autocomplete="off">
+			<div class="card-body">
+				<div class="row">
+					<div class="col-sm-3"> </div>
+					<div class="col-sm-6">
+						<div class="form-group row">
+							<label for="company_name" class="col-sm-4">Created</label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control form-control-sm" id="created_by"
+									name="created_by" value="" [(ngModel)]="created_by" disabled />
+							</div>
+							<div class="col-sm-4">
+								<input type="text" class="form-control form-control-sm" id="created_on"
+									name="created_on" value="" [(ngModel)]="created_on" disabled />
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="company_name" class="col-sm-4"> Modified </label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control form-control-sm" id="modified_by"
+									name="modified_by" value="" [(ngModel)]="modified_by" disabled />
+							</div>
+							<div class="col-sm-4">
+								<input type="text" class="form-control form-control-sm " id="modified_on"
+									name="modified_on" value="" [(ngModel)]="modified_on" disabled />
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-4" for="company_name"> Company </label>
+							<div class="col-sm-8">
+								<select id="company_name" name="company_name" class="select2 required"
+									style="width: 100%">
+									<option value="">Select</option>
+									<option *ngFor="let company of companyList" value="{{company.company_id}}">
+										{{company.company_code}}-{{company.company_name}}</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-4" for="bu_name"> BU </label>
+							<div class="col-sm-8">
+								<select id="bu_name" name="bu_name" class="select2 required" style="width: 100%">
+									<option value=""> ~~ Select ~~ </option>
+									<option *ngFor="let buList of buList" value="{{buList.bu_id}}">
+										{{buList.bu_code}}-{{buList.bu_name}}</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-4" for="plant_name"> Plant </label>
+							<div class="col-sm-8">
+								<select id="plant_name" name="plant_name" class="select2 required" style="width: 100%">
+									<option value=""> ~~ Select ~~ </option>
+									<option *ngFor="let plantList of plantList" value="{{plantList.plant_id}}"
+										[attr.plant_code]="plantList.plant_code">
+										{{plantList.plant_code}}-{{plantList.plant_name}}</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-4" for="department_name"> Department </label>
+							<div class="col-sm-8">
+								<select id="department_name" name="department_name" class="select2 required"
+									style="width: 100%">
+									<option value=""> ~~ Select ~~ </option>
+									<option *ngFor="let departmentList of departmentList"
+										value="{{departmentList.department_id}}">
+										{{departmentList.department_code}}-{{departmentList.department_name}}</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="required col-sm-4" for="employee_name"> Employee
+							</label>
+							<div class="col-sm-8">
+								<select id="employee_name" name="employee_name" class="select2 required">
+									<option value=""> ~~ Select ~~ </option>
+									<option *ngFor="let employeeList of engineerList"
+										value="{{employeeList.department_engineer_id}}">
+										{{employeeList.employee}}</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="card-footer text-center">
+				<button type="submit" class="btn btn-sm btn-info mr-2" (click)="saveEngineer()"> Save </button>
+				<button type="button" class="btn btn-sm btn-default" (click)="cancel()"> Cancel
+				</button>
+			</div>
+		</form>
+	</div>
+</div>

@@ -1,0 +1,106 @@
+<div class="col-sm-12 pt-2">
+  <div class="card card-outline card-cyan">
+    <div class="card-header">
+      <h3 class="card-title">Custom Work Order Number </h3>
+    </div>
+    <div class="card-body">
+      <form id="customized_ticket_no_form" name="customized_ticket_no_form" method="post" class="form-horizontal"
+        autocomplete="off">
+        <div class="row">
+          <div class="col-sm-4">
+            <div class="form-group row">
+              <label class="col-sm-4" for="company_name">Company Name<span></span>
+                <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+              <div class="col-sm-8">
+                <select name="company_name" id="company_name" class="select2 required" style="width: 100%;">
+                  <option value="">~~ Select Company ~~</option>
+                  <option *ngFor="let company of companyList" value="{{ company.company_id }}">
+                    {{ company.company_code }}-{{ company.company_name }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4" for="wo_type">Work Order Type<span></span>
+                <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+              <div class="col-sm-8">
+                <select name="wo_type" id="wo_type" class="select2 required" style="width: 100%;">
+                  <option value="">~~ Select Work Order ~~</option>
+                  <option value="breakdown">Breakdown</option>
+                  <option value="pm">Preventive Maintenance</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group row">
+              <label class="col-sm-4" for="bu_name">BU Name<span></span>
+                <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+              <div class="col-sm-8">
+                <select name="bu_name" id="bu_name" class="select2 required" style="width: 100%;">
+                  <option value="">~~ Select BU ~~</option>
+                  <option *ngFor="let buList of buList" value="{{ buList.bu_id }}">
+                    {{ buList.bu_code }}-{{ buList.bu_name }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4" for="ticket_no_prefix"> Prefix Number
+                <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm" name="ticket_no_prefix" id="ticket_no_prefix"
+                  value="" />
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-group row">
+              <label class="col-sm-4" for="plant_name">Plant Name<span></span>
+                <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+              <div class="col-sm-8">
+                <select name="plant_name" id="plant_name" class="select2 required" style="width: 100%;">
+                  <option value="">~~ Select Plant ~~</option>
+                  <option *ngFor="let plantList of plantList" value="{{ plantList.plant_id }}">
+                    {{ plantList.plant_code }}-{{ plantList.plant_name }}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12 mb-2 text-center">
+            <button type="submit" class="btn btn-sm btn-info mr-2" (click)="saveCustomizeWo()" *ngIf="masterOperation['add']"> Save </button>
+            <button type="button" id="btn_cancel" class="btn btn-sm btn-default" (click)="cancel()" *ngIf="masterOperation['add']"> Cancel
+            </button>
+          </div>
+        </div>
+      </form>
+      <div class="table-responsive">
+        <table class="table table-sm table-bordered" id="dataTable">
+          <thead>
+            <tr>
+              <th> Operation </th>
+              <th> Company </th>
+              <th> BU </th>
+              <th> Plant </th>
+              <th> Work Order Type </th>
+              <th> Prefix Number </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let list of customWOList">
+              <td>
+                <button class="btn" *ngIf="masterOperation['edit']" (click)="editCustomWo(list)" title="Edit Custom Work Order">
+                  <i class="fas fa-pencil-alt"></i>
+                </button>
+              </td>
+              <td>{{list.company_name}}</td>
+              <td>{{list.bu_name}}</td>
+              <td>{{list.plant_name}}</td>
+              <td *ngIf="list.work_order_type == 'breakdown'">Breakdown</td>
+              <td *ngIf="list.work_order_type == 'pm'">Preventive Maintenance</td>
+              <td>{{list.prefix_of_ticket_no}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

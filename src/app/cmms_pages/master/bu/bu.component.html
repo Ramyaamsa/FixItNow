@@ -1,0 +1,191 @@
+<div class="col-sm-12 pt-2">
+  <div class="card card-outline card-cyan" [hidden]="buCard">
+    <div class="card-header">
+      <h3 class="card-title pt-1"> Business Unit </h3>
+      <div class="card-tools">
+        <button type="button" class="btn btn-sm btn-outline-info" (click)="addBu()" *ngIf="masterOperation['add']">
+          <i class="fas fa-plus fa-sm mr-1"></i> BU
+        </button>
+        <button class="btn btn-secondary btn-sm ml-2" type="button" id="toggle_icon">
+          <i class="fa fa-toggle-off" id="toggleIcon"></i>
+        </button>
+        <button class="btn btn-secondary btn-sm ml-2" type="button" (click)="textWrap()"><i
+            class="fas fa-text-width"></i>
+        </button>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered table-sm" id="dataTable">
+          <thead>
+            <tr>
+              <th> Operation </th>
+              <th> Status </th>
+              <th> Company </th>
+              <th> Code </th>
+              <th> Name </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let buLists of buLists">
+              <td>
+                <div class="btn-group">
+                  <button class="btn" title="Edit BU" (click)="editBuLists(buLists)" *ngIf="masterOperation['edit']">
+                    <i class="fas fa-pencil-alt"></i>
+                  </button>
+                  <button *ngIf="buLists.is_assigned == 'yes' ? false : masterOperation['delete'] ? true : false"
+                    class="btn" title="Remove BU" (click)="activeInactive(buLists.bu_id,'delete')">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </td>
+              <td>
+                <button class="btn" title="Active/InActive BU" (click)="activeInactive(buLists.bu_id,buLists.status)">
+                  <i
+                    [ngClass]="buLists.status == 'active' ? 'far fa-thumbs-up text-success' : 'far fa-thumbs-down text-danger'"></i>
+                </button>
+              </td>
+              <td>{{ buLists.company_name }}</td>
+              <td>{{ buLists.bu_code }}</td>
+              <td>{{ buLists.bu_name }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="list-style: none;" *ngIf="listView">
+        <li class="card p-2">
+          <div class="row">
+            <div class="col-sm-2">
+              <b>Operation</b>
+            </div>
+            <div class="col-sm-2">
+              <b>Status</b>
+            </div>
+            <div class="col-sm-3">
+              <b>Company</b>
+            </div>
+            <div class="col-sm-2">
+              <b>BU Code</b>
+            </div>
+            <div class="col-sm-3">
+              <b>BU Name</b>
+            </div>
+          </div>
+        </li>
+        <div style="height: 70vh;overflow-y: auto;">
+          <li class="callout callout-info p-2" *ngFor="let buLists of buLists">
+            <div class="row align-items-center">
+              <div class="col-sm-2">
+                <div class="btn-group">
+                  <button class="btn" title="Edit BU" (click)="editBuLists(buLists)" *ngIf="masterOperation['edit']">
+                    <i class="fas fa-pencil-alt"></i>
+                  </button>
+                  <button *ngIf="buLists.is_assigned == 'yes' ? false : masterOperation['delete'] ? true : false"
+                    class="btn" title="Remove BU" (click)="activeInactive(buLists.bu_id,'delete')"> <i
+                      class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="col-sm-2">
+                <button class="btn" title="Active/InActive BU" (click)="activeInactive(buLists.bu_id,buLists.status)">
+                  <i
+                    [ngClass]="buLists.status == 'active' ? 'far fa-thumbs-up text-success' : 'far fa-thumbs-down text-danger'"></i>
+                </button>
+              </div>
+              <div class="col-sm-3">
+                <h6 class="m-0">{{ buLists.company_name }}</h6>
+              </div>
+              <div class="col-sm-2">
+                <h6 class="m-0">{{ buLists.bu_code }}</h6>
+              </div>
+              <div class="col-sm-3">
+                <h6 class="m-0">{{ buLists.bu_name }}</h6>
+              </div>
+            </div>
+          </li>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card card-outline card-cyan" [hidden]="!buCard">
+    <div class="card-header">
+      <h3 class="card-title pt-1"> Business Unit </h3>
+    </div>
+    <form id="branch_master_form" autocomplete="off">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group row">
+              <label for="created_on" class="col-sm-4"> Created On </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm" id="created_on" name="created_on" value=""
+                  [(ngModel)]="created_on" disabled />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="modified_on" class="col-sm-4"> Last Modified On
+              </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm" id="modified_on" name="modified_on" value=""
+                  [(ngModel)]="modified_on" disabled />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4" for="company_name"> Company <sup><i
+                    class="fas fa-asterisk fa-xs text-red"></i></sup>
+              </label>
+              <div class="col-sm-8">
+                <select id="company_name" name="company_name" class="select2 required" style="width: 100%">
+                  <option value="">Select</option>
+                  <option *ngFor="let company of companyLists" [attr.company_code]="company.company_code"
+                    value="{{ company.company_id }}">{{ company.company_code }}-{{ company.company_name }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="bu_name" class="col-sm-4"> Name <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup>
+              </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm required" id="bu_name" name="bu_name" value=""
+                  [(ngModel)]="bu_name" />
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group row">
+              <label for="created_by" class="col-sm-4"> Created By </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm" id="created_by" name="created_by" value=""
+                  [(ngModel)]="created_by" disabled />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="modified_by" class="col-sm-4"> Last Modified By
+              </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm" id="modified_by" name="modified_by" value=""
+                  [(ngModel)]="modified_by" disabled />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="branch_code" class="col-sm-4">BU Code<sup><i
+                    class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+              <div class="col-sm-3">
+                <input type="text" class="form-control form-control-sm" name="bu_code_prefix" id="bu_code_prefix"
+                  value="" [(ngModel)]="company_code" disabled />
+              </div>
+              <div class="col-sm-5">
+                <input type="text" class="form-control form-control-sm required" name="bu_code" id="bu_code" value=""
+                  [(ngModel)]="bu_code" (input)="convertToUpperCase()" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer text-center">
+        <button type="submit" class="btn btn-sm btn-info mr-2" (click)="saveBu()"> Save </button>
+        <button type="button" class="btn btn-sm btn-default" (click)="cancel()"> Cancel </button>
+      </div>
+    </form>
+  </div>
+</div>

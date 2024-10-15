@@ -1,0 +1,259 @@
+<div class="col-md-12 pt-2">
+  <div class="card card-outline card-cyan" [hidden]="breakdownAssignCard">
+    <div class="card-header">
+      <h3 class="card-title"> Breakdown Assignment </h3>
+      <div class="card-tools">
+        <button type="button" class="btn btn-sm btn-outline-info" (click)="breakdown()" *ngIf="masterOperation['add']">
+          <i class="fas fa-plus fa-sm mr-1"></i> Breakdown Assignment
+        </button>
+        <button class="btn btn-secondary btn-sm ml-2" type="button" id="breakdown_toggle">
+          <i class="fa fa-toggle-off" id="breakdownToggleIcon"></i>
+        </button>
+        <button class="btn btn-secondary btn-sm ml-2" type="button" (click)="textWrap()"><i
+            class="fas fa-text-width"></i></button>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table id="breakdownDatatable" class="table table-sm table-bordered">
+          <thead>
+            <tr>
+              <th> Operation </th>
+              <th> Status </th>
+              <th> Company </th>
+              <th> BU </th>
+              <th> Plant </th>
+              <th> Asset Group</th>
+              <th> Breakdown Category </th>
+              <th> Breakdown </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let list of breakdownAssignList">
+              <td>
+                <div class="btn-group">
+                  <button class="btn" title="Edit Breakdown" *ngIf="masterOperation['edit']"
+                    (click)="editBreakdownSubcategory(list)">
+                    <i class="fas fa-pencil-alt"></i>
+                  </button>
+                  <button *ngIf="list.is_assigned == 'yes' ? false : masterOperation['delete'] ? true : false"
+                    class="btn" title="Remove Breakdown"
+                    (click)="statusBreakdownSubcategory(list.breakdown_assignment_id,'delete')">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </td>
+              <td>
+                <button class="btn" title="Active/InActive Breakdown"
+                  (click)="statusBreakdownSubcategory(list.breakdown_assignment_id,list.status)">
+                  <i
+                    [ngClass]="list.status == 'active' ? 'far fa-thumbs-up text-success' : 'far fa-thumbs-down text-danger'"></i>
+                </button>
+              </td>
+              <td>{{ list.company_name }}</td>
+              <td>{{ list.bu_name }}</td>
+              <td>{{ list.plant_name }}</td>
+              <td>{{ list.asset_group_name }}</td>
+              <td>{{ list.breakdown_category }}</td>
+              <td>{{ list.breakdown_sub_category }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="list-style: none;" *ngIf="breakdownListView">
+        <li class="card p-2">
+          <div class="row">
+            <div class="col-sm-2">
+              <b> Operation </b>
+            </div>
+            <div class="col-sm-2">
+              <b> Status </b>
+            </div>
+            <div class="col-sm-2">
+              <b> Breakdown Category </b>
+            </div>
+            <div class="col-sm-2">
+              <b> Breakdown </b>
+            </div>
+            <div class="col-sm-2">
+              <b> Company </b>
+            </div>
+            <div class="col-sm-2">
+              <b> Asset Group </b>
+            </div>
+          </div>
+        </li>
+        <div style="height: 70vh;overflow-y: auto;">
+          <li class="callout callout-info p-2" *ngFor="let list of breakdownAssignList">
+            <div class="row align-items-center">
+              <div class="col-sm-2">
+                <div class="btn-group">
+                  <button class="btn" title="Edit Breakdown" *ngIf="masterOperation['edit']"
+                    (click)="editBreakdownSubcategory(list)">
+                    <i class="fas fa-pencil-alt"></i>
+                  </button>
+                  <button *ngIf="list.is_assigned == 'yes' ? false : masterOperation['delete'] ? true : false"
+                    class="btn" title="Remove Breakdown"
+                    (click)="statusBreakdownSubcategory(list.breakdown_assignment_id,'delete')">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="col-sm-2">
+                <button class="btn" title="Active/InActive Breakdown"
+                  (click)="statusBreakdownSubcategory(list.breakdown_assignment_id,list.status)">
+                  <i
+                    [ngClass]="list.status == 'active' ? 'far fa-thumbs-up text-success' : 'far fa-thumbs-down text-danger'"></i>
+                </button>
+              </div>
+              <div class="col-sm-2">
+                <h6 class="m-0">{{ list.breakdown_category }}</h6>
+              </div>
+              <div class="col-sm-2">
+                <h6 class="m-0">{{ list.breakdown_sub_category }}</h6>
+              </div>
+              <div class="col-sm-2">
+                <h6 class="m-0">{{ list.company_name }}</h6>
+              </div>
+              <div class="col-sm-2">
+                <h6 class="m-0">{{ list.asset_group_name }}</h6>
+              </div>
+            </div>
+          </li>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card card-outline card-cyan" [hidden]="!breakdownAssignCard">
+    <div class="card-header">
+      <h3 class="card-title"> Breakdown Assignment </h3>
+    </div>
+    <form id="breakdown_form" autocomplete="off">
+      <div class="card-body">
+        <div id="basic_detail" class="tab-pane active">
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group row">
+                <label for="created_on" class="col-sm-4"> Created On </label>
+                <div class="col-sm-8">
+                  <input type="text" class="form-control form-control-sm" id="created_on" name="created_on" value=""
+                    [(ngModel)]="breakdownCreatedOn" disabled />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="modified_on" class="col-sm-4"> Modified On </label>
+                <div class="col-sm-8">
+                  <input type="text" class="form-control form-control-sm" id="modified_on" name="modified_on" value=""
+                    [(ngModel)]="breakdownModifiedOn" disabled />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-sm-4" for="break_company_name"> Company <sup><i
+                      class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+                <div class="col-sm-8">
+                  <select id="break_company_name" name="break_company_name" class="break_select2 required"
+                    style="width:100%;">
+                    <option value=""> ~~ Select ~~ </option>
+                    <option *ngFor="let data of companyList" value="{{ data.company_id }}">
+                      {{ data.company_code }} - {{ data.company_name }}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-sm-4" for="break_plant_name"> Plant <sup><i
+                      class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+                <div class="col-sm-8">
+                  <select id="break_plant_name" name="break_plant_name" class="break_select2 required"
+                    style="width:100%;">
+                    <option value=""> ~~ Select ~~ </option>
+                    <option *ngFor="let data of plantList" value="{{ data.plant_id }}"
+                      [attr.plant_code]="data.plant_code">
+                      {{ data.plant_code }} - {{ data.plant_name }}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-sm-4" for="breakdown_category_name"> Breakdown Category <sup><i
+                      class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+                <div class="col-sm-8">
+                  <select id="breakdown_category_name" name="breakdown_category_name" class="break_select2 required"
+                    style="width:100%;">
+                    <option value=""> ~~ Select ~~ </option>
+                    <option *ngFor="let data of breakdownCategoryList" value="{{ data.breakdown_category_id }}">
+                      {{ data.breakdown_category_code }} - {{ data.breakdown_category_name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group row">
+                <label for="break_created_by" class="col-sm-4"> Created By </label>
+                <div class="col-sm-8">
+                  <input type="text" class="form-control form-control-sm" id="break_created_by" name="break_created_by"
+                    value="" [(ngModel)]="breakdownCreatedBy" disabled="" />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="break_modified_by" class="col-sm-4"> Modified By </label>
+                <div class="col-sm-8">
+                  <input type="text" class="form-control form-control-sm" id="break_modified_by"
+                    name="break_modified_by" value="" [(ngModel)]="breakdownModifiedBy" disabled />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-sm-4" for="break_bu_name"> BU <sup><i
+                      class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+                <div class="col-sm-8">
+                  <select id="break_bu_name" name="break_bu_name" class="break_select2 required" style="width:100%;">
+                    <option value=""> ~~ Select ~~ </option>
+                    <option *ngFor="let data of buList" value="{{ data.bu_id }}">
+                      {{ data.bu_code }} - {{ data.bu_name }}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-sm-4" for="break_asset_group"> Asset Group <sup><i
+                      class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+                <div class="col-sm-8">
+                  <select id="break_asset_group" name="break_asset_group" class="break_select2 required"
+                    style="width:100%;">
+                    <option value=""> ~~ Select ~~ </option>
+                    <option *ngFor="let data of assetGroupList" value="{{ data.asset_group_id }}">
+                      {{ data.asset_group_code }} - {{ data.asset_group_name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-sm-4" for="breakdown_sub_category"> Breakdown <sup><i
+                      class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+                <div class="col-sm-8">
+                  <select id="breakdown_sub_category" name="breakdown_sub_category" class="break_select2 required"
+                    style="width:100%;">
+                    <option value=""> ~~ Select ~~ </option>
+                    <option *ngFor="let data of breakdownList" value="{{ data.breakdown_sub_category_id }}">
+                      {{ data.breakdown_sub_category_code }} - {{ data.breakdown_sub_category_name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="escalation_time" class="col-sm-4"> Escalation Time (mins) </label>
+                <div class="col-sm-8">
+                  <input type="text" class="form-control form-control-sm numeric_dot" name="escalation_time"
+                    id="escalation_time" value="" [(ngModel)]="escalationTime" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer text-center">
+        <button type="submit" class="btn btn-sm btn-info mr-2" (click)="saveBreakdown()"> Save </button>
+        <button type="button" class="btn btn-sm btn-default" (click)="cancel()"> Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

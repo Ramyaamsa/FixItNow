@@ -1,0 +1,252 @@
+
+/* .modal-table thead tr th {
+    background: #117a8b !important;
+    color: #fff !important;
+    box-shadow: inset 0 1px 0 #dee2e6, inset 0 -1px 0 #dee2e6;
+}
+
+body {
+    overflow: auto;
+}
+
+.report-title {
+    text-align: center;
+    color: #17a2b8;
+    font-weight: 500;
+}
+.bootstrap-table .fixed-table-container .table thead th {
+    vertical-align: middle;
+    padding: 0;
+    margin: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: #117a8b;
+    color: #fff;
+    box-shadow: inset 0 1px 0 #dee2e6, inset 0 -1px 0 #dee2e6;
+
+}
+
+.bootstrap-table .fixed-table-container .fixed-table-body {
+    overflow-x: auto;
+    overflow-y: auto;
+    height: 84vh;
+}
+
+.table td,
+.table th {
+    padding: 0.5rem;
+    font-size: 14px;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.dropdown-item:hover {
+    background: #17a2b8;
+    color: #fff;
+    cursor: pointer;
+}
+
+thead{
+    background: #117a8b;color: #fff;
+}
+
+.responsive-scroll {
+    scrollbar-width: thin;
+}
+
+.table-responsive {
+    scrollbar-width: thin;
+}
+
+.responsive-scroll::-webkit-scrollbar-thumb {
+    background-color: #6c757d;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+    background-color: #6c757d;
+}
+
+.responsive-scroll::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+    background-color: #c0c0c0;
+}
+
+.table-responsive::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+    background-color: #c0c0c0;
+}
+
+.table {
+    border-collapse: separate;
+    border-spacing: 0px 4px;
+}
+
+.table thead {
+    background: linear-gradient(to bottom, #17a2b8 0%, #036a79 90%);
+    color: #ffffff;
+    position: sticky;
+    top: 0;
+    vertical-align: middle;
+}
+
+.table thead th {
+    border-bottom: none;
+}
+
+.table td,
+.table th {
+    border-top: none;
+}
+
+.table tbody tr {
+    box-shadow: 2px 2px 3px #cbcbcb inset, -2px -2px 3px #cbcbcb inset;
+    cursor: pointer;
+}
+
+.table-responsive::-webkit-scrollbar {
+    display: none;
+}
+
+.tool-btn {
+    position: absolute;
+    left: 2.5%;
+    top: 35%;
+    font-size: 18px;
+    background: transparent;
+    transform: translate(-50%, -50%);
+}
+
+.card-header button {
+    outline: none;
+    cursor: pointer;
+    font-weight: 500;
+    border-radius: 4px;
+    border: 2px solid transparent;
+    transition: background 0.1s linear, border-color 0.1s linear, color 0.1s linear;
+}
+
+.modal-body .content {
+    margin: 20px 0;
+}
+
+.modal-body .content .box {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.modal-body .content .box .column {
+    flex-basis: 50%;
+}
+
+.modal-body .content .box .column .item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.modal-body .content .box .column .item span {
+    font-size: 0.99rem;
+    margin-left: 15px;
+    margin-bottom: 8px;
+    cursor: pointer;
+}
+
+.modal-body .content .box label {
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    border: 4px solid #ff344c;
+    border-radius: 12.5%;
+    -webkit-transition: 400ms 100ms ease-out;
+    -o-transition: 400ms 100ms ease-out;
+    transition: 400ms 100ms ease-out;
+    cursor: pointer;
+
+}
+
+.modal-body .content .box input[type="checkbox"] {
+    position: absolute;
+    left: -1000px;
+}
+
+.modal-body .content .box .tick {
+    position: relative;
+    left: 30%;
+    top: -50%;
+    width: 13px;
+    height: 25px;
+    border-right: 4px solid #22abb5;
+    border-bottom: 4px solid #02dcff;
+    -webkit-transform: rotate(45deg) scale(0);
+    -ms-transform: rotate(45deg) scale(0);
+    transform: rotate(45deg) scale(0);
+    opacity: 0;
+    -webkit-transition: all 600ms cubic-bezier(0.175, 0.885, 0.32, 1.5);
+    -o-transition: all 600ms cubic-bezier(0.175, 0.885, 0.32, 1.5);
+    transition: all 600ms cubic-bezier(0.175, 0.885, 0.32, 1.5);
+}
+
+.modal-body .content .box input[type="checkbox"]:checked+label .tick {
+    opacity: 1;
+    -webkit-transform: rotate(40deg) scale(1);
+    -ms-transform: rotate(40deg) scale(1);
+    transform: rotate(40deg) scale(1);
+}
+
+.modal-body .content .box input[type="checkbox"]:focus+label {
+    -webkit-animation-name: cb-pop;
+    animation-name: cb-pop;
+    -webkit-animation-duration: 400ms;
+    animation-duration: 400ms;
+    -webkit-animation-iteration-count: 1;
+    animation-iteration-count: 1;
+    -webkit-animation-timing-function: linear;
+    animation-timing-function: linear;
+}
+
+@-webkit-keyframes cb-pop {
+    0% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+
+    33% {
+        -webkit-transform: scale(0.9);
+        transform: scale(0.9);
+    }
+
+    66% {
+        -webkit-transform: scale(1.1);
+        transform: scale(1.1);
+    }
+
+    100% {
+        tranform: scale(1);
+    }
+}
+
+@keyframes cb-pop {
+    0% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+
+    33% {
+        -webkit-transform: scale(0.9);
+        transform: scale(0.9);
+    }
+
+    66% {
+        -webkit-transform: scale(1.1);
+        transform: scale(1.1);
+    }
+
+    100% {
+        tranform: scale(1);
+    }
+}
+ */

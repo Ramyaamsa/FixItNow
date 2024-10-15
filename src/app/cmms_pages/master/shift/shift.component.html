@@ -1,0 +1,314 @@
+<div class="col-sm-12 pt-2">
+  <div class="card card-outline card-cyan" [hidden]="shiftCard">
+    <div class="card-header">
+      <h3 class="card-title">Shift</h3>
+      <div class="card-tools">
+        <button type="button" class="btn btn-sm btn-outline-info" (click)="addShift()" *ngIf="masterOperation['add']">
+          <i class="fas fa-plus fa-sm mr-1"></i> Shift
+        </button>
+        <button class="btn btn-secondary btn-sm ml-2" type="button" id="toggle_icon">
+          <i class="fa fa-toggle-off" id="toggleIcon"></i>
+        </button>
+        <button class="btn btn-secondary btn-sm ml-2" type="button" (click)="textWrap()"><i
+            class="fas fa-text-width"></i></button>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table id="dataTable" class="table table-sm table-bordered">
+          <thead>
+            <tr>
+              <th>Operation </th>
+              <th>Status </th>
+              <th>Company </th>
+              <th>BU </th>
+              <th>Plant</th>
+              <th>No.of Shifts </th>
+              <th>A Shift Time </th>
+              <th>B Shift Time </th>
+              <th>C Shift Time </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of shiftList">
+              <td>
+                <div class="btn-group">
+                  <button class="btn" title="Edit Shift" (click)="editShift(data)" *ngIf="masterOperation['edit']">
+                    <i class="fas fa-pencil-alt"></i>
+                  </button>
+                  <button *ngIf="data.is_assigned == 'yes' ? false : masterOperation['delete'] ? true : false"
+                    class="btn" title="Remove Shift" (click)="statusShift(data.shift_id,'delete')"> <i
+                      class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </td>
+              <td> <button class="btn" title="Active/InActive Shift" (click)="statusShift(data.shift_id,data.status)">
+                  <i
+                    [ngClass]="data.status == 'active' ? 'far fa-thumbs-up text-success' : 'far fa-thumbs-down text-danger'"></i>
+                </button>
+              </td>
+              <td>{{ data.company_name }}</td>
+              <td>{{ data.bu_name }}</td>
+              <td>{{ data.plant_name }}</td>
+              <td>{{ data.no_of_shifts }}</td>
+              <td>{{ data.a_shift_start_time }}</td>
+              <td>{{ data.b_shift_start_time }}</td>
+              <td>{{ data.c_shift_start_time }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="list-style: none;" *ngIf="listView">
+        <li class="card p-2">
+          <div class="row">
+            <div class="col-sm-2">
+              <b>Operation</b>
+            </div>
+            <div class="col-sm-2">
+              <b>Status</b>
+            </div>
+            <div class="col-sm-2">
+              <b>Company</b>
+            </div>
+            <div class="col-sm-2">
+              <b>BU</b>
+            </div>
+            <div class="col-sm-2">
+              <b>Plant</b>
+            </div>
+            <div class="col-sm-2">
+              <b>No. of Shift</b>
+            </div>
+          </div>
+        </li>
+        <div style="height: 70vh;overflow-y: auto;">
+          <li class="callout callout-info p-2" *ngFor="let data of shiftList">
+            <div class="row align-items-center">
+              <div class="col-sm-2">
+                <div class="btn-group">
+                  <button class="btn" title="Edit Shift" (click)="editShift(data)" *ngIf="masterOperation['edit']">
+                    <i class="fas fa-pencil-alt"></i>
+                  </button>
+                  <button *ngIf="data.is_assigned == 'yes' ? false : masterOperation['delete'] ? true : false"
+                    class="btn" title="Remove Shift" (click)="statusShift(data.shift_id,'delete')"> <i
+                      class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="col-sm-2">
+                <button class="btn" title="Active/InActive Shift" (click)="statusShift(data.shift_id,data.status)">
+                  <i
+                    [ngClass]="data.status == 'active' ? 'far fa-thumbs-up text-success' : 'far fa-thumbs-down text-danger'"></i>
+                </button>
+              </div>
+              <div class="col-sm-2">
+                <h6 class="m-0">{{ data.company_name }}</h6>
+              </div>
+              <div class="col-sm-2">
+                <h6 class="m-0">{{ data.bu_name }}</h6>
+              </div>
+              <div class="col-sm-2">
+                <h6 class="m-0">{{ data.plant_name }}</h6>
+              </div>
+              <div class="col-sm-2">
+                <h6 class="m-0">{{ data.no_of_shifts }}</h6>
+              </div>
+            </div>
+          </li>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card card-outline card-cyan" [hidden]="!shiftCard">
+    <div class="card-header">
+      <h3 class="card-title">Shift</h3>
+    </div>
+    <form id="shift_form" autocomplete="off">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group row">
+              <label for="created_on" class="col-sm-4"> Created On </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm" id="created_on" name="created_on" value=""
+                  [(ngModel)]="created_on" disabled />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="modified_on" class="col-sm-4"> Last Modified On
+              </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm" id="modified_on" name="modified_on" value=""
+                  [(ngModel)]="modified_on" disabled />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4" for="company_name"> Company
+                <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup>
+              </label>
+              <div class="col-sm-8">
+                <select id="company_name" name="company_name" class="select2 required" style="width:100%;">
+                  <option value=""> ~~ Select ~~ </option>
+                  <option *ngFor="let companyList of companyList" value="{{ companyList.company_id }}">
+                    {{ companyList.company_code }}-{{ companyList.company_name }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4" for="plant_name"> Plant
+                <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup>
+              </label>
+              <div class="col-sm-8">
+                <select id="plant_name" name="plant_name" class="select2 required" style="width:100%;">
+                  <option value=""> ~~ Select ~~ </option>
+                  <option *ngFor="let plantList of plantList" value="{{ plantList.plant_id }}"
+                    [attr.plant_code]="plantList.plant_code">
+                    {{ plantList.plant_code }}-{{ plantList.plant_name }}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group row">
+              <label for="created_by" class="col-sm-4"> Created By </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm" id="created_by" name="created_by" value=""
+                  [(ngModel)]="created_by" disabled />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="modified_by" class="col-sm-4"> Last Modified By </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm" id="modified_by" name="modified_by" value=""
+                  [(ngModel)]="modified_by" disabled />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4" for="bu_name"> BU
+                <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup>
+              </label>
+              <div class="col-sm-8">
+                <select id="bu_name" name="bu_name" class="select2 required" style="width:100%;">
+                  <option value=""> ~~ Select ~~ </option>
+                  <option *ngFor="let buList of buList" value="{{ buList.bu_id }}">
+                    {{ buList.bu_code }}-{{ buList.bu_name }}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-3"></div>
+          <div class="col-sm-6">
+            <div class="form-group row">
+              <label for="no_of_shifts" class="col-sm-4"> No. of Shifts
+                <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup> </label>
+              <div class="col-sm-8">
+                <select name="no_of_shifts" id="no_of_shifts" class="select2 required" value="">
+                  <option value="">~~Select~~</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-4"></div>
+              <div class="col sm-4 text-center ">
+                <label>Start Time</label>
+              </div>
+              <div class="col-sm-4 text-center ">
+                <label>End Time</label>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="a_shift_time" class="col-sm-4"> A Shift Time
+                <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup>
+              </label>
+              <div class="col-sm-4">
+                <div class="input-group">
+                  <input type="text" class="form-control form-control-sm required timepicker" id="a_shift_start_time"
+                    name="a_shift_start_time" value="" [(ngModel)]="shift1_start_time">
+                  <input type="hidden" id="shift_id" name="shift_id" class="form-control form-control-sm" />
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <i class="far fa-clock"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="input-group">
+                  <input type="text" class="form-control form-control-sm required timepicker" id="a_shift_end_time"
+                    name="a_shift_end_time" value="" [(ngModel)]="shift1_end_time">
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <i class="far fa-clock"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row" id="b_shift_div">
+              <label for="b_shift_time" class="col-sm-4"> B Shift Time
+                <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup>
+              </label>
+              <div class="col-sm-4">
+                <div class="input-group">
+                  <input type="text" class="form-control form-control-sm required timepicker" id="b_shift_start_time"
+                    name="b_shift_start_time" value="" [(ngModel)]="shift2_start_time">
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <i class="far fa-clock"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="input-group">
+                  <input type="text" class="form-control form-control-sm required timepicker" id="b_shift_end_time"
+                    name="b_shift_end_time" value="" [(ngModel)]="shift2_end_time">
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <i class="far fa-clock"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row" id="c_shift_div">
+              <label for="a_shift_time" class="col-sm-4"> C Shift Time
+                <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup>
+              </label>
+              <div class="col-sm-4">
+                <div class="input-group">
+                  <input type="text" class="form-control form-control-sm required timepicker" id="c_shift_start_time"
+                    name="c_shift_start_time" value="" [(ngModel)]="shift3_start_time">
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <i class="far fa-clock"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="input-group">
+                  <input type="text" class="form-control form-control-sm required timepicker" id="c_shift_end_time"
+                    name="c_shift_end_time" value="" [(ngModel)]="shift3_end_time">
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <i class="far fa-clock"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer text-center">
+        <button type="submit" class="btn btn-sm btn-info mr-2" (click)="saveShift()"> Save </button>
+        <button type="button" class="btn btn-sm btn-default" (click)="cancel()"> Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

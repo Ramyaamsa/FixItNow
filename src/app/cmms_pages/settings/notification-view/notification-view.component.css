@@ -1,0 +1,15 @@
+.table-responsive {
+    scrollbar-width: thin;
+    height: 72vh;
+    overflow-y: auto;
+}
+
+.table-responsive::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+    background-color: #F5F5F5;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+    background-color: #c0c0c0;
+}

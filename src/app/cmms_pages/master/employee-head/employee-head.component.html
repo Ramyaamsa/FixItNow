@@ -1,0 +1,230 @@
+<div class="col-md-12 pt-2">
+  <div class="card card-outline card-cyan" [hidden]="headCard">
+    <div class="card-header">
+      <h3 class="card-title"> Assign Department Head </h3>
+      <div class="card-tools">
+        <button type="button" class="btn btn-sm btn-outline-info" (click)="addemployeeHead()"
+          *ngIf="masterOperation['add']">
+          <i class="fas fa-plus fa-sm mr-1"></i> Assign Department Head
+        </button>
+        <button class="btn btn-secondary btn-sm ml-2" type="button" id="toggle_icon">
+          <i class="fa fa-toggle-off" id="toggleIcon"></i>
+        </button>
+        <button class="btn btn-secondary btn-sm ml-2" type="button" (click)="textWrap()"><i
+            class="fas fa-text-width"></i></button>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table id="dataTable" class="table table-sm table-bordered">
+          <thead>
+            <tr>
+              <th> Operation </th>
+              <th> Status </th>
+              <th> Company</th>
+              <th> BU </th>
+              <th> Plant </th>
+              <th> Department </th>
+              <th> User </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let list of departmentHeadList">
+              <td>
+                <div class="btn-group">
+                  <button class="btn" title="Edit Department Head" (click)="editHead(list)"
+                    *ngIf="masterOperation['edit']">
+                    <i class="fas fa-pencil-alt"></i>
+                  </button>
+                  <button *ngIf="list.is_assigned == 'yes' ? false : masterOperation['delete'] ? true : false"
+                    class="btn" title="Remove Department Head"
+                    (click)="statusDepartmentHead(list.department_head_id,'delete')">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </td>
+              <td> <a class="btn" title="Active/InActive Head"
+                  (click)="statusDepartmentHead(list.department_head_id,list.status)">
+                  <i
+                    [ngClass]="list.status == 'active' ? 'far fa-thumbs-up text-success' : 'far fa-thumbs-down text-danger'"></i></a>
+              </td>
+              <td>{{ list.company_name }}</td>
+              <td>{{ list.bu_name }}</td>
+              <td>{{ list.plant_name }}</td>
+              <td>{{ list.department_name }}</td>
+              <td>{{ list.employee }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="list-style: none;" *ngIf="listView">
+        <li class="card p-2">
+          <div class="row">
+            <div class="col-sm-2">
+              <b>Operation</b>
+            </div>
+            <div class="col-sm-2">
+              <b>Status</b>
+            </div>
+            <div class="col-sm-2">
+              <b>BU</b>
+            </div>
+            <div class="col-sm-2">
+              <b>Plant</b>
+            </div>
+            <div class="col-sm-2">
+              <b>Department</b>
+            </div>
+            <div class="col-sm-2">
+              <b>User</b>
+            </div>
+          </div>
+        </li>
+        <div style="height: 70vh;overflow-y: auto;">
+          <li class="callout callout-info p-2" *ngFor="let list of departmentHeadList">
+            <div class="row align-items-center">
+              <div class="col-sm-2">
+                <div class="btn-group">
+                  <button class="btn" title="Edit Department Head" (click)="editHead(list)"
+                    *ngIf="masterOperation['edit']">
+                    <i class="fas fa-pencil-alt"></i>
+                  </button>
+                  <button *ngIf="list.is_assigned == 'yes' ? false : masterOperation['delete'] ? true : false"
+                    class="btn" title="Remove Department Head"
+                    (click)="statusDepartmentHead(list.department_head_id,'delete')">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="col-sm-2">
+                <button class="btn" title="Active/InActive Department Head"
+                  (click)="statusDepartmentHead(list.department_head_id,list.status)">
+                  <i
+                    [ngClass]="list.status == 'active' ? 'far fa-thumbs-up text-success' : 'far fa-thumbs-down text-danger'"></i>
+                </button>
+              </div>
+              <div class="col-sm-2">
+                <h6 class="m-0">{{ list.bu_name }}</h6>
+              </div>
+              <div class="col-sm-2">
+                <h6 class="m-0">{{ list.plant_name }}</h6>
+              </div>
+              <div class="col-sm-2">
+                <h6 class="m-0">{{ list.department_code }} - {{ list.department_name }}
+                </h6>
+              </div>
+              <div class="col-sm-2">
+                <h6 class="m-0">{{ list.employee }}</h6>
+              </div>
+            </div>
+          </li>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card card-outline card-cyan" [hidden]="!headCard">
+    <div class="card-header">
+      <h3 class="card-title"> Assign Department Head </h3>
+    </div>
+    <form id="department_head_form" autocomplete="off">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group row">
+              <label for="created" class="col-sm-4 ">Created On</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm" id="created_on" name="created_on" value=""
+                  [(ngModel)]="created_on" disabled />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="modified" class="col-sm-4 "> Modified On </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm " id="modified_on" name="modified_on" value=""
+                  [(ngModel)]="modified_on" disabled />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4" for="company_name"> Company <sup><i
+                    class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+              <div class="col-sm-8">
+                <select id="company_name" name="company_name" class="select2 required">
+                  <option value="">Select</option>
+                  <option *ngFor="let company of companyList" value="{{ company.company_id }}">
+                    {{ company.company_code }}-{{ company.company_name }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4" for="plant_name"> Plant <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup>
+              </label>
+              <div class="col-sm-8">
+                <select id="plant_name" name="plant_name" class="select2 required">
+                  <option value=""> ~~ Select ~~ </option>
+                  <option *ngFor="let plantList of plantList" value="{{ plantList.plant_id }}"
+                    [attr.plant_code]="plantList.plant_code">
+                    {{ plantList.plant_code }}-{{ plantList.plant_name }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="required col-sm-4" for="employee_name"> Head <sup><i
+                    class="fas fa-asterisk fa-xs text-red"></i></sup>
+              </label>
+              <div class="col-sm-8">
+                <select id="employee_name" name="employee_name" class="select2 required">
+                  <option value=""> ~~ Select ~~ </option>
+                  <option *ngFor="let employeeList of employeeList" value="{{ employeeList.employee_id }}">
+                    {{ employeeList.employee_code }}-{{ employeeList.employee_name }}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group row">
+              <label for="created" class="col-sm-4 ">Created By</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm" id="created_by" name="created_by" value=""
+                  [(ngModel)]="created_by" disabled />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="modified" class="col-sm-4 "> Modified By</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm" id="modified_by" name="modified_by" value=""
+                  [(ngModel)]="modified_by" disabled />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4" for="bu_name"> BU <sup><i
+                    class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+              <div class="col-sm-8">
+                <select id="bu_name" name="bu_name" class="select2 required">
+                  <option value=""> ~~ Select ~~ </option>
+                  <option *ngFor="let buList of buList" value="{{ buList.bu_id }}">
+                    {{ buList.bu_code }}-{{ buList.bu_name }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4" for="department_name"> Department <sup><i
+                    class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+              <div class="col-sm-8">
+                <select id="department_name" name="department_name" class="multiselect required" multiple style="width: 100%;">
+                  <option value=""> ~~ Select ~~ </option>
+                  <option *ngFor="let departmentList of departmentList" value="{{ departmentList.department_id }}">
+                    {{ departmentList.department_code }}-{{ departmentList.department_name }}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer text-center">
+        <button type="submit" class="btn btn-sm btn-info mr-2" (click)="saveHead()"> Save </button>
+        <button type="button" class="btn btn-sm btn-default" (click)="cancel()"> Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

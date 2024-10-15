@@ -1,0 +1,38 @@
+<div class="card card-outline card-cyan">
+  <div class="card-header">
+    All Notification
+  </div>
+  <div class="card-body collapse show text-center">
+    <div class="table-responsive">
+      <table class="table table-head-fixed text-nowrap">
+        <thead>
+          <tr>
+            <th style="width: 10px">S.No</th>
+            <th>Company</th>
+            <th>Bu</th>
+            <th>plant</th>
+            <th>Status</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="notificationLists.length > 0; else noData">
+          <tr *ngFor="let notification of notificationLists; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ notification.company }}</td>
+            <td>{{ notification.bu }}</td>
+            <td>{{ notification.plant }}</td>
+            <td>{{ notification.title }}</td>
+            <td>{{ notification.body }}</td>
+          </tr>
+        </tbody>
+        <ng-template #noData>
+          <tbody>
+            <tr>
+              <td colspan="6" class="text-center">No Data Available </td>
+            </tr>
+          </tbody>
+        </ng-template>
+      </table>
+    </div>
+  </div>
+</div>

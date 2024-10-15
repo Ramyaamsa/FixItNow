@@ -1,0 +1,189 @@
+<div class="col-sm-12 pt-2">
+    <div class="card">
+      <div class="card-header p-2">
+        <h3 class="card-title report-title"> {{ reportTitle }}</h3>
+        <div class="card-tools mr-1">
+          <button type="button" class="btn btn-sm btn-info dropdown-toggle dropdown-icon" data-toggle="dropdown"
+            aria-expanded="true">
+            <i class="fas fa-download mr-2"></i>
+          </button>
+          <div class="dropdown-menu" role="menu">
+            <a class="dropdown-item" (click)="downloadReport('report_csv')">
+              <i class="fas fa-file-csv mr-2"></i> CSV</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" (click)="downloadReport('report_excel')">
+              <i class="fas fa-file-excel mr-2"></i> Excel</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" (click)="downloadReport('report_pdf')">
+              <i class="fas fa-file-pdf mr-2"></i> PDF</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" (click)="downloadReport('report_print')">
+              <i class="fas fa-print mr-2"></i> Print</a>
+          </div>
+        </div>
+        <div class="card-body p-2">
+            <div class="table-responsive" style="height: 450px;">
+                <table class="table table-bordered mb-0" id="detail_table" [attr.data-height]="height" *ngIf="reportType == 'detail'">
+                    <thead>
+                        <tr>
+                            <th>S.no</th>           
+                            <th data-field="date" [attr.data-visible]="rpt['date']"> Date </th>
+                            <th data-field="company" [attr.data-visible]="rpt['company']">Company</th>
+                            <th data-field="bu" [attr.data-visible]="rpt['bu']">BU</th>
+                            <th data-field="plant" [attr.data-visible]="rpt['plant']">Plant</th>
+                            <th data-field="department" [attr.data-visible]="rpt['department']">Department</th>
+                            <th data-field="location" [attr.data-visible]="rpt['location']">Location</th>
+                            <th data-field="asset_group" [attr.data-visible]="rpt['asset_group']">Asset Group</th>
+                            <th data-field="asset_model" [attr.data-visible]="rpt['asset_model']">Asset Model</th>
+                            <th data-field="asset" [attr.data-visible]="rpt['asset']">Asset</th>
+                            <th data-field="breakdown_category" [attr.data-visible]="rpt['breakdown_category']">Breakdown Category / Service</th>
+                            <th data-field="breakdown" [attr.data-visible]="rpt['breakdown']">Breakdown / Task</th>
+                            <th data-field="ticket_no" [attr.data-visible]="rpt['ticket_no']">Ticket / Schedule No</th>
+                            <th data-field="spare_type" [attr.data-visible]="rpt['spare_type']">Spare Type</th>
+                            <th data-field="spare_name" [attr.data-visible]="rpt['spare_name']">Spare Name</th>
+                            <th data-field="replaced_by" [attr.data-visible]="rpt['replaced_by']">Replaced By</th>
+                            <th data-field="consumed_qty" [attr.data-visible]="rpt['consumed_qty']">Consumed Qty</th>
+                            <th data-field="total_cost" [attr.data-visible]="rpt['total_cost']">Total Cost</th>
+                        </tr>            
+                    </thead>
+                    <tbody *ngIf="spareReportLists.length > 0; else noData">
+                        <tr *ngFor="let spareList of spareReportLists; let i = index" >
+                            <td>{{i + 1}}</td>
+                            <td>{{spareList.date}}</td>
+                            <td>{{spareList.company_name}}</td>
+                            <td>{{spareList.bu_name}}</td>
+                            <td>{{spareList.plant_name}}</td>
+                            <td>{{spareList.department_name}}</td>
+                            <td>{{spareList.location_name}}</td>
+                            <td>{{spareList.asset_group_name}}</td>
+                            <td>{{spareList.asset_model_name}}</td>
+                            <td>{{spareList.asset_name}}</td>
+                            <td>{{spareList.breakdown_category_service_name}}</td>
+                            <td>{{spareList.breakdown_sub_category_task_name}}</td>
+                            <td>{{spareList.ticket_schedule_no}}</td>
+                            <td>{{spareList.spare_type}}</td>
+                            <td>{{spareList.spare_name}}</td>
+                            <td>{{spareList.spare_consumed_by}}</td>
+                            <td>{{spareList.consumed_qty}}</td>
+                            <td>{{spareList.total_cost}}</td>
+                        </tr>
+                    </tbody>
+                    <ng-template #noData>
+                        <tbody>
+                        <tr>
+                            <td colspan="18" class="text-center">No Data Available </td>
+                        </tr>
+                        </tbody>
+                    </ng-template>
+                </table>                    
+                <table class="table table-bordered mb-0" id="summary_table" [attr.data-height]="height" *ngIf="reportType == 'summary'">
+                    <thead>
+                        <tr>
+                            <th>S.no</th>           
+                            <th data-field="date" [attr.data-visible]="rpt['date']"> Date </th>
+                            <th data-field="company" [attr.data-visible]="rpt['company']">Company</th>
+                            <th data-field="bu" [attr.data-visible]="rpt['bu']">BU</th>
+                            <th data-field="plant" [attr.data-visible]="rpt['plant']">Plant</th>
+                            <th data-field="department" [attr.data-visible]="rpt['department']">Department</th>
+                            <th data-field="location" [attr.data-visible]="rpt['location']">Location</th>
+                            <th data-field="asset_group" [attr.data-visible]="rpt['asset_group']">Asset Group</th>
+                            <th data-field="asset_model" [attr.data-visible]="rpt['asset_model']">Asset Model</th>
+                            <th data-field="asset" [attr.data-visible]="rpt['asset']">Asset</th>
+                            <th data-field="breakdown_category" [attr.data-visible]="rpt['breakdown_category']">Breakdown Category / Service</th>
+                            <th data-field="breakdown" [attr.data-visible]="rpt['breakdown']">Breakdown / Task</th>
+                            <th data-field="ticket_no" [attr.data-visible]="rpt['ticket_no']">Ticket / Schedule No</th>
+                            <th data-field="spare_type" [attr.data-visible]="rpt['spare_type']">Spare Type</th>
+                            <th data-field="spare_name" [attr.data-visible]="rpt['spare_name']">Spare Name</th>
+                            <th data-field="replaced_by" [attr.data-visible]="rpt['replaced_by']">Replaced By</th>
+                            <th data-field="consumed_qty" [attr.data-visible]="rpt['consumed_qty']">Consumed Qty</th>
+                            <th data-field="total_cost" [attr.data-visible]="rpt['total_cost']">Total Cost</th>
+                        </tr>            
+                    </thead>
+                    <tbody *ngIf="spareReportLists.length > 0; else noData">
+                        <tr *ngFor="let spareList of spareReportLists; let i = index" >
+                            <td>{{i + 1}}</td>
+                            <td>{{spareList.date}}</td>
+                            <td>{{spareList.company_name}}</td>
+                            <td>{{spareList.bu_name}}</td>
+                            <td>{{spareList.plant_name}}</td>
+                            <td>{{spareList.department_name}}</td>
+                            <td>{{spareList.location_name}}</td>
+                            <td>{{spareList.asset_group_name}}</td>
+                            <td>{{spareList.asset_model_name}}</td>
+                            <td>{{spareList.asset_name}}</td>
+                            <td>{{spareList.breakdown_category_service_name}}</td>
+                            <td>{{spareList.breakdown_sub_category_task_name}}</td>
+                            <td>{{spareList.ticket_schedule_no}}</td>
+                            <td>{{spareList.spare_type}}</td>
+                            <td>{{spareList.spare_name}}</td>
+                            <td>{{spareList.spare_consumed_by}}</td>
+                            <td>{{spareList.consumed_qty}}</td>
+                            <td>{{spareList.total_cost}}</td>
+                        </tr>
+                    </tbody>
+                    <ng-template #noData>
+                        <tbody>
+                        <tr>
+                            <td colspan="18" class="text-center">No Data Available </td>
+                        </tr>
+                        </tbody>
+                    </ng-template>
+                </table> 
+                <table class="table table-bordered mb-0" id="cumulative_table" [attr.data-height]="height" *ngIf="reportType == 'cumulative'">
+                    <thead>
+                        <tr>
+                            <th>S.no</th>           
+                            <!-- <th>Date</th>            -->
+                            <th data-field="company" [attr.data-visible]="rpt['company']">Company</th>
+                            <th data-field="bu" [attr.data-visible]="rpt['bu']">BU</th>
+                            <th data-field="plant" [attr.data-visible]="rpt['plant']">Plant</th>
+                            <th data-field="department" [attr.data-visible]="rpt['department']">Department</th>
+                            <th data-field="location" [attr.data-visible]="rpt['location']">Location</th>
+                            <th data-field="asset_group" [attr.data-visible]="rpt['asset_group']">Asset Group</th>
+                            <th data-field="asset_model" [attr.data-visible]="rpt['asset_model']">Asset Model</th>
+                            <th data-field="asset" [attr.data-visible]="rpt['asset']">Asset</th>
+                            <th data-field="breakdown_category" [attr.data-visible]="rpt['breakdown_category']">Breakdown Category / Service</th>
+                            <th data-field="breakdown" [attr.data-visible]="rpt['breakdown']">Breakdown / Task</th>
+                            <th data-field="ticket_no" [attr.data-visible]="rpt['ticket_no']">Ticket / Schedule No</th>
+                            <th data-field="spare_type" [attr.data-visible]="rpt['spare_type']">Spare Type</th>
+                            <th data-field="spare_name" [attr.data-visible]="rpt['spare_name']">Spare Name</th>
+                            <th data-field="replaced_by" [attr.data-visible]="rpt['replaced_by']">Replaced By</th>
+                            <th data-field="consumed_qty" [attr.data-visible]="rpt['consumed_qty']">Consumed Qty</th>
+                            <th data-field="total_cost" [attr.data-visible]="rpt['total_cost']">Total Cost</th>
+                        </tr>            
+                    </thead>
+                    <tbody *ngIf="spareReportLists.length > 0; else noData">
+                        <tr *ngFor="let spareList of spareReportLists; let i = index" >
+                            <td>{{i + 1}}</td>
+                            <!-- <td>{{spareList.date}}</td> -->
+                            <td>{{spareList.company_name}}</td>
+                            <td>{{spareList.bu_name}}</td>
+                            <td>{{spareList.plant_name}}</td>
+                            <td>{{spareList.department_name}}</td>
+                            <td>{{spareList.location_name}}</td>
+                            <td>{{spareList.asset_group_name}}</td>
+                            <td>{{spareList.asset_model_name}}</td>
+                            <td>{{spareList.asset_name}}</td>
+                            <td>{{spareList.breakdown_category_service_name}}</td>
+                            <td>{{spareList.breakdown_sub_category_task_name}}</td>
+                            <td>{{spareList.ticket_schedule_no}}</td>
+                            <td>{{spareList.spare_type}}</td>
+                            <td>{{spareList.spare_name}}</td>
+                            <td>{{spareList.spare_consumed_by}}</td>
+                            <td>{{spareList.consumed_qty}}</td>
+                            <td>{{spareList.total_cost}}</td>
+                        </tr>
+                    </tbody>
+                    <ng-template #noData>
+                        <tbody>
+                        <tr>
+                            <td colspan="17" class="text-center">No Data Available </td>
+                        </tr>
+                        </tbody>
+                    </ng-template>
+                </table> 
+            </div>
+        </div>
+      </div>
+    </div>
+  

@@ -1,0 +1,494 @@
+<div class="col-sm-12 pt-2">
+  <div class="card card-outline card-cyan" [hidden]="showAsset">
+    <div class="card-header">
+      <h3 class="card-title">Asset</h3>
+      <div class="card-tools">
+        <button type="button" class="btn btn-sm btn-outline-info" (click)="addAsset()" *ngIf="masterOperation['add']">
+          <i class="fas fa-plus fa-sm mr-1"></i> Asset
+        </button>
+        <button class="btn btn-secondary btn-sm ml-2" type="button" id="asset_toggle_icon">
+          <i class="fa fa-toggle-off" id="asset_toggleIcon"></i>
+        </button>
+        <button class="btn btn-secondary btn-sm ml-2" type="button" (click)="textWrap()">
+          <i class="fas fa-text-width"></i>
+        </button>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered table-sm" id="asset_dataTable">
+          <thead>
+            <tr>
+              <th> Operation </th>
+              <th> Status </th>
+              <th> Asset Code </th>
+              <th> Asset Name </th>
+              <th> Asset Logo </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of assetList">
+              <td>
+                <div class="btn-group">
+                  <button class="btn" title="Edit Asset" (click)="editAsset(data)" *ngIf="masterOperation['edit']">
+                    <i class="fas fa-pencil-alt"></i>
+                  </button>
+                  <button *ngIf="data.is_assigned == 'yes' ? false : masterOperation['delete'] ? true : false"
+                    class="btn" title="Remove Asset" (click)="changeAssetStatus(data.asset_id,'delete')">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </td>
+              <td>
+                <button class="btn" title="Active/InActive Asset"
+                  (click)="changeAssetStatus(data.asset_id,data.status)">
+                  <i
+                    [ngClass]="data.status == 'active' ? 'far fa-thumbs-up text-success' : 'far fa-thumbs-down text-danger'"></i>
+                </button>
+              </td>
+              <td>{{ data.asset_code }}</td>
+              <td>{{ data.asset_name }}</td>
+              <td><button type="button" title="Asset logo" class="btn btn-sm"
+                  [ngClass]="data.asset_image == 'placeholder.jpg' ? 'btn-outline-danger' : 'btn-outline-success'"
+                  file_type="image" (click)="modelImage(data)"><i class="fas fa-eye"></i></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="list-style: none;" *ngIf="listView">
+        <li class="card p-2">
+          <div class="row">
+            <div class="col-sm-2">
+              <b>Operation</b>
+            </div>
+            <div class="col-sm-2">
+              <b>Status</b>
+            </div>
+            <div class="col-sm-2">
+              <b>Plant</b>
+            </div>
+            <div class="col-sm-2">
+              <b>Department</b>
+            </div>
+            <div class="col-sm-2">
+              <b>Asset Group</b>
+            </div>
+            <div class="col-sm-2">
+              <b>Asset Name</b>
+            </div>
+          </div>
+        </li>
+        <div style="height: 64vh;overflow-y: auto;">
+          <li class="callout callout-info p-2" *ngFor="let data of assetList">
+            <div class="row align-items-center">
+              <div class="col-sm-2">
+                <div class="btn-group">
+                  <button class="btn" title="Edit Asset" (click)="editAsset(data)" *ngIf="masterOperation['edit']">
+                    <i class="fas fa-pencil-alt"></i>
+                  </button>
+                  <button *ngIf="data.is_assigned == 'yes' ? false : masterOperation['delete'] ? true : false"
+                    class="btn" title="Remove Asset" (click)="changeAssetStatus(data.asset_id,'delete')">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="col-sm-2">
+                <button class="btn" title="Active/InActive Shift"
+                  (click)="changeAssetStatus(data.asset_id,data.status)">
+                  <i
+                    [ngClass]="data.status == 'active' ? 'far fa-thumbs-up text-success' : 'far fa-thumbs-down text-danger'"></i>
+                </button>
+              </div>
+              <div class="col-sm-2">
+                <h6 class="m-0">{{ data.plant }}</h6>
+              </div>
+              <div class="col-sm-2">
+                <h6 class="m-0">{{ data.department }}</h6>
+              </div>
+              <div class="col-sm-2">
+                <h6 class="m-0">{{ data.asset_group }}</h6>
+              </div>
+              <div class="col-sm-2">
+                <h6 class="m-0">{{ data.asset_code }} - {{ data.asset_name }}</h6>
+              </div>
+            </div>
+          </li>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card card-outline card-cyan" [hidden]="!showAsset">
+    <div class="card-header">
+      <h3 class="card-title">Asset</h3>
+    </div>
+    <form id="asset_form" autocomplete="off">
+      <div class="card-body">
+        <ul class="nav nav-pills">
+          <li class="nav-item">
+            <a class="nav-link active" data-toggle="pill" href="#general_tab" role="tab" id="general_link">
+              <i class="far fa-list-alt mr-2"></i>General
+            </a>
+          </li><!-- 
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="pill" href="#user_tab" role="tab">
+              <i class="far fa-list-alt mr-2"></i>Users
+            </a>
+          </li> -->
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="pill" href="#vendor_tab" role="tab">
+              <i class="fas fa-user-tie mr-2"></i>Vendors
+            </a>
+          </li>
+          <!-- 
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="pill" href="#part_tab" role="tab">
+            <i class="fas fa-parking mr-2"></i> Parts
+          </a>
+        </li> -->
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="pill" href="#upload_tab" role="tab">
+              <i class="fas fa-upload mr-2"></i>Uploads
+            </a>
+          </li>
+          <!-- 
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="pill" href="#log_tab" role="tab">
+              <i class="fas fa-book-reader mr-2"></i>Logs
+            </a>
+          </li> -->
+        </ul>
+        <div class="tab-content mt-4">
+          <div class="tab-pane fade show active" id="general_tab">
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group row">
+                  <label for="created_on" class="col-sm-4"> Created On </label>
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control form-control-sm " id="created_on" name="created_on" value=""
+                      [(ngModel)]="assetCreatedOn" disabled />
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="modified_on" class="col-sm-4"> Modified On </label>
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control form-control-sm " id="modified_on" name="modified_on"
+                      value="" [(ngModel)]="assetModifiedOn" disabled />
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="asset_code" class="col-sm-4">Asset Code<sup><i
+                        class="fas fa-asterisk fa-xs text-red"></i></sup> </label>
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control form-control-sm required" id="asset_code" name="asset_code"
+                      value="" [(ngModel)]="assetCode" (input)="convertToUpperCase()" />
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="asset_description" class="col-sm-4">Asset Name <sup><i
+                        class="fas fa-asterisk fa-xs text-red"></i></sup> </label>
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control form-control-sm required" id="asset_name" name="asset_name"
+                      class="form-control form-control-sm" value="" [(ngModel)]="assetDescription" />
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group row">
+                  <label for="created_by" class="col-sm-4"> Created By </label>
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control form-control-sm " id="created_by" name="created_by" value=""
+                      [(ngModel)]="assetCreatedBy" disabled />
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="modified_by" class="col-sm-4"> Modified By </label>
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control form-control-sm " id="modified_by" name="modified_by"
+                      value="" [(ngModel)]="assetModifiedBy" disabled />
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="asset_model_name" class="col-sm-4">Asset Model
+                  </label>
+                  <div class="col-sm-8">
+                    <select id="asset_model_name" name="asset_model_name" class="asset_select2" style="width: 100%">
+                      <option value="">~~ Select Asset Model ~~</option>
+                      <option *ngFor="let data of assetModelList" value="{{ data.asset_model_id }}">
+                        {{ data.asset_model_code }}-{{ data.asset_model_name }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="asset_serial_no" class="col-sm-4">Serial No</label>
+                  <div class="col-sm-8">
+                    <input type="text" id="asset_serial_no" name="asset_serial_no" class="form-control form-control-sm"
+                      value="" [(ngModel)]="assetSerial" />
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="asset_make" class="col-sm-4"> Make </label>
+                  <div class="col-sm-8">
+                    <input type="text" id="asset_make" name="asset_make" class="form-control form-control-sm" value=""
+                      [(ngModel)]="assetMake" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="user_tab" style="display: none;">
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group row">
+                  <label for="asset_manage" class="col-sm-4">Manageable Engineer </label>
+                  <div class="col-sm-8">
+                    <select id="asset_manage" name="asset_manage" class="asset_select2" style="width: 100%;">
+                      <option value="">~~ Select Manageable Person ~~</option>
+                      <option *ngFor="let data of engineerList" value="{{ data.employee_id }}">
+                        {{ data.employee_code }} - {{ data.employee_name }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group row">
+                  <label for="asset_engineer" class="col-sm-4">Responsible Engineer</label>
+                  <div class="col-sm-8">
+                    <select id="asset_engineer" name="asset_engineer" class="asset_select2" style="width: 100%;">
+                      <option value="">~~ Select Responsible Engineer ~~</option>
+                      <option *ngFor="let data of engineerList" value="{{ data.employee_id }}">
+                        {{ data.employee_code }} - {{ data.employee_name }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="asset_head" class="col-sm-4">Responsible Head</label>
+                  <div class="col-sm-8">
+                    <select id="asset_head" name="asset_head" class="multiselect" multiple style="width: 100%;">
+                      <option *ngFor="let data of headList" value={{data.employee_id}}>
+                        {{ data.employee_code }} - {{ data.employee_name }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="vendor_tab">
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group row">
+                  <label for="asset_manufacturer" class="col-sm-4"> Manufacturer
+                  </label>
+                  <div class="col-sm-8">
+                    <input type="text" id="asset_manufacturer" name="asset_manufacturer"
+                      class="form-control form-control-sm" value="" [(ngModel)]="assetManufacturer" />
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="asset_mfg_date" class="col-sm-4">Mfg Date
+                  </label>
+                  <div class="col-sm-8">
+                    <input type="text" id="asset_mfg_date" name="asset_mfg_date" class="form-control form-control-sm"
+                      value="" [(ngModel)]="assetMfgDate" />
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group row">
+                  <label for="asset_vendor_name" class="col-sm-4">Vendor Name
+                  </label>
+                  <div class="col-sm-8">
+                    <input type="text" id="asset_vendor_name" name="asset_vendor_name"
+                      class="form-control form-control-sm" value="" [(ngModel)]="assetVendor" />
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="asset_vendor_mail" class="col-sm-4">Vendor Mail
+                  </label>
+                  <div class="col-sm-8">
+                    <input type="email" id="asset_vendor_mail" name="asset_vendor_mail"
+                      class="form-control form-control-sm" value="" [(ngModel)]="vendorMail" />
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="asset_vendor_contact" class="col-sm-4">Vendor Contact
+                  </label>
+                  <div class="col-sm-8">
+                    <input type="text" id="asset_vendor_contact" name="asset_vendor_contact"
+                      class="form-control form-control-sm numeric" value="" minlength="10" maxlength="10"
+                      [(ngModel)]="vendorContact" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- 
+        <div class="tab-pane fade" id="part_tab">
+          <div class="row">
+            <div class="col-sm-4">
+              <label class="text-sm mb-1">Part Name</label>
+              <input type="text" id="asset_part_name" name="asset_part_name" placeholder="Part Name"
+                class="form-control form-control-sm mb-2" value="" [(ngModel)]="asset_part_name" />
+              <label class="text-sm mb-1">Description</label>
+              <input type="text" id="asset_part_description" name="asset_part_description" placeholder="Description"
+                class="form-control form-control-sm mb-2" value="" [(ngModel)]="asset_part_description" />
+              <input type="hidden" id="part_id" name="part_id" [(ngModel)]="part_id" />
+            </div>
+            <div class="col-sm-4">
+              <label class="text-sm mb-1">Make</label>
+              <input type="text" id="asset_part_make" name="asset_part_make" placeholder="Make"
+                class="form-control form-control-sm mb-2" value="" [(ngModel)]="asset_part_make" />
+              <label class="text-sm mb-1">Serial Number</label>
+              <input type="text" id="asset_part_serial_no" name="asset_part_serial_no" placeholder="Serial No"
+                class="form-control form-control-sm mb-2" value="" [(ngModel)]="asset_part_serial_no" />
+            </div>
+            <div class="col-sm-4">
+              <label class="text-sm mb-1">Life Time (hrs) </label>
+              <input type="text" id="asset_part_life" name="asset_part_life" placeholder="Life Time (hrs)"
+                class="form-control form-control-sm mb-2" value="" [(ngModel)]="asset_part_life" />
+              <label class="text-sm mb-1">Alert Life Time (hrs) </label>
+              <input type="text" id="asset_part_life_alert" name="asset_part_life_alert"
+                placeholder="Alert Life Time (hrs)" class="form-control form-control-sm mb-2" value=""
+                [(ngModel)]="asset_part_life_alert" />
+              <button type="button" id="add_parts" (click)="addParts()"
+                class="btn btn-flat btn-sm btn-outline-primary float-right mb-2"><i class="fas fa-plus mr-2"></i>
+                Add Parts</button>
+            </div>
+            <div class="col-sm-12">
+              <table class="table" id="parts_table">
+                <thead>
+                  <tr>
+                    <th>
+                      <button type="button" class="btn btn-sm delete_row" style="display:none" (click)="delete_row()">
+                        <i class="far fa-trash-alt"></i> </button>
+                      <button type="button" class="btn btn-sm edit_row" style="display:none"> <i class="far fa-edit"
+                          (click)="edit_row($event)"></i> </button>
+                    </th>
+                    <th>Part Name</th>
+                    <th>Part Description</th>
+                    <th>Make</th>
+                    <th>Serial No</th>
+                    <th>Life Time (hrs)</th>
+                    <th>Alert Life Time (hrs)</th>
+                  </tr>
+                </thead>
+                <tbody id="parts_table_body">
+                  <tr *ngFor="let assetPart of asset_part">
+                    <td class="text-center" part_id=""><i class="fas fa-clipboard-check mr-2 edit_done"
+                        style="display: none"></i> <input type="checkbox" class="checkbox" name="task_select" value=""
+                        (click)="checkbox($event)" [(ngModel)]="assetPart.checked">
+                    <td>{{ assetPart.asset_part_name }}</td>
+                    <td>{{ assetPart.asset_part_description }}</td>
+                    <td>{{ assetPart.asset_part_make }}</td>
+                    <td>{{ assetPart.asset_part_serial_no }}</td>
+                    <td>{{ assetPart.asset_part_life }}</td>
+                    <td>{{ assetPart.asset_part_life_alert }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div> -->
+          <div class="tab-pane fade" id="upload_tab">
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group row">
+                  <label for="asset_image" class="col-sm-4">Image</label>
+                  <div class="col-sm-8">
+                    <div class="custom-file custom-file-sm">
+                      <input type="file" class="form-control custom-file-input" id="asset_image" name="asset_image"
+                        (change)="uploadImage($event)">
+                      <input type="hidden" id="asset_image_old" name="asset_image_old" [(ngModel)]="assetImageOld">
+                      <label class="custom-file-label" for="asset_image" id="asset_image_name">
+                        Choose File
+                      </label>
+                    </div>
+                    <span class="text-orange text-xs"><b> * Accept Images alone. Upto: 1200 *
+                        600</b></span>
+                  </div>
+                  <div class="col-sm-4"></div>
+                  <div class="col-sm-8 mt-2">
+                    <img [src]="assetImageUrl" alt="asset Image" style="height: 100px; width: 150px;" />
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="asset_manual" class="col-sm-4">Manual</label>
+                  <div class="col-sm-8">
+                    <div class="custom-file custom-file-sm">
+                      <input type="file" class="form-control custom-file-input" id="asset_manual" name="asset_manual"
+                        (change)="uploadManual($event)">
+                      <input type="hidden" id="asset_manual_old" name="asset_manual_old" [(ngModel)]="assetManualOld">
+                      <label class="custom-file-label" for="asset_manual" id="asset_manual_name">
+                        Choose File
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-sm-4"></div>
+                  <div class="col-sm-8 mt-2">
+                    <iframe id="asset_manual_file" src="assets/images/dummy.pdf" width="150px" height="100px;"
+                      style="border: none"></iframe>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group row">
+                  <label for="asset_video" class="col-sm-4"> Video </label>
+                  <div class="col-sm-8">
+                    <div class="custom-file custom-file-sm">
+                      <input type="file" class="form-control custom-file-input" id="asset_video" name="asset_video"
+                        (change)="uploadVideo($event)" />
+                      <input type="hidden" id="asset_video_old" name="asset_video_old" [(ngModel)]="assetVideoOld">
+                      <label class="custom-file-label" for="asset_video" id="asset_video_name">
+                        Choose File
+                      </label>
+                    </div>
+                    <span class="text-orange text-xs"><b> * Accept video alone. size: 30Mb</b></span>
+                  </div>
+                  <div class="col-sm-4"></div>
+                  <div class="col-sm-8 mt-2">
+                    <video width="200" height="150" controls>
+                      <source id="asset_video_file" src="assets/images/dummy.mp4" type="video/mp4">
+                    </video>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- 
+          <div class="tab-pane fade" id="log_tab">
+            <div class="row">
+            </div>
+          </div> -->
+        </div>
+      </div>
+      <div class="card-footer text-center">
+        <button type="submit" class="btn btn-sm btn-info mr-2" (click)="saveAsset()">Save</button>
+        <button type="button" class="btn btn-sm btn-default" (click)="cancel()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal fade" id="modal-image">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header p-1 pl-2 pr-2">
+        <h4 class="modal-title"> Asset Logo </h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">
+            &times;
+          </span>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        <img id="image_data" [src]="model_image" alt="Asset image" height="150px" width="300px" />
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>

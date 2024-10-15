@@ -1,0 +1,268 @@
+<div class="col-sm-12 pt-2">
+  <div class="card card-info card-outline card-outline-tabs bg-dark">
+    <div class="card-header p-0 border-bottom-0">
+      <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" data-toggle="pill" href="#plant_div" role="tab"
+            (click)="periodChange('today','date')">Today</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="pill" href="#plant_div" role="tab"
+            (click)="periodChange('previous','date')">Previous
+            Day</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="pill" href="#plant_div" role="tab"
+            (click)="periodChange('week','from_to')">This
+            Week</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="pill" href="#plant_div" role="tab"
+            (click)="periodChange('month','from_to')">This
+            Month</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="pill" href="#plant_div" role="tab"
+            (click)="periodChange('year','from_to')">This
+            Year</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="pill" href="#plant_div" role="tab"
+            (click)="periodChange('custom','from_to')">Custom</a>
+        </li>
+      </ul>
+    </div>
+    <div class="card-body p-2">
+      <div class="tab-content">
+        <div class="row mb-1" id="from_to_input_div" style="display: none;">
+          <div class="col-sm-3">
+            <div class="input-group date">
+              <input type="text" class="form-control form-control-sm" id="from_to_date" name="from_to_date" value=""
+                style="background-color: #fff;" />
+              <div class="input-group-append">
+                <div class="input-group-text">
+                  <i class="far fa-calendar-alt"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-pane fade show active" id="plant_div">
+          <!-- Extension Table -->
+          <div class="table-responsive"
+            style="margin-bottom: 0px;box-shadow: 5px 5px 7px #1c1f22, -4px -4px 7px #4b545c">
+            <input type="hidden" id="dril_department_default" value="">
+            <input type="hidden" id="dril_department_ip" value="">
+            <input type="hidden" id="dril_asset_group_ip" value="">
+            <input type="hidden" id="dril_asset_ip" value="">
+            <table class="table" id="extension_table" style="width:100%;">
+              <thead class="text-nowrap">
+                <tr>
+                  <th> S.No </th>
+                  <th> Name </th>
+                  <th> Total Asset </th>
+                  <th> Total Ticket </th>
+                  <th> Open </th>
+                  <th> In Progress </th>
+                  <th> Acknowledge </th>
+                  <th> Closed </th>
+                  <th> Others </th>
+                </tr>
+              </thead>
+              <tbody id="table_data_c_b_p">
+              </tbody>
+            </table>
+          </div>
+          <h5 class="title"><i class="fas fa-ticket-alt"></i> Breakdown - {{ dashboardTitle }} </h5>
+          <!-- Breakdown Count Chart Detail -->
+          <div class="card bg-secondary mb-2">
+            <div class="card-header">
+              <h3 class="card-title">Breakdown Count</h3>
+            </div>
+            <div class="card-body p-0" style="height: 350px">
+              <div id="breakdown_count"></div>
+              <div class="justify-content-center align-items-center" id="no_breakdown_count" style="height: 100%;">
+                <h3 class="text-center text-yellow">
+                  <i class="far fa-frown mb-1" style="font-size: 4rem;"></i> <br />
+                  No Data Found
+                </h3>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <!-- Breakdown Downtime, MTTR & MTBF Detail -->
+            <div class="col-sm-2 pr-0">
+              <div class="card bg-secondary text-center mb-2">
+                <div class="card-header">
+                  <h4 class="card-title float-none text-sm"><i class="fas fa-history"></i>
+                    Downtime (HH:MM)</h4>
+                </div>
+                <div class="card-body p-2" style="height: 80px;">
+                  <h3 class="text-blue" style="font-size: calc(1.6vw + 1.6vh + 0.7vmin);" id="down_time">
+                    {{ downtime }}
+                  </h3>
+                </div>
+              </div>
+              <div class="card bg-secondary text-center mb-2">
+                <div class="card-header">
+                  <h4 class="card-title float-none text-sm"><i class="far fa-hourglass"></i>
+                    MTBF (HH:MM)</h4>
+                </div>
+                <div class="card-body p-2" style="height: 80px;">
+                  <h3 class="text-green" style="font-size: calc(1.6vw + 1.6vh + 0.7vmin);" id="mtbf">
+                    {{ mtbf }}
+                  </h3>
+                </div>
+              </div>
+              <div class="card bg-secondary text-center mb-2">
+                <div class="card-header">
+                  <h4 class="card-title float-none text-sm"><i class="fas fa-business-time"></i> MTTR (HH:MM)</h4>
+                </div>
+                <div class="card-body p-2" style="height: 80px;">
+                  <h3 class="text-orange" style="font-size: calc(1.6vw + 1.6vh + 0.7vmin);" id="mttr">
+                    {{ mttr }}
+                  </h3>
+                </div>
+              </div>
+            </div>
+            <!-- Breakdown Analysis -->
+            <div class="col-sm-10">
+              <div class="card bg-secondary mb-2">
+                <div class="card-header border-0">
+                  <h3 class="card-title">Breakdown Analysis</h3>
+                </div>
+                <div class="card-body p-0" style="height: 338px">
+                  <div id="breakdown_analysis"></div>
+                  <div class="justify-content-center align-items-center" id="no_breakdown_analysis"
+                    style="height: 100%;">
+                    <h3 class="text-center text-yellow">
+                      <i class="far fa-frown mb-1" style="font-size: 4rem;"></i> <br />
+                      No Data Found
+                    </h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Maximum Asset -->
+            <div class="col-sm-8">
+              <div class="card bg-secondary mb-2">
+                <div class="card-header">
+                  <h3 class="card-title"> Breakdown Maximum Asset </h3>
+                </div>
+                <div class="card-body p-0" style="height: 400px">
+                  <div id="asset_breakdown"></div>
+                  <div class="justify-content-center align-items-center" id="no_asset_breakdown" style="height: 100%;">
+                    <h3 class="text-center text-yellow">
+                      <i class="far fa-frown mb-1" style="font-size: 4rem;"></i> <br />
+                      No Data Found
+                    </h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Engineer Performance -->
+            <div class="col-sm-4 pl-0">
+              <div class="card bg-secondary mb-2">
+                <div class="card-header">
+                  <h3 class="card-title"> Engineer Performance </h3>
+                </div>
+                <div class="card-body p-2" style="height: 400px;overflow-y: auto;">
+                  <div class="bg-dark mb-2" *ngFor="let data of engineerList" id="engineer_div">
+                    <div class="row">
+                      <div class="col-sm-3 pr-0">
+                        <img src="assets/images/user.png" alt="Example" style="width: 100%;padding: 10px;">
+                        <h4 class="text-center text-green mb-0">{{ data.engineer_perc }} <span
+                            style="font-size: 15px;">%</span></h4>
+                      </div>
+                      <div class="col-sm-9 pt-2 pr-3">
+                        <h6 class="text-info mt-1">{{ data.employee_code }} - {{ data.employee_name }}</h6>
+                        <div class="d-flex justify-content-between align-items-center">
+                          <h6 style="width: 60%">Avg Response Time</h6>
+                          <h6 class="text-right" style="width: 40%">{{ data.avg_response_time }}</h6>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                          <h6 style="width: 60%">Avg Resolve Time</h6>
+                          <h6 class="text-right" style="width: 40%">{{ data.avg_resolve_time }}</h6>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center text-primary">
+                          <h6 style="width: 60%">Fixed vs Total</h6>
+                          <h6 class="text-right" style="width: 40%">{{ data.fixed }} / {{ data.ticket_count }}</h6>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="justify-content-center align-items-center" id="no_engineer_div" style="height: 100%;">
+                    <h3 class="text-center text-yellow">
+                      <i class="far fa-frown mb-1" style="font-size: 4rem;"></i> <br />
+                      No Data Found
+                    </h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Spare Consumed Quantity -->
+            <div class="col-sm-4">
+              <div class="info-box pt-0 bg-secondary mb-2" style="height: 123px">
+                <div class="info-box-content pt-0 pb-0">
+                  <span class="info-box-text text-primary" style="font-size: 1rem">
+                    Total Consumed Spare
+                  </span>
+                  <p class="info-box-number mb-0">
+                    <span style="font-weight: 400;">Spare Quantity - </span><span style="font-size: 1.1rem">{{ totalSpare }}</span>
+                  </p>
+                  <p class="info-box-number mb-0">
+                    <span style="font-weight: 400;">Spare Cost - </span><span style="font-size: 1.1rem">{{ totalCost }}</span>
+                  </p>
+                </div>
+              </div>
+              <div class="info-box pt-0 bg-secondary mb-2" style="height: 123px">
+                <div class="info-box-content pt-0 pb-0">
+                  <span class="info-box-text text-primary" style="font-size: 1rem">
+                    Spare Used Breakdown
+                  </span>
+                  <p class="info-box-number mb-0">
+                    <span style="font-weight: 400;">Spare Quantity - </span><span style="font-size: 1.1rem">{{ breakdownSpare }}</span>
+                  </p>
+                  <p class="info-box-number mb-0">
+                    <span style="font-weight: 400;">Spare Cost - </span><span style="font-size: 1.1rem">{{ breakdownSpareCost }}</span>
+                  </p>
+                </div>
+              </div>
+              <div class="info-box pt-0 bg-secondary mb-2" style="height: 123px">
+                <div class="info-box-content pt-0 pb-0">
+                  <span class="info-box-text text-primary" style="font-size: 1rem">
+                    Spare Used PM
+                  </span>
+                  <p class="info-box-number mb-0">
+                    <span style="font-weight: 400;">Spare Quantity - </span><span style="font-size: 1.1rem">{{ pmSpare }}</span>
+                  </p>
+                  <p class="info-box-number mb-0">
+                    <span style="font-weight: 400;">Spare Cost - </span><span style="font-size: 1.1rem">{{ pmSpareCost }}</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <!-- Spare Consumption -->
+            <div class="col-sm-8 pl-0">
+              <div class="card bg-secondary mb-2">
+                <div class="card-header border-0">
+                  <h3 class="card-title">Spare Consumption</h3>
+                </div>
+                <div class="card-body p-0" style="height: 341px">
+                  <div id="spare_consumption"></div>
+                  <div class="justify-content-center align-items-center" id="no_spare_consumption"
+                    style="height: 100%;">
+                    <h3 class="text-center text-yellow">
+                      <i class="far fa-frown mb-1" style="font-size: 4rem;"></i> <br />
+                      No Data Found
+                    </h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

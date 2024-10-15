@@ -1,0 +1,25 @@
+.table th:nth-child(1),
+.table td:nth-child(1) {
+    position: sticky;
+    left: 0;
+    width: 80px;
+    min-width: 80px;
+}
+
+.table th:nth-child(2),
+.table td:nth-child(2) {
+    position: sticky;
+    left: 80px;
+    width: 40px;
+}
+
+.table td:nth-child(1),
+.table td:nth-child(2) {
+    background: #fff;
+}
+
+.table th:nth-child(1),
+.table th:nth-child(2) {
+    z-index: 2;
+    background: #fff;
+}

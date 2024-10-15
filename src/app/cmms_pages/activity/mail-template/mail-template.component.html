@@ -1,0 +1,332 @@
+<div class="col-sm-12 pt-2">
+  <div class="card card-info card-outline" [hidden]="isMailDtlShow">
+    <div class="card-header">
+      <h3 class="card-title">Mail</h3>
+      <div class="card-tools">
+        <button type="button" *ngIf="masterOperation['add']" class="btn btn-sm btn-outline-info mr-2"
+          (click)="mailShow()"><i class="fas fa-plus fa-sm"></i>&nbsp; Add </button>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered table-sm" id="mail_dataTable">
+          <thead>
+            <tr>
+              <th>Operation</th>
+              <th>Status</th>
+              <th>Company</th>
+              <th>BU</th>
+              <th>Plant</th>
+              <th>Mail</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let list of mailTemplateLists">
+              <td>
+                <button type="button" *ngIf="masterOperation['edit']" class="btn" (click)="editMailTemplate(list)"><i
+                    class="fas fa-pencil-alt"></i></button>
+                <button types="button" *ngIf="masterOperation['delete']" class="btn"
+                  (click)="mailTemplateStatus(list.mail_id, 'delete')"><i class="fas fa-trash"></i></button>
+              </td>
+              <td><a *ngIf="masterOperation['edit']" title="Active / Inactive" class="btn" (click)="mailTemplateStatus(list.mail_id, list.status)">
+                  <i
+                    [ngClass]="list.status == 'active' ? 'far fa-thumbs-up text-green' : 'far fa-thumbs-down text-red'"></i></a>
+              </td>
+              <td>{{ list.company_name }}</td>
+              <td>{{ list.bu_name }}</td>
+              <td>{{ list.plant_name }}</td>
+              <td>{{ list.subject }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="card card-info card-outline" [hidden]="!isMailDtlShow">
+    <form id="mail_template_form" name="mail_template_form" autocomplete="off">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-sm-6 p-2">
+            <div class="form-group row">
+              <label for="created_on" class="col-sm-4">Created On</label>
+              <div class="col-sm-8">
+                <input type="text" id="created_on" name="created_on" [(ngModel)]="createdOn"
+                  class="form-control form-control-sm" value="" disabled />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="modified_on" class="col-sm-4">Modified On</label>
+              <div class="col-sm-8">
+                <input type="text" id="modified_on" name="modified_on" [(ngModel)]="modifiedOn"
+                  class="form-control form-control-sm" value="" disabled />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="company_name" class="col-sm-4">Company <sup><i
+                    class="fas fa-asterisk fa-xs text-red"></i></sup>
+              </label>
+              <div class="col-sm-8">
+                <select id="company_name" name="company_name" class="select2 required">
+                  <option value="">~~ Select Company ~~</option>
+                  <option *ngFor="let item of companyList" value="{{ item.company_id }}">
+                    {{ item.company_code }}-{{ item.company_name }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="plant_name" class="col-sm-4">Plant
+              </label>
+              <div class="col-sm-8">
+                <select id="plant_name" name="plant_name" class="select2 required">
+                  <option value="all">All</option>
+                  <option *ngFor="let plant of plantList" value="{{ plant.plant_id }}">
+                    {{ plant.plant_code }}-{{ plant.plant_name }}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 p-2">
+            <div class="form-group row">
+              <label for="created_by" class="col-sm-4">Created By</label>
+              <div class="col-sm-8">
+                <input type="text" id="created_by" name="created_by" [(ngModel)]="createdBy"
+                  class="form-control form-control-sm" value="" disabled />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="modified_by" class="col-sm-4">Modified By</label>
+              <div class="col-sm-8">
+                <input type="text" id="modified_by" name="modified_by" [(ngModel)]="modifiedBy"
+                  class="form-control form-control-sm" value="" disabled />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="bu_name" class="col-sm-4">BU </label>
+              <div class="col-sm-8">
+                <select id="bu_name" name="bu_name" class="select2">
+                  <option value="all">All</option>
+                  <option *ngFor="let branch of branchList" value="{{ branch.bu_id }}">
+                    {{ branch.bu_code }}-{{ branch.bu_name }}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body p-0">
+        <div class="row">
+          <div class="col-sm-3 pr-0 mail_div" style="border-right: 1px solid rgba(0, 0, 0, .125);">
+            <div class="card-header border-bottom-0">
+              <h3 class="card-title">Reports</h3>
+            </div>
+            <div class="card-body p-3 pt-1 pb-2">
+              <!-- Production Reports -->
+              <h6 class="d-flex justify-content-between pl-2 pr-2 pb-2 border-bottom"
+                (click)="dropTemplate($event, 'production_div')">
+                <span style="cursor: default;"><i class="fa fa-plus fa-sm text-info"
+                    style="width: 20px;cursor: pointer;"></i>Breakdown</span>
+                <i class="fas fa-caret-down text-secondary"></i>
+              </h6>
+              <!-- Production Templates List -->
+              <div class="mb-4" id="production_div" style="display: none">
+                <div *ngIf="breakdownTemplateList.length > 0; else noData">
+                  <div class="custom-control custom-checkbox ml-4 mt-2" *ngFor="let data of breakdownTemplateList">
+                    <input type="checkbox" id="template_check_{{ data.template_id }}"
+                      name="template_check_{{ data.template_id }}" class="custom-control-input"
+                      value="{{ data.template_id }}">
+                    <label for="template_check_{{ data.template_id }}"
+                      class="custom-control-label">{{ data.template_name }}</label>
+                  </div>
+                </div>
+                <ng-template #noData>
+                  <h6 class="text-orange text-center"> No Templates Available</h6>
+                </ng-template>
+              </div>
+              <!-- Downtime Reports -->
+              <h6 class="d-flex justify-content-between pl-2 pr-2 pb-2 border-bottom"
+                (click)="dropTemplate($event, 'downtime_div')">
+                <span style="cursor: default;"><i class="fa fa-plus fa-sm text-info"
+                    style="width: 20px;cursor: pointer;"></i>PM</span>
+                <i class="fas fa-caret-down text-secondary"></i>
+              </h6>
+              <!-- Downtime Templates List -->
+              <div class="mb-4" id="downtime_div" style="display: none">
+                <div *ngIf="pmTemplateList.length > 0; else noData">
+                  <div class="custom-control custom-checkbox ml-4 mt-2" *ngFor="let data of pmTemplateList">
+                    <input type="checkbox" id="template_check_{{ data.template_id }}"
+                      name="template_check_{{ data.template_id }}" class="custom-control-input"
+                      value="{{ data.template_id }}">
+                    <label for="template_check_{{ data.template_id }}"
+                      class="custom-control-label">{{ data.template_name }}</label>
+                  </div>
+                </div>
+                <ng-template #noData>
+                  <h6 class="text-orange text-center"> No Templates Available</h6>
+                </ng-template>
+              </div>
+              <!-- Job & RouteCard Reports -->
+              <h6 class="d-flex justify-content-between pl-2 pr-2 pb-2 border-bottom"
+                (click)="dropTemplate($event, 'job_routecard_div')">
+                <span style="cursor: default;"><i class="fa fa-plus fa-sm text-info"
+                    style="width: 20px;cursor: pointer;"></i>Spare</span>
+                <i class="fas fa-caret-down text-secondary"></i>
+              </h6>
+              <!-- Job & RouteCard Templates List -->
+              <div class="mb-4" id="job_routecard_div" style="display: none">
+                <div *ngIf="spareTemplateList.length > 0; else noData">
+                  <div class="custom-control custom-checkbox ml-4 mt-2" *ngFor="let data of spareTemplateList">
+                    <input type="checkbox" id="template_check_{{ data.template_id }}"
+                      name="template_check_{{ data.template_id }}" class="custom-control-input"
+                      value="{{ data.template_id }}">
+                    <label for="template_check_{{ data.template_id }}"
+                      class="custom-control-label">{{ data.template_name }}</label>
+                  </div>
+                </div>
+                <ng-template #noData>
+                  <h6 class="text-orange text-center"> No Templates Available</h6>
+                </ng-template>
+              </div>
+              <!-- Defect Reports -->
+              <!-- <h6 class="d-flex justify-content-between pl-2 pr-2 pb-2 border-bottom"
+                (click)="dropTemplate($event, 'defect_div')">
+                <span style="cursor: default;"><i class="fa fa-plus fa-sm text-info"
+                    style="width: 20px;cursor: pointer;"></i>Defect</span>
+                <i class="fas fa-caret-down text-secondary"></i>
+              </h6> -->
+              <!-- Defect Templates List -->
+              <!-- <div class="mb-4" id="defect_div" style="display: none">
+                <div *ngIf="defectTemplateList.length > 0; else noData">
+                  <div class="custom-control custom-checkbox ml-4 mt-2" *ngFor="let data of defectTemplateList">
+                    <input type="checkbox" id="template_check_{{ data.template_id }}"
+                      name="template_check_{{ data.template_id }}" class="custom-control-input"
+                      value="{{ data.template_id }}">
+                    <label for="template_check_{{ data.template_id }}"
+                      class="custom-control-label">{{ data.template_name }}</label>
+                  </div>
+                </div>
+                <ng-template #noData>
+                  <h6 class="text-orange text-center"> No Templates Available</h6>
+                </ng-template>
+              </div> -->
+            </div>
+          </div>
+          <div class="col-sm-9 pl-0 mail_div">
+            <div class="card-header border-bottom-0">
+              <h3 class="card-title">Auto Mail</h3>
+              <div class="custom-control custom-switch card-tools" style="display: none;">
+                <input type="checkbox" class="custom-control-input" id="customSwitch1">
+                <label class="custom-control-label" for="customSwitch1">Mail Status</label>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="form-group row" style="display: none;">
+                <label class="col-sm-3">From </label>
+                <div class="col-sm-9">
+                  <input type="email" id="from_mail" name="from_mail" class="form-control form-control-sm" value="" />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-sm-3">To </label>
+                <div class="col-sm-9">
+                  <textarea type="text" id="to_mail" name="to_mail" class="form-control form-control-sm required"
+                    multiple value=""></textarea>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-sm-3">Cc </label>
+                <div class="col-sm-9">
+                  <textarea type="text" id="cc_mail" name="cc_mail" class="form-control form-control-sm required"
+                    multiple value=""></textarea>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-sm-3">Subject </label>
+                <div class="col-sm-9">
+                  <input type="text" id="subject" name="subject" class="form-control form-control-sm required"
+                    placeholder="Subject" value="" />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-sm-3">Schedule </label>
+                <div class="col-sm-9 d-flex">
+                  <div class="custom-control custom-checkbox mr-3" style="display: none;">
+                    <input type="checkbox" id="period_shift" name="period_shift" class="custom-control-input"
+                      [checked]="isShift">
+                    <label for="period_shift" class="custom-control-label">Shift</label>
+                  </div>
+                  <div class="custom-control custom-checkbox mr-3">
+                    <input type="checkbox" id="period_daily" name="period_daily" class="custom-control-input"
+                      [checked]="isDaily">
+                    <label for="period_daily" class="custom-control-label">Daily</label>
+                  </div>
+                  <div class="custom-control custom-checkbox mr-3">
+                    <input type="checkbox" id="period_weekly" name="period_weekly" class="custom-control-input"
+                      [checked]="isWeek">
+                    <label for="period_weekly" class="custom-control-label">Weekly</label>
+                  </div>
+                  <div class="custom-control custom-checkbox mr-3">
+                    <input type="checkbox" id="period_monthly" name="period_monthly" class="custom-control-input"
+                      [checked]="isMonth">
+                    <label for="period_monthly" class="custom-control-label">Monthly</label>
+                  </div>
+                  <div class="custom-control custom-checkbox mr-3">
+                    <input type="checkbox" id="period_yearly" name="period_yearly" class="custom-control-input"
+                      [checked]="isYear">
+                    <label for="period_yearly" class="custom-control-label">Yearly</label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row" id="custom_input" style="display: none;">
+                <label class="col-sm-3">Mail Time</label>
+                <div class="col-sm-9" id="custom_input_div">
+                  <div class="row mb-2">
+                    <div class="col-sm-8">
+                      <div class="input-group">
+                        <input type="text" name="date" class="form-control form-control-sm datepicker required date"
+                          value="" />
+                        <div class="input-group-append">
+                          <div class="input-group-text">
+                            <i class="far fa-calendar-alt"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-3">
+                      <div class="input-group">
+                        <input type="text" name="time" class="form-control form-control-sm timepicker time" value=""
+                          readonly="">
+                        <div class="input-group-append">
+                          <div class="input-group-text">
+                            <input type="checkbox" id="time_status">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-1">
+                      <button type="button" class="btn btn-primary btn-sm" id="add_custom"><i
+                          class="fas fa-plus"></i></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <!--  <textarea name="mail_content" id="mail_content" rows="3"></textarea>
+                   -->
+                <textarea id="mail_content" name="mail_content" class="form-control" style="height: 300px" value="">
+                </textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="card-footer">
+      <div class="float-right">
+        <button type="submit" class="btn btn-sm btn-primary mr-2" (click)="saveMailTemplate()"><i
+            class="far fa-envelope"></i>
+          Save</button>
+        <button type="button" class="btn btn-sm btn-danger" (click)="cancel()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

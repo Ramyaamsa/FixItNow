@@ -1,0 +1,137 @@
+<div class="col-sm-12 pt-2">
+    <div class="card card-outline card-cyan">
+        <form id="asset_scrap_report_form" name="asset_scrap_report_form" method="POST" target="_blank"
+            class="form-horizontal">
+            <div class="card-header">
+                <h3 class="card-title pt-1">{{reportFormtitle}}</h3>
+                <div class="card-tools d-flex">
+                  <div class="custom-control custom-radio ml-2 mr-4">
+                    <input class="custom-control-input custom-control-input-success" type="radio" id="report_type_scrap"
+                      name="report_type" value="scrap" (click)="getReportType($event,'Scrap')" checked>
+                    <label for="report_type_scrap" class="custom-control-label">Asset Scrap</label>
+                  </div>
+                  <div class="custom-control custom-radio mr-4">
+                    <input class="custom-control-input custom-control-input-success" type="radio" id="report_type_detail"
+                      name="report_type" value="detail" (click)="getReportType($event,'Detail')">
+                    <label for="report_type_detail" class="custom-control-label">Asset</label>
+                  </div>
+                </div>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="comapny_name">Company</label>
+                    <select id="company_name" name="company_name" class="select2 required" style="width:100%;">
+                      <option value="" selected>All</option>
+                      <option *ngFor="let company of companyList" value="{{ company.company_id }}">
+                        {{ company.company_code }}-{{ company.company_name }}</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="bu_name">Bu</label>
+                    <select class="select2 required" id="bu_name" name="bu_name">
+                      <option value="" selected>All</option>
+                      <option *ngFor="let buList of buList" value="{{ buList.bu_id }}">
+                        {{ buList.bu_code }}-{{ buList.bu_name }}</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="plant_name">Plant</label>
+                    <select class="select2 required" id="plant_name" name="plant_name">
+                      <option value="" selected>All</option>
+                      <option *ngFor="let plantList of plantList" value="{{ plantList.plant_id }}"
+                        [attr.plant_code]="plantList.plant_code">
+                        {{ plantList.plant_code }}-{{ plantList.plant_name }}</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="department_name">Department</label>
+                    <select class="select2 required" id="department_name" name="department_name">
+                      <option value="" selected>All</option>
+                      <option *ngFor="let departmentList of departmentList" value="{{ departmentList.department_id }}">
+                        {{ departmentList.department_code }}-{{ departmentList.department_name }}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="location_name"> Location </label>
+                    <select id="location_name" name="location_name" class="select2 required">
+                      <option value="" selected>All</option>
+                      <option *ngFor="let location of locationList" value="{{ location.location_id }}">
+                        {{ location.location_code }} - {{ location.location_name }}
+                      </option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="asset_group_name">Asset Group</label>
+                    <select id="asset_group_name" name="asset_group_name" class="select2 required">
+                      <option value="" selected>All</option>
+                      <option *ngFor="let eg of assetgroupList" value="{{ eg.asset_group_id }}">
+                        {{ eg.asset_group_code }} - {{ eg.asset_group_name }}
+                      </option>
+                    </select>
+                  </div>
+                  <div class="form-group" id="asset_div">
+                    <label for="asset_name">Asset</label>
+                    <select id="asset_name" name="asset_name" class="select2 required">
+                      <option value="" selected>All</option>
+                      <option *ngFor="let asset of assetList" value="{{ asset.asset_id }}">
+                        {{ asset.asset_code }}
+                      </option>
+                    </select>
+                  </div>                  
+                  <div class="form-group" id="head_div">
+                    <label for="responsible_head_name">Responsible Head</label>
+                    <select id="responsible_head_name" name="responsible_head_name" class="select2 required">
+                      <option value="" selected>All</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group" id="engineer_div">
+                    <label for="responsible_engineer_name">Responsible Engineer</label>
+                    <select id="responsible_engineer_name" name="responsible_engineer_name" class="select2 required">
+                      <option value="" selected>All</option>
+                    </select>
+                  </div>
+                  <div class="form-group period_div">
+                    <label for="period_id">Period</label>
+                    <select id="period_id" name="period_id" class="select2">
+                      <option value="from_to" selected>From To</option>
+                      <option value="date">Date</option>
+                    </select>
+                  </div>
+                  <div class="form-group from_date_div">
+                    <label class="from_date_label">From Date</label>
+                    <div class="input-group">
+                      <input type="text" class="form-control form-control-sm datepicker" id="from_date" name="from_date">
+                      <div class="input-group-append">
+                        <div class="input-group-text">
+                          <i class="far fa-calendar"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group to_date_div">
+                    <label for="to_date_label">To Date</label>
+                    <div class="input-group">
+                      <input type="text" class="form-control form-control-sm datepicker" id="to_date" name="to_date">
+                      <div class="input-group-append">
+                        <div class="input-group-text">
+                          <i class="fa fa-calendar"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer text-center">
+                <button type="submit" class="btn btn-info btn-sm" (click)="getAssetReport()">View</button>&nbsp;
+                <button type="button" class="btn btn-sm btn-default" id="btn_cancel" (click)="cancel()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>

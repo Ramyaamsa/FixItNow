@@ -1,0 +1,388 @@
+<div class="col-md-12 pt-2">
+  <div class="card card-outline card-cyan" [hidden]="breakdownSubcategoryCard">
+    <div class="card-header">
+      <h3 class="card-title"> Breakdown </h3>
+      <div class="card-tools">
+        <button type="button" class="btn btn-sm btn-outline-info" (click)="breakdown()" *ngIf="masterOperation['add']">
+          <i class="fas fa-plus fa-sm mr-1"></i> Breakdown
+        </button>
+        <button class="btn btn-secondary btn-sm ml-2" type="button" id="breakdown_toggle">
+          <i class="fa fa-toggle-off" id="breakdownToggleIcon"></i>
+        </button>
+        <button class="btn btn-secondary btn-sm ml-2" type="button" (click)="textWrap()"><i
+            class="fas fa-text-width"></i></button>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table id="breakdownDatatable" class="table table-sm table-bordered">
+          <thead>
+            <tr>
+              <th> Operation </th>
+              <th> Status </th>
+              <th> Breakdown Category </th>
+              <th> Breakdown Code </th>
+              <th> Breakdown Name </th>
+              <th>Breakdown Image </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let bscLists of breakdownList">
+              <td>
+                <div class="btn-group">
+                  <button class="btn" title="Edit Breakdown" *ngIf="masterOperation['edit']"
+                    (click)="editBreakdownSubcategory(bscLists)">
+                    <i class="fas fa-pencil-alt"></i>
+                  </button>
+                  <button *ngIf="bscLists.is_assigned == 'yes' ? false : masterOperation['delete'] ? true : false"
+                    class="btn" title="Remove Breakdown"
+                    (click)="statusBreakdownSubcategory(bscLists.breakdown_sub_category_id,'delete')">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </td>
+              <td>
+                <button class="btn" title="Active/InActive Breakdown"
+                  (click)="statusBreakdownSubcategory(bscLists.breakdown_sub_category_id,bscLists.status)">
+                  <i
+                    [ngClass]="bscLists.status == 'active' ? 'far fa-thumbs-up text-success' : 'far fa-thumbs-down text-danger'"></i>
+                </button>
+              </td>
+              <td>{{ bscLists.breakdown_category }}</td>
+              <td>{{ bscLists.breakdown_sub_category_code }}</td>
+              <td>{{ bscLists.breakdown_sub_category_name }}</td>
+              <td><button type="button" title="Breakdown logo" class="btn btn-sm"
+                  [ngClass]="bscLists.breakdown_sub_category_image == 'placeholder.jpg' ? 'btn-outline-danger' : 'btn-outline-success'"
+                  file_type="image" (click)="modelImage(bscLists)"><i class="fas fa-eye"></i></button>
+              </td>
+              <!-- <td>{{ bscLists. }}</td>
+							<td>{{ bscLists. }}</td>
+							<td>{{ bscLists. }}</td> -->
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="list-style: none;" *ngIf="breakdownListView">
+        <li class="card p-2">
+          <div class="row">
+            <div class="col-sm-2">
+              <b> Operation </b>
+            </div>
+            <div class="col-sm-2">
+              <b> Status </b>
+            </div>
+            <div class="col-sm-2">
+              <b> Breakdown Code </b>
+            </div>
+            <div class="col-sm-3">
+              <b> Breakdown Name </b>
+            </div>
+            <div class="col-sm-3">
+              <b> Breakdown Category </b>
+            </div>
+          </div>
+        </li>
+        <div style="height: 70vh;overflow-y: auto;">
+          <li class="callout callout-info p-2" *ngFor="let bscLists of breakdownList">
+            <div class="row align-items-center">
+              <div class="col-sm-2">
+                <div class="btn-group">
+                  <button class="btn" title="Edit Breakdown" (click)="editBreakdownSubcategory(bscLists)"
+                    *ngIf="masterOperation['edit']">
+                    <i class="fas fa-pencil-alt"></i>
+                  </button>
+                  <button *ngIf="bscLists.is_assigned == 'yes' ? false : masterOperation['delete'] ? true : false"
+                    class="btn" title="Remove Breakdown"
+                    (click)="statusBreakdownSubcategory(bscLists.breakdown_sub_category_id,'delete')">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="col-sm-2">
+                <button class="btn" title="Active/InActive Breakdown"
+                  (click)="statusBreakdownSubcategory(bscLists.breakdown_sub_category_id,bscLists.status)">
+                  <i
+                    [ngClass]="bscLists.status == 'active' ? 'far fa-thumbs-up text-success' : 'far fa-thumbs-down text-danger'"></i>
+                </button>
+              </div>
+              <div class="col-sm-2">
+                <h6 class="m-0">{{ bscLists.breakdown_sub_category_code }}</h6>
+              </div>
+              <div class="col-sm-3">
+                <h6 class="m-0">{{ bscLists.breakdown_sub_category_name }}</h6>
+              </div>
+              <div class="col-sm-3">
+                <h6 class="m-0">{{ bscLists.breakdown_category }}</h6>
+              </div>
+            </div>
+          </li>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card card-outline card-cyan" [hidden]="!breakdownSubcategoryCard">
+    <div class="card-header">
+      <h3 class="card-title"> Breakdown </h3>
+    </div>
+    <form id="breakdown_form" autocomplete="off">
+      <div class="card-body">
+        <ul class="nav nav-pills m-t-10 m-b-10">
+          <li class=" nav-item"> <a href="#basic_detail" class="nav-link active" data-toggle="tab"
+              aria-expanded="false">
+              <i class="fa fa-address-book mr-2"></i>Basic Details</a>
+          </li>
+          <li class="nav-item"> <a href="#upload_div" class="nav-link" data-toggle="tab" aria-expanded="false">
+              <i class="fa fa-phone-square mr-2"></i>Uploads</a>
+          </li>
+        </ul>
+        <div class="tab-content">
+          <div id="basic_detail" class="tab-pane active">
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group row">
+                  <label for="created_on" class="col-sm-4"> Created On </label>
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control form-control-sm" id="created_on" name="created_on" value=""
+                      [(ngModel)]="breakdownCreatedOn" disabled />
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="modified_on" class="col-sm-4"> Modified On </label>
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control form-control-sm" id="modified_on" name="modified_on" value=""
+                      [(ngModel)]="breakdownModifiedOn" disabled />
+                  </div>
+                </div>
+                <div class="form-group row" style="display: none;">
+                  <label class="col-sm-4" for="break_company_name"> Company <sup><i
+                        class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+                  <div class="col-sm-8">
+                    <select id="break_company_name" name="break_company_name" class="break_select2" style="width:100%;">
+                      <option value=""> ~~ Select ~~ </option>
+                      <option *ngFor="let data of companyList" value="{{ data.company_id }}">
+                        {{ data.company_code }} - {{ data.company_name }}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group row" style="display: none;">
+                  <label class="col-sm-4" for="break_plant_name"> Plant <sup><i
+                        class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+                  <div class="col-sm-8">
+                    <select id="break_plant_name" name="break_plant_name" class="break_select2" style="width:100%;">
+                      <option value=""> ~~ Select ~~ </option>
+                      <option *ngFor="let data of plantList" value="{{ data.plant_id }}"
+                        [attr.plant_code]="data.plant_code">
+                        {{ data.plant_code }} - {{ data.plant_name }}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-sm-4" for="breakdown_category_name"> Breakdown Category <sup><i
+                        class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+                  <div class="col-sm-8">
+                    <select id="breakdown_category_name" name="breakdown_category_name" class="break_select2 required"
+                      style="width:100%;">
+                      <option value=""> ~~ Select ~~ </option>
+                      <option *ngFor="let data of breakdownCategoryList" value="{{ data.breakdown_category_id }}">
+                        {{ data.breakdown_category_code }} - {{ data.breakdown_category_name }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="breakdown_sub_category_name" class="col-sm-4"> Name <sup><i
+                        class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control form-control-sm required" name="breakdown_sub_category_name"
+                      id="breakdown_sub_category_name" value="" [(ngModel)]="breakdownName" />
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group row">
+                  <label for="break_created_by" class="col-sm-4"> Created By </label>
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control form-control-sm" id="break_created_by"
+                      name="break_created_by" value="" [(ngModel)]="breakdownCreatedBy" disabled="" />
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="break_modified_by" class="col-sm-4"> Modified By </label>
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control form-control-sm" id="break_modified_by"
+                      name="break_modified_by" value="" [(ngModel)]="breakdownModifiedBy" disabled />
+                  </div>
+                </div>
+                <div class="form-group row" style="display: none;">
+                  <label class="col-sm-4" for="break_bu_name"> BU <sup><i
+                        class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+                  <div class="col-sm-8">
+                    <select id="break_bu_name" name="break_bu_name" class="break_select2" style="width:100%;">
+                      <option value=""> ~~ Select ~~ </option>
+                      <option *ngFor="let data of buList" value="{{ data.bu_id }}">
+                        {{ data.bu_code }} - {{ data.bu_name }}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group row" style="display: none;">
+                  <label class="col-sm-4" for="break_asset_group"> Asset Group <sup><i
+                        class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+                  <div class="col-sm-8">
+                    <select id="break_asset_group" name="break_asset_group" class="break_select2" style="width:100%;">
+                      <option value=""> ~~ Select ~~ </option>
+                      <option *ngFor="let data of assetGroupList" value="{{ data.asset_group_id }}">
+                        {{ data.asset_group_code }} - {{ data.asset_group_name }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="breakdown_sub_category_code" class="col-sm-4"> Code <sup><i
+                        class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control form-control-sm required" name="breakdown_sub_category_code"
+                      id="breakdown_sub_category_code" value="" [(ngModel)]="breakdownCode"
+                      (input)="convertToUpperCase()" />
+                  </div>
+                </div>
+                <div class="form-group row" style="display: none;">
+                  <label for="escalation_time" class="col-sm-4"> Escalation Time (mins) </label>
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control form-control-sm numeric_dot" name="escalation_time"
+                      id="escalation_time" value="" [(ngModel)]="escalationTime" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="upload_div" class="tab-pane">
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group row">
+                  <label for="sub_category_image" class="col-sm-4"> Image </label>
+                  <div class="col-sm-8">
+                    <div class="custom-file custom-file-sm">
+                      <input type="file" class="custom-file-input" id="breakdown_image" name="breakdown_image"
+                        (change)="uploadBreakdownImage($event)">
+                      <input type="hidden" id="breakdown_image_old" name="breakdown_image_old"
+                        [(ngModel)]="breakdownImageOld">
+                      <label class="custom-file-label" for="breakdown_image" id="breakdown_image_name"> Choose File
+                      </label>
+                    </div>
+                    <span class="text-orange text-xs"><b> * Accept Images alone. Upto: 1200 *
+                        600</b></span>
+                  </div>
+                  <div class="col-sm-4"></div>
+                  <div class="col-sm-8 mt-2">
+                    <img [src]="breakdownImageFile" alt="category image" style="height: 150px;width: 200px;" />
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="breakdown_manual" class="col-sm-4"> Manual </label>
+                  <div class="col-sm-8">
+                    <div class="custom-file custom-file-sm">
+                      <input type="file" class="form-control custom-file-input" id="breakdown_manual"
+                        name="breakdown_manual" (change)="uploadBreakdownManual($event);">
+                      <input type="hidden" id="breakdown_manual_old" name="breakdown_manual_old"
+                        [(ngModel)]="breakdownManualOld">
+                      <label class="custom-file-label" for="breakdown_manual" id="breakdown_manual_name"> Choose File
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-sm-4"></div>
+                  <div class="col-sm-8 mt-2">
+                    <iframe id="breakdown_manual_file" src="assets/document/dummy.pdf" width="150px" height="100px"
+                      style="border: none"></iframe>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group row">
+                  <label for="breakdown_video" class="col-sm-4"> Video </label>
+                  <div class="col-sm-8">
+                    <div class="custom-file custom-file-sm">
+                      <input type="file" class="custom-file-input" id="breakdown_video" name="breakdown_video"
+                        (change)="uploadBreakdownVideo($event);">
+                      <input type="hidden" id="breakdown_video_old" name="breakdown_video_old"
+                        [(ngModel)]="breakdownVideoOld">
+                      <label class="custom-file-label" for="breakdown_video" id="breakdown_video_name"> Choose File
+                      </label>
+                    </div>
+                    <span class="text-orange text-xs"><b> * Accept video alone. size: 30Mb</b></span>
+                  </div>
+                  <div class="col-sm-4"></div>
+                  <div class="col-sm-8 mt-2">
+                    <video width="200" height="150" controls>
+                      <source id="breakdown_video_file" src="assets/document/dummy.mp4" type="video/mp4">
+                    </video>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer text-center">
+        <button type="submit" class="btn btn-sm btn-info mr-2" (click)="saveBreakdown()"> Save </button>
+        <button type="button" class="btn btn-sm btn-default" (click)="cancel()"> Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal fade" id="breakdown-modal-image">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header p-1 pl-2 pr-2">
+        <h4 class="modal-title"> Breakdown Image </h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">
+            &times;
+          </span>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        <img id="image_data" [src]="model_image" alt="Breakdown image" height="150px" width="300px" />
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modal-video">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header p-1 pl-2 pr-2">
+        <h4 class="modal-title">Video</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">
+            &times;
+          </span>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        <video id='video_data' src='' width='280' height='200' controls></video>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modal-manual">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header p-1 pl-2 pr-2">
+        <h4 class="modal-title">Manual</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">
+            &times;
+          </span>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        <iframe width="100%" height="600px;" style="border: none;" id="manual_data" src=""></iframe>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,262 @@
+<div class="col-sm-12 pt-2">
+  <div class="card card-outline card-cyan" id="report_template" [hidden]="template">
+    <div class="card-header">
+      <h3 class="card-title pt-1"> Report Template </h3>
+      <div class="card-tools">
+        <button type="button" class="btn btn-sm btn-outline-info" *ngIf="masterOperation['add']" (click)="showtemplate()">
+          <i class="fas fa-plus fa-sm mr-1"></i> Add
+        </button>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table id="report_dataTable" class="table table-bordered table-sm">
+          <thead>
+            <tr>
+              <th> Operation </th>
+              <th> Status </th>
+              <th> Company </th>
+              <th> Bu </th>
+              <th> Plant </th>
+              <th> Template Name </th>
+              <th> Report Name </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let list of reportTemplateLists">
+              <td>
+                <div class="btn-group">
+                  <button class="btn" title="Edit Report Template" (click)="editReportTemplate(list)"
+                    *ngIf="masterOperation['edit']">
+                    <i class="fas fa-pencil-alt"></i>
+                  </button>
+                  <button *ngIf="list.is_assigned == 'yes' ? false : masterOperation['delete'] ? true : false"
+                    class="btn" title="Remove Report Template" (click)="templateStatus(list.template_id,'delete')">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </td>
+              <td>
+                <button class="btn" *ngIf="masterOperation['edit']" title="Active/InActive  Report Template"
+                  (click)="templateStatus(list.template_id,list.status)">
+                  <i
+                    [ngClass]="list.status == 'active' ? 'far fa-thumbs-up text-success' : 'far fa-thumbs-down text-danger'"></i>
+                </button>
+              </td>
+              <td>{{ list.company_name }}</td>
+              <td>{{ list.bu_name }}</td>
+              <td>{{ list.plant_name }}</td>
+              <td>{{ list.template_name }}</td>
+              <td>{{ list.report_name }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="card card-outline card-cyan" [hidden]="!template">
+    <form id="report_template_form" name="report_template_form">
+      <div class="card-header">
+        <h3 class="card-title pt-1">Reports</h3>
+      </div>
+      <div class="card-body p-2">
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group row">
+              <label for="report_name" class="col-sm-4" id="report_label"> Report
+                <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup> </label>
+              <div class="col-sm-8">
+                <select id="report_name" name="report_name" class="select2 required">
+                  <option value=""> ~~ Select Report ~~ </option>
+                  <option value="1"> Breakdown </option>
+                  <option value="2"> Breakdown Summary </option>
+                  <option value="7"> PM </option>
+                  <option value="15"> PM Summary </option>
+                  <option value="13"> Spare </option>
+                  <option value="14"> Spare Summary </option>
+                  <option value="12"> Asset </option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="created_on" class="col-sm-4" id="created_on_label"> Created
+                On </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm" id="created_on" name="created_on" value=""
+                  [(ngModel)]="createdOn" disabled />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="modified_on" class="col-sm-4" id="modified_on_label">
+                Modified On </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm" id="modified_on" name="modified_on" value=""
+                  [(ngModel)]="modifiedOn" disabled />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4" for="comapny_name"> Company
+                <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+              <div class="col-sm-8">
+                <select id="company_name" name="company_name" class="select2 required" style="width:100%;">
+                  <option value="0" selected>All</option>
+                  <option *ngFor="let company of companyList" value="{{ company.company_id }}">
+                    {{ company.company_code }}-{{ company.company_name }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4" for="plant_name"> Plant </label>
+              <div class="col-sm-8">
+                <select id="plant_name" name="plant_name" class="select2 required" style="width:100%;">
+                  <option value="0" selected>All</option>
+                  <option *ngFor="let plantList of plantList" value="{{ plantList.plant_id }}"
+                    [attr.plant_code]="plantList.plant_code">
+                    {{ plantList.plant_code }}-{{ plantList.plant_name }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4" for="location_name"> Location </label>
+              <div class="col-sm-8">
+                <select id="location_name" name="location_name" class="select2 required" style="width:100%;">
+                  <option value="0" selected>All</option>
+                  <option *ngFor="let location of locationList" value="{{ location.location_id }}">
+                    {{ location.location_code }} - {{ location.location_name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4" for="asset_name"> Asset </label>
+              <div class="col-sm-8">
+                <select id="asset_name" name="asset_name" class="multi-select" multiple style="width:100%;">
+                  <option value="0" selected>All</option>
+                  <option *ngFor="let asset of assetList" value="{{ asset.asset_id }}">
+                    {{ asset.asset_code }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row" id="group_by_div">
+              <label class="col-sm-4" for="group_by" id="group_by_label"> Group By </label>
+              <div class="col-sm-8">
+                <select id="group_by" name="group_by" class="select2 required" style="width:100%;">
+                  <option value=""> ~~ Select ~~ </option>
+                  <option value="company">Company</option>
+                  <option value="bu">BU</option>
+                  <option value="plant">Plant</option>
+                  <option value="department">Department</option>
+                  <option value="asset group">Asset Group</option>
+                  <option value="asset">Asset</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group row">
+              <label for="template_name" class="col-sm-4"> Template Name
+                <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm required" id="template_name" name="template_name"
+                  value="" [(ngModel)]="templateName" />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="created_by" class="col-sm-4" id="created_by_label"> Created
+                By </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm required" id="created_by" name="created_by"
+                  [(ngModel)]="createdBy" value="" disabled />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="modified_by" class="col-sm-4" id="modified_by_label">
+                Modified By </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm required" id="modified_by" name="modified_by"
+                  [(ngModel)]="modifiedBy" value="" disabled />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4" for="bu_name"> BU <span id="bu_name_label"></span>
+                <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+              <div class="col-sm-8">
+                <select id="bu_name" name="bu_name" class="select2 required" style="width:100%;">
+                  <option value="0" selected>All</option>
+                  <option *ngFor="let buList of buList" value="{{ buList.bu_id }}">
+                    {{ buList.bu_code }}-{{ buList.bu_name }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4" for="department_name"> Department </label>
+              <div class="col-sm-8">
+                <select id="department_name" name="department_name" class="select2 required" style="width:100%;">
+                  <option value="0" selected>All</option>
+                  <option *ngFor="let departmentList of departmentList" value="{{ departmentList.department_id }}">
+                    {{ departmentList.department_code }}-{{ departmentList.department_name }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4" for="asset_group_name" id="equipment_class"> Asset Group </label>
+              <div class="col-sm-8">
+                <select id="asset_group_name" name="asset_group_name" class="select2 required" style="width:100%;">
+                  <option value="0" selected>All</option>
+                  <option *ngFor="let eg of assetGroupList" value="{{ eg.asset_group_id }}">
+                    {{ eg.asset_group_code }} - {{ eg.asset_group_name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4" for="report_type"> Report Type </label>
+              <div class="col-sm-8">
+                <select id="report_type" name="report_type" class="select2 required" style="width:100%;">
+                  <option value=""> ~~ Select ~~ </option>
+                  <option value="detail">Detail</option>
+                  <option value="summary">Summary</option>
+                  <option value="Cummulative">Cummulative</option>
+                </select>
+              </div>
+            </div>         
+            <div class="form-group row" id="file_type_div">
+              <label class="col-sm-4">File Type </label>
+              <div class="col-sm-8 d-flex">
+                <div class="custom-control custom-checkbox mr-3">
+                  <input type="checkbox" id="report_csv" name="report_csv" class="custom-control-input" value="">
+                  <label for="report_csv" class="custom-control-label">CSV</label>
+                </div>
+                <div class="custom-control custom-checkbox mr-3">
+                  <input type="checkbox" id="report_pdf" name="report_pdf" class="custom-control-input" value="pdf">
+                  <label for="report_pdf" class="custom-control-label">PDF</label>
+                </div>
+                <div class="custom-control custom-checkbox mr-3">
+                  <input type="checkbox" id="report_excel" name="report_excel" class="custom-control-input"
+                    value="excel">
+                  <label for="report_excel" class="custom-control-label">Excel</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12">
+            <div class="form-group row" id="report_fields_div">
+              <label class="col-sm-2" for="rpt_fields" id="report_fields_label"> Report Fields </label>
+              <div class="col-sm-10">
+                <select id="rpt_fields" name="rpt_fields" class="multiselect" multiple style="width:100%;">
+                  <option *ngFor="let report of reportFields" value="{{ report.field_code }}"
+                    [attr.selected]="report.is_show === 'yes' ? true : null"> {{ report.field_name }}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer text-center">
+        <button type="submit" class="btn btn-sm btn-info mr-2" (click)="saveReportTemplate()"> Save </button>
+        <button type="button" class="btn btn-sm btn-default" (click)="cancel()"> Cancel </button>
+      </div>
+    </form>
+  </div>
+</div>

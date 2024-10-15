@@ -1,0 +1,270 @@
+<div class="col-md-12 pt-2">
+  <div class="card card-outline card-cyan" [hidden]="serviceCard">
+    <div class="card-header">
+      <h3 class="card-title"> Service</h3>
+      <div class="card-tools">
+        <button type="button" class="btn btn-sm btn-outline-info" (click)="addService()" *ngIf="masterOperation['add']">
+          <i class="fas fa-plus fa-sm mr-1"></i>&nbsp; Service
+        </button>
+        <button class="btn btn-secondary btn-sm ml-2" type="button" id="service_toggle_icon">
+          <i class="fa fa-toggle-off" id="service_toggleIcon"></i>
+        </button>
+        <button class="btn btn-secondary btn-sm ml-2" type="button" (click)="textWrap()"><i
+            class="fas fa-text-width"></i></button>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table id="service_dataTable" class="table table-sm table-bordered">
+          <thead>
+            <tr>
+              <th> Operation </th>
+              <th> Status </th>
+              <th> Company </th>
+              <th> Bu </th>
+              <th> Plant </th>
+              <th> Department </th>
+              <th> Asset Group </th>
+              <th> Service Code </th>
+              <th> Service Name </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of serviceList">
+              <td>
+                <div class="btn-group">
+                  <button class="btn" title="Edit Service" (click)="editService(data)" *ngIf="masterOperation['edit']">
+                    <i class="fas fa-pencil-alt"></i>
+                  </button>
+                  <button *ngIf="data.is_assigned == 'yes' ? false : masterOperation['delete'] ? true : false"
+                    class="btn" title="Remove Service" (click)="statusService(data.service_id,'delete')"> <i
+                      class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </td>
+              <td> <button class="btn" title="Active/InActive Service"
+                  (click)="statusService(data.service_id,data.status)">
+                  <i
+                    [ngClass]="data.status == 'active' ? 'far fa-thumbs-up text-success' : 'far fa-thumbs-down text-danger'"></i>
+                </button>
+              </td>
+              <td>{{ data.company_name }}</td>
+              <td>{{ data.bu_name }}</td>
+              <td>{{ data.plant_name }}</td>
+              <td>{{ data.department_name }}</td>
+              <td>{{ data.asset_group_name }}</td>
+              <td>{{ data.service_code }}</td>
+              <td>{{ data.service_name }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="list-style: none;" *ngIf="listView">
+        <li class="card p-2">
+          <div class="row">
+            <div class="col-sm-2">
+              <b>Operation</b>
+            </div>
+            <div class="col-sm-2">
+              <b>Status</b>
+            </div>
+            <div class="col-sm-2">
+              <b>Service</b>
+            </div>
+            <div class="col-sm-2">
+              <b>Asset Group</b>
+            </div>
+            <div class="col-sm-2">
+              <b>Department</b>
+            </div>
+            <div class="col-sm-2">
+              <b>Plant</b>
+            </div>
+          </div>
+        </li>
+        <div style="height: 64vh;overflow-y: auto;">
+          <li class="callout callout-info p-2" *ngFor="let data of serviceList">
+            <div class="row align-items-center">
+              <div class="col-sm-2">
+                <div class="btn-group">
+                  <button class="btn" title="Edit Service" (click)="editService(data)" *ngIf="masterOperation['edit']">
+                    <i class="fas fa-pencil-alt"></i>
+                  </button>
+                  <button *ngIf="data.is_assigned == 'yes' ? false : masterOperation['delete'] ? true : false"
+                    class="btn" title="Remove Service" (click)="statusService(data.service_id,'delete')"> <i
+                      class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="col-sm-2">
+                <button class="btn" title="Active/InActive Service"
+                  (click)="statusService(data.service_id,data.status)">
+                  <i
+                    [ngClass]="data.status == 'active' ? 'far fa-thumbs-up text-success' : 'far fa-thumbs-down text-danger'"></i>
+                </button>
+              </div>
+              <div class="col-sm-2">
+                <h6 class="m-0">{{ data.service_code }} - {{ data.service_name }}</h6>
+              </div>
+              <div class="col-sm-2">
+                <h6 class="m-0">{{ data.department_name }}</h6>
+              </div>
+              <div class="col-sm-2">
+                <h6 class="m-0">{{ data.asset_group_name }}</h6>
+              </div>
+              <div class="col-sm-2">
+                <h6 class="m-0">{{ data.plant_name }}
+                </h6>
+              </div>
+            </div>
+          </li>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card card-outline card-cyan" [hidden]="!serviceCard">
+    <div class="card-header">
+      <h3 class="card-title d-flex"> Service
+        <h6 class="m-0 pl-2 text-info" [hidden]="!isServiceHide">
+          <b>{{ this.serviceCode }} - {{ this.serviceName }}</b>
+        </h6>
+      </h3>
+      <div class="card-tools">
+        <button type="button" class="btn p-0" (click)="serviceShow($event)">
+          <i class="fas fa-angle-down"></i></button>
+      </div>
+    </div>
+    <form id="service_form" autocomplete="off" [hidden]="isServiceHide">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group row">
+              <label for="created_on" class="col-sm-4"> Created On </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm" id="created_on" name="created_on" value=""
+                  [(ngModel)]="created_on" disabled />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="modified_on" class="col-sm-4"> Modified On
+              </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm" id="modified_on" name="modified_on" value=""
+                  [(ngModel)]="modified_on" disabled />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4" for="service_company_name"> Company <sup><i
+                    class="fas fa-asterisk fa-xs text-red"></i></sup>
+              </label>
+              <div class="col-sm-8">
+                <select id="service_company_name" name="service_company_name" class="service_select2 required"
+                  style="width:100%;">
+                  <option value=""> ~~ Select ~~ </option>
+                  <option *ngFor="let company of companyList" value="{{ company.company_id }}">
+                    {{ company.company_code }}-{{ company.company_name }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4" for="service_plant_name"> Plant <sup><i
+                    class="fas fa-asterisk fa-xs text-red"></i></sup>
+              </label>
+              <div class="col-sm-8">
+                <select id="service_plant_name" name="service_plant_name" class="service_select2 required"
+                  style="width:100%;">
+                  <option value=""> ~~ Select ~~ </option>
+                  <option *ngFor="let plantList of plantList" value="{{ plantList.plant_id }}"
+                    [attr.plant_code]="plantList.plant_code">
+                    {{ plantList.plant_code }}-{{ plantList.plant_name }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4" for="service_equipment_group"> Asset Group <sup><i
+                    class="fas fa-asterisk fa-xs text-red"></i></sup>
+              </label>
+              <div class="col-sm-8">
+                <select id="service_equipment_group" name="service_equipment_group" class="service_select2 required"
+                  style="width:100%;">
+                  <option value=""> ~~ Select ~~ </option>
+                  <option *ngFor="let asset_groupList of assetGroupList" value="{{ asset_groupList.asset_group_id }}">
+                    {{ asset_groupList.asset_group_code }}-{{ asset_groupList.asset_group_name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="service_name" class="col-sm-4"> Name <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup>
+              </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm required" name="service_name" id="service_name"
+                  value="" [(ngModel)]="serviceName" />
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group row">
+              <label for="created_by" class="col-sm-4"> Created By </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm" id="created_by" name="created_by" value=""
+                  [(ngModel)]="created_by" disabled />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="modified_by" class="col-sm-4"> Modified By </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm" id="modified_by" name="modified_by" value=""
+                  [(ngModel)]="modified_by" disabled />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4" for="service_bu_name"> BU <sup><i
+                    class="fas fa-asterisk fa-xs text-red"></i></sup>
+              </label>
+              <div class="col-sm-8">
+                <select id="service_bu_name" name="service_bu_name" class="service_select2 required"
+                  style="width:100%;">
+                  <option value=""> ~~ Select ~~ </option>
+                  <option *ngFor="let buList of buList" value="{{ buList.bu_id }}">
+                    {{ buList.bu_code }}-{{ buList.bu_name }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4" for="service_department_name"> Department <sup><i
+                    class="fas fa-asterisk fa-xs text-red"></i></sup>
+              </label>
+              <div class="col-sm-8">
+                <select id="service_department_name" name="service_department_name" class="service_select2 required"
+                  style="width:100%;">
+                  <option value=""> ~~ Select ~~ </option>
+                  <option *ngFor="let departmentList of departmentList" value="{{ departmentList.department_id }}">
+                    {{ departmentList.department_code }}-{{ departmentList.department_name }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="service_code" class="col-sm-4"> Code <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup>
+              </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm required" name="service_code" id="service_code"
+                  value="" [(ngModel)]="serviceCode" (input)="convertToUpperCase()" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer text-center">
+        <button type="submit" class="btn btn-sm btn-info mr-2" (click)="saveService()"> Save </button>
+        <button type="button" class="btn btn-sm btn-default" (click)="cancel()"> Cancel
+        </button>
+      </div>
+    </form>
+    <div class="col-sm-12 p-2">
+      <app-task *ngIf="isTaskDetail" [serviceId]="serviceId" [companyId]="serviceCompanyId" [buId]="serviceBuId"
+        [plantId]="servicePlantId">
+      </app-task>
+    </div>
+  </div>
+</div>

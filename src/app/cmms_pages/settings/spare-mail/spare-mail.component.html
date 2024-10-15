@@ -1,0 +1,115 @@
+<div class="col-sm-12 pt-2">
+    <div class="card card-outline card-cyan" id="mail_dt1">
+        <div class="card-header">
+            <h3 class="card-title">Spare Mail </h3>
+        </div>
+        <form id="auto_mail_form" name="auto_mail_form" class="form-horizontal">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group row" id="from_mail_div">
+                            <label class="col-sm-4" for="from_mail"><span id="from_mail_label"></span>
+                                <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup>Department</label>
+                            <div class="col-sm-8">
+                                <input type="hidden" class="form-control form-control-sm" id="auto_mail_id"
+                                    name="auto_mail_id" value="" [(ngModel)]="spareMailId" />
+                                <select id="department_id" name="department_id" class="select2">
+                                    <option value="">~~Select~~</option>
+                                    <option *ngFor="let department of departmentLists"
+                                        value="{{department.department_id}}">
+                                        {{department.department_code}}-{{department.department_name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row" id="from_mail_div">
+                            <label class="col-sm-4" for="from_mail"><span id="from_mail_label"></span>
+                                <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup>From Mail</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control form-control-sm required" name="from_mail"
+                                    id="from_mail" value="" [(ngModel)]="fromMail" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4" for="from_mail_password"><span id="from_mail_password_label"></span>
+                                <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup>Password</label>
+                            <div class="col-sm-8">
+                                <input type="password" class="form-control form-control-sm required"
+                                    name="from_mail_password" id="from_mail_password" value=""
+                                    [(ngModel)]="fromMailPassword" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group row" id="to_mail_div">
+                            <label class="col-sm-4" for="to_mail"><span id="to_mail_label"></span> To Mail </label>
+                            <div class="col-sm-8">
+                                <textarea class="form-control form-control-sm" rows="3" id="to_mail" style="width: 100%"
+                                    name="to_mail" [(ngModel)]="toMail"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="mail_subject" class="col-sm-4"><span id="subject_label"></span>
+                                <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup>Subject </label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control form-control-sm required" name="mail_subject"
+                                    id="mail_subject" value="" [(ngModel)]="mailSubject" />
+                            </div>
+                        </div>
+                        <div class="form-group row" id="mail_message_div">
+                            <label class="col-sm-4" for="mail_message"><span id="mail_message_label"></span> <sup><i
+                                        class="fas fa-asterisk fa-xs text-red"></i></sup> Message </label>
+                            <div class="col-sm-8">
+                                <textarea class="form-control form-control-sm required" rows="3" id="mail_message"
+                                    style="width: 100%" name="mail_message" [(ngModel)]="mailMessage"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-center">
+                <button type="submit" class="btn btn-sm btn-info mr-2" (click)="saveMail()"> Save </button>
+                <button type="button" id="btn_cancel" class="btn btn-sm btn-default" (click)="cancel()"> Cancel
+                </button>
+            </div>
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-8"><br />
+                    <div class="form-group" id="div_success" style="display: none;">
+                        <div class="alert alert-success">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <strong><i class="fa fa-check"></i> Success!</strong> Saved Successfully...
+                        </div>
+                    </div>
+                    <div class="form-group" id="div_error" style="display: none;">
+                        <div class="alert alert-danger">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <strong><i class="fa fa-close"></i> Error!</strong> <span id="span_err"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="table-responsive">
+            <table id="dataTable" class="table table-bordered table-sm">
+                <thead>
+                    <tr>
+                        <th data-field="operation" data-sortable=true data-visible="true"> Operation </th>
+                        <th data-field="auto_mail_name" data-sortable=true data-visible="true"> Department </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let mail of spareMailLists">
+                        <td>
+                            <div class="btn-group">
+                                <button class="btn tip" title="Edit Mail" (click)="editMail(mail)">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </button>
+                            </div>
+                        </td>
+                        <td>{{mail.department_name}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

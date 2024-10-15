@@ -1,0 +1,525 @@
+<div class="wrapper">
+  <nav class="main-header navbar navbar-expand navbar-cyan navbar-dark border-bottom-0">
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-icon nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block" *ngIf="menuId[40] && isTrailOpen">
+        <a class="nav-link" href="{{ homeUrl }}">
+          <i class="nav-icon fas fa-home"></i> Home
+        </a>
+      </li>      
+      <!-- <li class="nav-item d-none d-sm-inline-block" *ngIf="menuId[16] && isTrailOpen">
+        <a class="nav-link" href="iframe/master/asset_group">
+          <i class="nav-icon fas fa-user-plus"></i> Asset
+        </a>
+      </li> -->
+      <li class="nav-item d-none d-sm-inline-block" *ngIf="menuId[34] && isTrailOpen">
+        <a class="nav-link" href="iframe/work_order/breakdown">
+          <i class="nav-icon fas fa-ticket-alt nav-icon"></i> Breakdown
+        </a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block" *ngIf="menuId[37] && isTrailOpen">
+        <a class="nav-link" href="iframe/work_order/pm_checklist">
+          <i class="nav-icon far fa-clock nav-icon"></i> PM
+        </a>
+      </li>
+    </ul>
+    <!-- Right navbar links -->
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item dropdown">
+        <a class="nav-link" data-toggle="dropdown" href="javascript:void(0)">
+          <i class="fas fa-user-circle img-circle elevation-2 text-lg" alt="User Image"></i> <span
+            class="text-capitalize"> {{ employeeName }}
+          </span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-right">
+          <button type="button" class="dropdown-item" data-toggle="modal" data-target="#modal_profile">
+            <i class="fas fa-user mr-2"></i> Profile
+          </button>
+          <div class="dropdown-divider"></div>
+          <button type="button" class="dropdown-item" data-toggle="modal" data-target="#change_password_modal">
+            <i class="fas fa-exchange-alt mr-2"></i> Change Password
+          </button>
+          <div class="dropdown-divider"></div>
+          <a href="javascript:void(0)" class="log_out" (click)="logOut()">
+            <i class="fas fa-sign-out-alt mr-2"></i> Logout
+          </a>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link noty_nocom_count_data" data-toggle="dropdown" href="#">
+          <i class="far fa-bell"></i>
+          <p class="badge badge-warning navbar-badge notification_count">{{notificationLists.length}}</p>
+        </a>
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" id="noty_nocom">
+          <!-- <span class="dropdown-item dropdown-header"> Under Development </span> -->
+          
+          <span class="dropdown-item dropdown-header"><span class="notification_count"> {{notificationLists.length}} </span>
+            Notifications</span>
+          <div class="dropdown-divider"></div>
+          <!-- <div id="alert_notification">
+            <a href="#" class="dropdown-item">
+              <i class="fas fa-envelope mr-2"></i> 4 new messages
+              <span class="float-right text-muted text-sm">3 mins</span>
+            </a>
+          </div> -->
+          <div class="dropdown-divider"></div>
+          <a href="iframe/settings/notification-view" class="dropdown-item dropdown-footer"> All Notifications</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+          <i class="fas fa-expand-arrows-alt"></i>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <aside class="main-sidebar sidebar-dark-cyan elevation-4 text-sm">
+    <!-- Brand Logo -->
+    <p class="brand-link navbar-cyan" style="padding: 0px;">
+      <img src="assets/images/fix_logo.png" alt="Logo" class="brand-image bg-white elevation-3"
+        style="opacity: 1;margin-top: 0.4rem;padding: 0.1rem;max-height: 40px;height: 35px;margin-left:0.65rem;">
+      <span class="brand-text">
+        <img src="assets/images/fixitnow.png" style="min-height: 2rem;height: 3rem;" />
+      </span>
+    </p>
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <!-- Sidebar user panel (optional) -->
+      <div class="text-center mb-3">
+        <img src="assets/images/murugappa_logo.png" alt="User Image" class="end_user_logo bg-light p-1"
+          style="min-width: 80%;">
+      </div>
+      <!-- Sidebar Menu -->
+      <nav class="mt-2" id="mainnav">
+        <ul class="nav nav-pills nav-sidebar flex-column nav-collapse-hide-child" data-widget="treeview" role="menu"
+          data-accordion="false">
+          <li class="nav-item">
+            <a href="javascript:void(0)" class="nav-link">
+              <i class="nav-icon far fa-calendar-alt"></i>
+              <p id="datebox"> {{ currentDate | date: 'dd-MM-yyyy' }} </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="javascript:void(0)" class="nav-link">
+              <i class="nav-icon far fa-clock"></i>
+              <p id="clockbox"> {{ time | date: 'hh:mm:ss a' }} </p>
+            </a>
+          </li>
+          <li class="nav-item" *ngIf="menuId[33] && isTrailOpen">
+            <a class="nav-link" href="#">
+              <i class="fas fa-tools nav-icon"></i>
+              <p> Work Order
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item" *ngIf="menuId[34] && isTrailOpen"><a class="nav-link" href="iframe/work_order/breakdown"><i
+                    class="fas fa-ticket-alt nav-icon"></i>
+                  <p>Breakdown (Tickets)</p>
+                </a>
+              </li>
+              <li class="nav-item" *ngIf="menuId[35] && isTrailOpen">
+                <a class="nav-link" href="#">
+                  <i class="fas fa-tools nav-icon"></i>
+                  <p> PM
+                    <i class="right fas fa-angle-left"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item" *ngIf="menuId[36] && isTrailOpen"><a class="nav-link" href="iframe/work_order/pm_schedule"><i
+                        class="far fa-clock nav-icon"></i>
+                      <p>PM Schedule</p>
+                    </a></li>
+                  <li class="nav-item" *ngIf="menuId[37] && isTrailOpen">
+                    <a class="nav-link" href="iframe/work_order/pm_checklist"><i class="fas fa-tasks nav-icon"></i>
+                      <p>PM Checklist</p>
+                    </a></li>
+                  <li class="nav-item" *ngIf="menuId[38] && isTrailOpen"><a class="nav-link" href="iframe/work_order/pm_calendar"><i
+                        class="fas fa-calendar-week nav-icon"></i>
+                      <p>PM Calendar</p>
+                    </a></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item" *ngIf="menuId[1] && isTrailOpen">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-globe"></i>
+              <p> Master
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <!-- <li class="nav-item"><a class="nav-link" href="iframe/master/client_page"><i
+                    class="fas fa-user-plus nav-icon"></i>
+                  <p>Client Page</p>
+                </a></li>
+              <li class="nav-item"><a class="nav-link" href="iframe/master/client_list"><i
+                    class="fas fa-user-plus nav-icon"></i>
+                  <p>Client List</p>
+                </a></li> -->
+              <li class="nav-item" *ngIf="menuId[2] && isTrailOpen"><a class="nav-link" href="iframe/master/company"><i
+                    class="fas fa-user-plus nav-icon"></i>
+                  <p>Company</p>
+                </a></li>
+              <li class="nav-item" *ngIf="menuId[3] && isTrailOpen"><a class="nav-link" href="iframe/master/bu"><i
+                    class="fas fa-user-plus nav-icon"></i>
+                  <p>BU</p>
+                </a></li>
+              <li class="nav-item" *ngIf="menuId[4] && isTrailOpen"><a class="nav-link" href="iframe/master/plant"><i
+                    class="fas fa-user-plus nav-icon"></i>
+                  <p>Plant</p>
+                </a></li>
+              <li class="nav-item" *ngIf="menuId[5] && isTrailOpen"><a class="nav-link" href="iframe/master/shift"><i
+                    class="fas fa-user-plus nav-icon"></i>
+                  <p>Shift</p>
+                </a></li>
+              <li class="nav-item" *ngIf="menuId[6] && isTrailOpen"><a class="nav-link" href="iframe/master/department"><i
+                    class="fas fa-user-plus nav-icon"></i>
+                  <p>Department</p>
+                </a></li>
+              <li class="nav-item" *ngIf="menuId[7] && isTrailOpen"><a class="nav-link" href="iframe/master/location"><i
+                    class="fas fa-user-plus nav-icon"></i>
+                  <p>Location</p>
+                </a></li>
+              <li class="nav-item" *ngIf="menuId[8] && isTrailOpen"><a class="nav-link" href="iframe/master/asset_model"><i
+                    class="fas fa-user-plus nav-icon"></i>
+                  <p>Asset Model</p>
+                </a></li>
+              <li class="nav-item" *ngIf="menuId[9] && isTrailOpen"><a class="nav-link" href="iframe/master/uom"><i
+                    class="fas fa-user-plus nav-icon"></i>
+                  <p>UOM</p>
+                </a></li>
+              <!-- 
+              <li class="nav-item"><a class="nav-link" href="iframe/master/designation"><i
+                    class="fas fa-user-plus nav-icon"></i>
+                  <p>Designation</p>
+                </a></li> -->
+              <li class="nav-item" *ngIf="menuId[10] && isTrailOpen"><a class="nav-link" href="iframe/master/user"><i
+                    class="fas fa-user-plus nav-icon"></i>
+                  <p>User</p>
+                </a></li>
+              <li class="nav-item" *ngIf="menuId[11] && isTrailOpen"><a class="nav-link" href="iframe/master/employee_head"><i
+                    class="fas fa-user-plus nav-icon"></i>
+                  <p>Assign Department Head</p>
+                </a></li>
+              <li class="nav-item" *ngIf="menuId[12] && isTrailOpen"><a class="nav-link" href="iframe/master/spares"><i
+                    class="fas fa-user-plus nav-icon"></i>
+                  <p>Spares</p>
+                </a></li>
+              <li class="nav-item" *ngIf="menuId[13] && isTrailOpen"><a class="nav-link" href="iframe/master/breakdown_category"><i
+                    class="fas fa-user-plus nav-icon"></i>
+                  <p>Breakdown Category</p>
+                </a></li>
+              <li class="nav-item" *ngIf="menuId[14] && isTrailOpen"><a class="nav-link" href="iframe/master/breakdown"><i
+                    class="fas fa-user-plus nav-icon"></i>
+                  <p>Breakdown</p>
+                </a></li>
+              <li class="nav-item" *ngIf="menuId[16] && isTrailOpen"><a class="nav-link" href="iframe/master/asset_group"><i
+                    class="fas fa-user-plus nav-icon"></i>
+                  <p>Asset</p>
+                </a></li>
+              <li class="nav-item" *ngIf="menuId[15] && isTrailOpen"><a class="nav-link" href="iframe/master/breakdown_assign"><i
+                    class="fas fa-user-plus nav-icon"></i>
+                  <p>Breakdown Assignment</p>
+                </a></li>
+              <li class="nav-item" *ngIf="menuId[21] && isTrailOpen"><a class="nav-link" href="iframe/master/services"><i
+                    class="fas fa-user-plus nav-icon"></i>
+                  <p>Services</p>
+                </a></li>
+              <li class="nav-item" *ngIf="menuId[23] && isTrailOpen"><a class="nav-link" href="iframe/master/mttr"><i
+                    class="fas fa-user-plus nav-icon"></i>
+                  <p>MTTR</p>
+                </a></li>
+              <!--  <li class="nav-item" *ngIf="menuId[24] && isTrailOpen"><a class="nav-link" href="iframe/master/breakdown_status"><i
+                    class="fas fa-user-plus nav-icon"></i>
+                  <p>Breakdown Status</p>
+                </a></li>
+              <li class="nav-item" *ngIf="menuId[25] && isTrailOpen"><a class="nav-link" href="iframe/master/pm_status"><i
+                    class="fas fa-user-plus nav-icon"></i>
+                  <p>PM Status</p>
+                </a></li> -->
+            </ul>
+          </li>
+          <li class="nav-item" *ngIf="menuId[26] && isTrailOpen">
+            <a class="nav-link" href="#">
+              <i class="fas fa-cogs nav-icon"></i>
+              <p> Settings
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item" *ngIf="menuId[27] && isTrailOpen"><a class="nav-link" href="iframe/settings/userpage"><i
+                    class="fas fa-cog nav-icon"></i>
+                  <p>User Rights</p>
+                </a></li>
+              <li class="nav-item" *ngIf="menuId[28] && isTrailOpen"><a class="nav-link" href="iframe/activity/mail_template"><i
+                    class="fas fa-cog nav-icon"></i>
+                  <p>Mail</p>
+                </a></li>
+            </ul>
+          </li>
+          <li class="nav-item" *ngIf="menuId[29] && isTrailOpen">
+            <a class="nav-link" href="#">
+              <i class="fas fa-users-cog nav-icon"></i>
+              <p> Activity
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item" *ngIf="menuId[30] && isTrailOpen">
+                <a class="nav-link" href="iframe/activity/report_template"><i class="fas fa-user-cog nav-icon"></i>
+                  <p> Report Template</p>
+                </a>
+              </li>
+              <li class="nav-item" *ngIf="menuId[31] && isTrailOpen"><a class="nav-link" href="iframe/settings/notification"><i
+                    class="fas fa-cog nav-icon"></i>
+                  <p>Notification</p>
+                </a>
+              </li>
+              <li class="nav-item" *ngIf="menuId[32] && isTrailOpen"><a class="nav-link" href="iframe/settings/customised_ticket"><i
+                    class="fas fa-user-plus nav-icon"></i>
+                  <p>Customise Work Order Number</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item" *ngIf="menuId[42] && isTrailOpen">
+            <a class="nav-link" href="#">
+              <i class="fas fa-file-export nav-icon"></i>
+              <p> Report
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item" *ngIf="menuId[43] && isTrailOpen"><a class="nav-link" href="iframe/report/breakdown_report"><i
+                    class="fas fa-file-invoice nav-icon"></i>
+                  <p> Breakdown </p>
+                </a></li>
+              <li class="nav-item" *ngIf="menuId[44] && isTrailOpen"><a class="nav-link" href="iframe/report/pm_report"><i
+                    class="fas fa-file-invoice nav-icon"></i>
+                  <p> PM </p>
+                </a></li>
+              <li class="nav-item" *ngIf="menuId[45] && isTrailOpen"><a class="nav-link" href="iframe/report/spare"><i
+                    class="fas fa-file-invoice nav-icon"></i>
+                  <p> Spare </p>
+                </a></li>
+              <li class="nav-item" *ngIf="menuId[46] && isTrailOpen"><a class="nav-link" href="iframe/report/asset_scrap"><i
+                    class="fas fa-file-invoice nav-icon"></i>
+                  <p> Asset </p>
+                </a></li>
+            </ul>
+          </li>
+          <!-- 
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <i class="fas fa-chart-line nav-icon"></i>
+              <p> Charts
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item"><a class="nav-link" href="iframe/charts/breakdown_chart"><i
+                    class="fas fa-file-invoice nav-icon"></i>
+                  <p> Breakdown chart</p>
+                </a>
+              </li>
+            </ul>
+          </li> -->
+        </ul>
+      </nav>
+    </div>
+  </aside>
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper iframe-mode text-sm" data-widget="iframe" data-loading-screen="750">
+    <div class="nav navbar navbar-expand navbar-white navbar-light border-bottom p-0">
+      <a class="nav-link bg-light btn_nav_scroll" href="javascript:void(0)" data-widget="iframe-scrollleft">
+        <i class="fas fa-angle-double-left"></i>
+      </a>
+      <ul class="navbar-nav overflow-hidden" role="tablist"></ul>
+      <a class="nav-link bg-light" href="javascript:void(0)" id="refresh">
+        <i class="fas fa-sync"></i>
+      </a>
+      <a class="nav-link bg-light btn_nav_scroll" href="javascript:void(0)" data-widget="iframe-scrollright">
+        <i class="fas fa-angle-double-right"></i>
+      </a>
+      <a class="nav-link bg-light" href="javascript:void(0)" data-widget="iframe-fullscreen">
+        <i class="fas fa-expand"></i>
+      </a>
+    </div>
+    <app-iframe></app-iframe>
+  </div>
+  <footer class="main-footer text-sm text-center" style="padding: 0.25rem;">
+    Powered By Ausweg &copy; 2023 <img src="assets/images/fixitnow-logo.png" style="min-height: 30px;height: 30px;" /> |
+    version 2.0.0
+  </footer>
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark"></aside>
+</div>
+
+<!-- Profile modal -->
+<div class="modal fade" id="modal_profile">
+  <div class="modal-dialog" style="min-width: 70%;">
+    <div class="modal-content">
+      <div class="modal-header p-2">
+        <h5>Profile</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body p-2" id="modal_profile" style="font-size: 1rem;">
+        <div class="row align-items-center">
+          <div class="col-sm-3 text-center">
+            <img [src]="userImage" alt="employee image" style="width: 100%;height: auto;" />
+          </div>
+          <div class="col-sm-9">
+            <table class="table table-sm table-borderless m-0">
+              <tbody>
+                <tr>
+                  <th>User</th>
+                  <th>:</th>
+                  <td>{{ userDetail.employee_code }} - {{ userDetail.employee_name }} </td>
+                </tr>
+                <tr>
+                  <th>Designation</th>
+                  <th>:</th>
+                  <td>{{ userDetail.employee_type }}</td>
+                </tr>
+                <tr>
+                  <th>Email</th>
+                  <th>:</th>
+                  <td>{{ userDetail.employee_email }}</td>
+                </tr>
+                <tr>
+                  <th>Contact No</th>
+                  <th>:</th>
+                  <td>{{ userDetail.employee_mobile }}</td>
+                </tr>
+                <tr *ngIf="userDetail.company_id != 0">
+                  <th>Company</th>
+                  <th>:</th>
+                  <td>{{ userDetail.company_code }} - {{ userDetail.company_name }}</td>
+                </tr>
+                <tr *ngIf="userDetail.bu_id != 0">
+                  <th>Business Unit</th>
+                  <th>:</th>
+                  <td>{{ userDetail.bu_code }} - {{ userDetail.bu_name }}</td>
+                </tr>
+                <tr *ngIf="userDetail.plant_id != 0">
+                  <th>Plant</th>
+                  <th>:</th>
+                  <td>{{ userDetail.plant_code }} - {{ userDetail.plant_name }}</td>
+                </tr>
+                <tr *ngIf="userDetail.department_id != 0">
+                  <th>Department</th>
+                  <th>:</th>
+                  <td>{{ userDetail.department_code }} - {{ userDetail.department_name }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer p-1">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Change Password -->
+<div class="modal fade" id="change_password_modal" data-backdrop="static">
+  <div class="modal-dialog" style="min-width: 90%;">
+    <div class="modal-content">
+      <div class="modal-header p-2">
+        <h5>Change Password</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form id="save_form" name="save_form" autocomplete="off">
+        <div class="modal-body p-2">
+          <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+              <div class="form-group row">
+                <label for="oldpassword" class="col-sm-4">Old Password</label>
+                <div class="col-sm-8">
+                  <div class="input-group">
+                    <input type="password" class="form-control form-control-sm required" id="oldpassword"
+                      name="oldpassword" value="" />
+                    <div class="input-group-append">
+                      <div class="input-group-text pt-0 pb-0">
+                        <label class="m-0">
+                          <input type="checkbox" class="form-control-sm password_show" org_id="old"
+                            style="display: none;">
+                          <i id="oldpassword_icon" class="fas fa-eye"></i>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="newpassword" class="col-sm-4">New Password</label>
+                <div class="col-sm-8">
+                  <div class="input-group">
+                    <input type="password" class="form-control form-control-sm required" id="newpassword"
+                      name="newpassword" value="" />
+                    <div class="input-group-append">
+                      <div class="input-group-text pt-0 pb-0">
+                        <label class="m-0">
+                          <input type="checkbox" class="form-control-sm password_show" org_id="new"
+                            style="display: none;">
+                          <i id="newpassword_icon" class="fas fa-eye"></i>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="retypepassword" class="col-sm-4">Retype Password</label>
+                <div class="col-sm-8">
+                  <div class="input-group">
+                    <input type="password" class="form-control form-control-sm required" id="retypepassword"
+                      name="retypepassword" value="" />
+                    <div class="input-group-append">
+                      <div class="input-group-text pt-0 pb-0">
+                        <label class="m-0">
+                          <input type="checkbox" class="form-control-sm password_show" org_id="retype"
+                            style="display: none;">
+                          <i id="retypepassword_icon" class="fas fa-eye"></i>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer p-1">
+          <button type="button" class="btn btn-sm btn-info mr-2" (click)="saveChangePassword()">Save</button>
+          <button type="reset" class="btn btn-sm btn-default">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Trial Over -->
+<div class="modal fade" id="trial_over_modal" data-backdrop="static">
+  <div class="modal-dialog" style="margin-top: 30vh;">
+    <div class="modal-content">
+        <div class="modal-body p-2">
+          <img src="assets/images/fixitnow-logo.png" class="d-block text-center" style="min-height: 50px;height: 50px;margin: auto;" />
+          <h4 class="text-primary">{{trialStatement}}</h4>
+          <h6> To continue on with further use, kindly subscribe it. </h6>
+        </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,682 @@
+<div class="col-sm-12 pt-2">
+  <div class="card card-outline card-cyan" [hidden]="isAssetGroupDtl">
+    <div class="card-header">
+      <h3 class="card-title"> Asset Group </h3>
+      <div class="card-tools">
+        <button type="button" class="btn btn-sm btn-outline-info" (click)="addAssetGroup()"
+          *ngIf="masterOperation['add']">
+          <i class="fas fa-plus fa-sm mr-1"></i> Asset Group
+        </button>
+        <button type="button" class="btn btn-sm btn-outline-info ml-2" (click)="qrCodeModal()">
+          <i class="fas fa-qrcode fa-sm mr-1"></i> QR Code
+        </button>
+        <button class="btn btn-secondary btn-sm ml-2" type="button" id="toggle_icon">
+          <i class="fa fa-toggle-off" id="toggleIcon"></i>
+        </button>
+        <button class="btn btn-secondary btn-sm ml-2" type="button" (click)="textWrap()">
+          <i class="fas fa-text-width"></i></button>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table id="dataTable" class="table table-bordered table-sm">
+          <thead>
+            <tr>
+              <th> Operation </th>
+              <th> Status </th>
+              <th> Asset Group Code </th>
+              <th> Asset Group Name </th>
+              <th> Company </th>
+              <th> BU </th>
+              <th> Plant </th>
+              <th> Department </th>
+              <th> Location </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let list of assetGroupList">
+              <td>
+                <div class="btn-group">
+                  <button class="btn" (click)="editAssetGroup(list)" title="Edit Asset Group"
+                    *ngIf="masterOperation['edit']">
+                    <i class="fas fa-pencil-alt"></i>
+                  </button>
+                  <button *ngIf="list.is_assigned=='yes' ? false : masterOperation['delete'] ? true : false" class="btn"
+                    title="Remove Asset Group" (click)="changeStatus(list.asset_group_id,'delete')">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </td>
+              <td> <button class="btn" title="Active/InActive Asset Group"
+                  (click)="changeStatus(list.asset_group_id, list.status)">
+                  <i
+                    [ngClass]="list.status == 'active' ? 'far fa-thumbs-up text-success' : 'far fa-thumbs-down text-danger'"></i>
+                </button>
+              </td>
+              <td>{{ list.asset_group_code }}</td>
+              <td>{{ list.asset_group_name }}</td>
+              <td>{{ list.company }}</td>
+              <td>{{ list.bu }}</td>
+              <td>{{ list.plant }}</td>
+              <td>{{ list.department }}</td>
+              <td>{{ list.location }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="list-style: none;" *ngIf="listView">
+        <li class="card p-2">
+          <div class="row">
+            <div class="col-sm-2">
+              <b>Operation</b>
+            </div>
+            <div class="col-sm-2">
+              <b>Status</b>
+            </div>
+            <div class="col-sm-2">
+              <b>Plant</b>
+            </div>
+            <div class="col-sm-2">
+              <b>Department</b>
+            </div>
+            <div class="col-sm-2">
+              <b>Location</b>
+            </div>
+            <div class="col-sm-2">
+              <b>Asset Group</b>
+            </div>
+          </div>
+        </li>
+        <div style="height: 70vh;overflow-y: auto;">
+          <li class="callout callout-info p-2" *ngFor="let list of assetGroupList">
+            <div class="row align-items-center">
+              <div class="col-sm-2">
+                <div class="btn-group">
+                  <button class="btn" (click)="editAssetGroup(list)" title="Edit Asset Group"
+                    *ngIf="masterOperation['edit']">
+                    <i class="fas fa-pencil-alt"></i>
+                  </button>
+                  <button *ngIf="list.is_assigned == 'yes' ? false : masterOperation['delete'] ? true : false"
+                    class="btn" title="Remove Asset Group" (click)="changeStatus(list.asset_group_id,'delete')">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="col-sm-2">
+                <button class="btn" title="Active/InActive Shift"
+                  (click)="changeStatus(list.asset_group_id, list.status)">
+                  <i
+                    [ngClass]="list.status == 'active' ? 'far fa-thumbs-up text-success' : 'far fa-thumbs-down text-danger'"></i>
+                </button>
+              </div>
+              <div class="col-sm-2">
+                <h6 class="m-0">{{ list.plant }}</h6>
+              </div>
+              <div class="col-sm-2">
+                <h6 class="m-0">{{ list.department }}</h6>
+              </div>
+              <div class="col-sm-2">
+                <h6 class="m-0">{{ list.location }}</h6>
+              </div>
+              <div class="col-sm-2">
+                <h6 class="m-0">{{ list.asset_group_code }} - {{ list.asset_group_name }}</h6>
+              </div>
+            </div>
+          </li>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card card-outline card-cyan" [hidden]="!isAssetGroupDtl">
+    <div class="card-header">
+      <h3 class="card-title d-flex"> Asset Group
+        <h6 class="m-0 pl-2 text-info" [hidden]="isAssetShow">
+          <b>{{ this.assetGroupCode }} - {{ this.assetGroupName }}</b>
+        </h6>
+      </h3>
+      <div class="card-tools">
+        <button type="button" class="btn p-0" (click)="assetGroupShow($event)"><i
+            class="fas fa-angle-down"></i></button>
+      </div>
+    </div>
+    <form id="asset_group_master" class="mb-2" autocomplete="off" [hidden]="!isAssetShow">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group row">
+              <label for="created_on" class="col-sm-4"> Created On </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm " id="created_on" name="created_on" value=""
+                  [(ngModel)]="createdOn" disabled />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="modified_on" class="col-sm-4"> Modified On </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm " id="modified_on" name="modified_on" value=""
+                  [(ngModel)]="modifiedOn" disabled />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4" for="company_name"> Company
+                <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+              <div class="col-sm-8">
+                <select id="company_name" name="company_name" class="select2 required" style="width:100%;">
+                  <option value="">~~ Select ~~</option>
+                  <option *ngFor="let company of companyList" value="{{ company.company_id }}">
+                    {{ company.company_code }}-{{ company.company_name }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="plant_name" class="col-sm-4"> Plant
+                <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+              <div class="col-sm-8">
+                <select name="plant_name" id="plant_name" class="select2 required" style="width:100%;">
+                  <option value="">~~ Select ~~</option>
+                  <option *ngFor="let plantList of plantList" [attr.plant_code]="plantList.plant_code"
+                    value="{{ plantList.plant_id }}">
+                    {{ plantList.plant_code }}-{{ plantList.plant_name }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4" for="location"> Location
+                <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+              <div class="col-sm-8">
+                <select id="location_name" name="location_name" class="select2 required" style="width:100%;">
+                  <option value=""> ~~ Select ~~ </option>
+                  <option *ngFor="let data of locationList" value="{{ data.location_id }}">
+                    {{ data.location_code }} - {{ data.location_name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="equipment_group_name" class="col-sm-4"> Asset Group Name
+                <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup>
+              </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm required" name="equipment_group_name"
+                  id="equipment_group_name" value="" [(ngModel)]="assetGroupName" />
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group row">
+              <label for="created_by" class="col-sm-4"> Created By </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm " id="created_by" name="created_by" value=""
+                  [(ngModel)]="createdBy" disabled />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="modified_by" class="col-sm-4"> Modified By </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm " id="modified_by" name="modified_by" value=""
+                  [(ngModel)]="modifiedBy" disabled />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="branch_name" class="col-sm-4"> BU
+                <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+              <div class="col-sm-8">
+                <select name="bu_name" id="bu_name" class="select2 required" style="width:100%;">
+                  <option value="">~~ Select ~~</option>
+                  <option *ngFor="let buList of buList" value="{{ buList.bu_id }}">
+                    {{ buList.bu_code }}-{{ buList.bu_name }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4" for="department_name"> Department
+                <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup>
+              </label>
+              <div class="col-sm-8">
+                <select id="department_name" name="department_name" class="select2 required" style="width:100%;">
+                  <option value=""> ~~ Select ~~ </option>
+                  <option *ngFor="let departmentList of departmentList" value="{{ departmentList.department_id }}">
+                    {{ departmentList.department_code }}-{{ departmentList.department_name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="asset_group_code" class="col-sm-4"> Asset Group Code
+                <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup>
+              </label>
+              <div class="col-sm-3">
+                <input type="text" class="form-control form-control-sm" name="code_prefix" id="code_prefix" value=""
+                  [(ngModel)]="plantCode" disabled />
+              </div>
+              <div class="col-sm-5">
+                <input type="text" class="form-control form-control-sm required" name="asset_group_code"
+                  id="asset_group_code" value="" [(ngModel)]="assetGroupCode" (input)="convertToUpperCase()" />
+              </div>
+            </div>
+            <!-- <div class="form-group row">
+              <label class="col-sm-4" for="asset_model_name">
+                Asset Model
+                <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup>
+              </label>
+              <div class="col-sm-8">
+                <select id="asset_model_name" name="asset_model_name" class="select2 required" style="width:100%;">
+                  <option value=""> ~~ Select ~~ </option>
+				  <option *ngFor="let data of assetModelList" value="{{ data.asset_model_id }}">
+					{{ data.asset_model_code }}-{{ data.asset_model_name }}
+				  </option>
+                </select>
+              </div>
+            </div> -->
+          </div>
+        </div>
+      </div>
+      <div class="card-footer text-right">
+        <button type="submit" class="btn btn-sm btn-info mr-2" (click)="saveAssetGroup()"> Save </button>
+        <button type="button" class="btn btn-sm btn-default" (click)="cancel()"> Cancel
+        </button>
+      </div>
+    </form>
+    <div id="smartwizard" class="mt-2" [hidden]="!isAssetDetail">
+      <ul class="nav">
+        <li class="nav-item">
+          <a class="nav-link active" href="#asset_detail">
+            <div class="num"><i class="fas fa-laptop"></i></div>
+            Asset
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#breakdown_detail">
+            <span class="num"><i class="fas fa-tools"></i></span>
+            Breakdown
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link " href="#service_detail">
+            <span class="num"><i class="fas fa-upload"></i></span>
+            Service
+          </a>
+        </li>
+        <li class="nav-item" (click)="getDocAssetList()">
+          <a class="nav-link" href="#spare_detail">
+            <span class="num"><i class="fas fa-parking"></i></span>
+            Spare
+          </a>
+        </li>
+        <li class="nav-item" (click)="getDocAssetList()">
+          <a class="nav-link " href="#document_detail">
+            <span class="num"><i class="fas fa-upload"></i></span>
+            Document
+          </a>
+        </li>
+      </ul>
+
+      <div class="tab-content" style="height: 100vh;overflow-y: scroll;">
+        <div id="asset_detail" class="tab-pane" role="tabpanel" style="height: 100vh;">
+          <app-asset *ngIf="isAssetDetail" [companyId]="companyId" [buId]="buId" [plantId]="plantId"
+            [locationId]="locationId" [departmentId]="departmentId" [assetGroupId]="assetGroupId" [loginId]="loginId">
+          </app-asset>
+        </div>
+        <div id="breakdown_detail" class="tab-pane" role="tabpanel" style="height: 100vh;">
+          <div class="col-sm-12">
+            <div class="card card-outline card-cyan">
+              <div class="card-header">
+                <h3 class="card-title">Breakdown Assignment</h3>
+              </div>
+              <div class="card-body">
+                <form id="breakdown_assignment_form" class="breakdown_assignment_form">
+                  <div class="row">
+                    <div class="col-sm-4">
+                      <div class="form-group row">
+                        <label class="col-sm-4" for="breakdown_category_name"> Breakdown Category </label>
+                        <div class="col-sm-8">
+                          <select id="breakdown_category_name" name="breakdown_category_name" class="select2 required">
+                            <option value=""> ~~ Select ~~ </option>
+                            <option *ngFor="let data of breakdownCategoryList" value="{{ data.breakdown_category_id }}">
+                              {{ data.breakdown_category_code }} - {{ data.breakdown_category_name }}
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-4">
+                      <div class="form-group row">
+                        <label class="col-sm-4" for="breakdown_name"> Breakdown
+                          <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup>
+                        </label>
+                        <div class="col-sm-8">
+                          <select id="breakdown_name" name="breakdown_name" class="select2 required"
+                            style="width:100%;">
+                            <option value=""> ~~ Select ~~ </option>
+                            <option *ngFor="let data of breakdownList" value="{{ data.breakdown_sub_category_id }}">
+                              {{ data.breakdown_sub_category_code }} - {{ data.breakdown_sub_category_name }}
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-4 text-right">
+                      <button type="button" class="btn btn-sm btn-outline-info" (click)="saveAssetGroupBreakdown()">
+                        <i class="fas fa-plus fa-sm mr-1"></i> Breakdown Assignment
+                      </button>
+                    </div>
+                  </div>
+                </form>
+                <div class="table-responsive">
+                  <table id="breakdown_assignment_table" class="table table-sm table-bordered">
+                    <thead>
+                      <tr>
+                        <th> Operation </th>
+                        <th> Status </th>
+                        <th> Breakdown Category </th>
+                        <th> Breakdown </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let list of breakdownAssignList">
+                        <td>
+                          <div class="btn-group">
+                            <button *ngIf="list.is_assigned == 'yes' ? false : masterOperation['delete'] ? true : false"
+                              class="btn" title="Remove Breakdown"
+                              (click)="changeStatusBreakdownAssign(list.breakdown_assignment_id,'delete')">
+                              <i class="fas fa-trash-alt"></i>
+                            </button>
+                          </div>
+                        </td>
+                        <td>
+                          <button class="btn" title="Active/InActive Breakdown"
+                            (click)="changeStatusBreakdownAssign(list.breakdown_assignment_id,list.status)">
+                            <i
+                              [ngClass]="list.status == 'active' ? 'far fa-thumbs-up text-success' : 'far fa-thumbs-down text-danger'"></i>
+                          </button>
+                        </td>
+                        <td>{{ list.breakdown_category }}</td>
+                        <td>{{ list.breakdown_sub_category }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="service_detail" class="tab-pane" role="tabpanel" style="height: 100vh;">
+          <app-services *ngIf="isAssetDetail" [serviceCompanyId]="companyId" [serviceBuId]="buId"
+            [servicePlantId]="plantId" [serviceDepartmentId]="departmentId" [serviceAssetGroupId]="assetGroupId">
+          </app-services>
+        </div>
+        <div id="spare_detail" class="tab-pane" role="tabpanel" style="height: 100vh;">
+          <div class="col-sm-12 pt-2">
+            <div class="card card-outline card-cyan">
+              <div class="card-header">
+                <h3 class="card-title">Spares</h3>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-sm-4">
+                    <div class="form-group row">
+                      <label class="col-sm-4" for="spare_asset_name"> Asset Name </label>
+                      <div class="col-sm-8">
+                        <select id="spare_asset_name" name="spare_asset_name" class="select2">
+                          <option value="0"> All </option>
+                          <option *ngFor="let data of docAssetList" value="{{ data.asset_id }}">
+                            {{ data.asset_code }} - {{ data.asset_name }}
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="form-group row">
+                      <label class="col-sm-4" for="spare_name"> Spare
+                        <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup>
+                      </label>
+                      <div class="col-sm-8">
+                        <select id="spare_name" name="spare_name" class="select2 required" style="width:100%;">
+                          <option value=""> ~~ Select ~~ </option>
+                          <option *ngFor="let data of spareList" value="{{ data.spare_id }}">
+                            {{ data.spare_code }}-{{ data.spare_name }}
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-4 text-right">
+                    <button type="button" class="btn btn-sm btn-outline-info" (click)="saveAssetGroupSpare()">
+                      <i class="fas fa-plus fa-sm mr-1"></i> Add Spares
+                    </button></div>
+                </div>
+                <div class="table-responsive">
+                  <table id="spare_dataTable" class="table table-sm table-bordered">
+                    <thead>
+                      <tr>
+                        <th> Operation </th>
+                        <th> Asset </th>
+                        <th> Spare Name </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let data of assetGroupSpareList ">
+                        <td>
+                          <div class="btn-group">
+                            <button class="btn" title="Remove Asset Group Spare"
+                              (click)="changeSpareStatus(data.asset_group_spare_id,'delete')">
+                              <i class="fas fa-trash-alt"></i>
+                            </button>
+                          </div>
+                        </td>
+                        <td>{{ data.asset_name }}</td>
+                        <td>{{ data.spare_code }} - {{ data.spare_name }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="document_detail" class="tab-pane" role="tabpanel" style="height: 100vh;">
+          <div class="col-sm-12 pt-2">
+            <div class="card card-outline card-cyan">
+              <div class="card-header">
+                <h3 class="card-title">Documents</h3>
+                <div class="card-tools">
+                  <button type="button" class="btn btn-sm btn-outline-info" (click)="saveDocument()">
+                    <i class="fas fa-plus fa-sm mr-1"></i> Document
+                  </button>
+                </div>
+              </div>
+              <div class="card-body">
+                <form id="document_form" name="document_form" autocomplete="off">
+                  <div class="row">
+                    <div class="col-sm-4">
+                      <div class="form-group row">
+                        <label class="col-sm-4" for="doc_asset_name"> Asset Name </label>
+                        <div class="col-sm-8">
+                          <select id="doc_asset_name" name="doc_asset_name" class="select2">
+                            <option value="0"> All </option>
+                            <option *ngFor="let data of docAssetList" value="{{ data.asset_id }}">
+                              {{ data.asset_code }} - {{ data.asset_name }}
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-4">
+                      <div class="form-group row">
+                        <label class="col-sm-4 mb-0">Document Name</label>
+                        <div class="col-sm-8">
+                          <input type="text" class="form-control form-control-sm required" name="document_name"
+                            id="document_name" value="" />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-4">
+                      <div class="form-group row">
+                        <label for="assetgroup_document" class="col-sm-4"> Document </label>
+                        <div class="col-sm-8">
+                          <div class="custom-file custom-file-sm">
+                            <input type="file" class="custom-file-input required" id="assetgroup_document"
+                              name="assetgroup_document" (change)="uploadDocument($event);">
+                            <label class="custom-file-label" for="assetgroup_document_name"
+                              id="assetgroup_document_name">
+                              Choose File
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+                <div class="table-responsive">
+                  <table id="document_dataTable" class="table table-sm table-bordered">
+                    <thead>
+                      <tr>
+                        <th> Operation </th>
+                        <th> Asset </th>
+                        <th> Document Name </th>
+                        <th> Document </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let data of documentList ">
+                        <td>
+                          <div class="btn-group">
+                            <button class="btn" title="Remove Asset Group Document"
+                              (click)="changeDocumentStatus(data.asset_group_document_id,'delete')">
+                              <i class="fas fa-trash-alt"></i>
+                            </button>
+                          </div>
+                        </td>
+                        <td>{{ data.asset }}</td>
+                        <td> {{ data.document_name }} </td>
+                        <td><button type="button" title="{{ data.document_name }}" class="btn btn-sm btn-outline-success"
+                            (click)="documentShow(data)"><i class="fas fa-eye"></i>
+                          </button>
+                        </td>
+                        <!-- <td>{{ data.spare_quantity }}</td> -->
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="qr-modal">
+  <div class="modal-dialog modal-lg" style="min-width: 90%">
+    <div class="modal-content light">
+      <div class="modal-header bg-info p-1 pl-2 pr-3">
+        <h6 class="modal-title">
+          <span class="pl-2 text-white"> QR Code </span>
+        </h6>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="modal_close" (click)="cancel()">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <form>
+        <div class="modal-body p-2">
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group row">
+                <label class="col-sm-4" for="qr_department_name"> Department
+                  <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup>
+                </label>
+                <div class="col-sm-8">
+                  <select id="qr_department_name" name="qr_department_name" class="select2 required"
+                    style="width:100%;">
+                    <option value="all"> All </option>
+                    <option *ngFor="let departmentList of qrDepartmentList" value="{{ departmentList.department_id }}">
+                      {{ departmentList.department_code }}-{{ departmentList.department_name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-sm-4" for="qr_asset_group_name"> Asset Group
+                  <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+                <div class="col-sm-8">
+                  <select id="qr_asset_group_name" name="qr_asset_group_name" class="select2 required"
+                    style="width:100%;">
+                    <option value="all"> All </option>
+                    <option *ngFor="let data of qrAssetGroupList" value="{{ data.asset_group_id }}">
+                      {{ data.asset_group_code }} - {{ data.asset_group_name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group row">
+                <label class="col-sm-4" for="location"> Location
+                  <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+                <div class="col-sm-8">
+                  <select id="qr_location_name" name="qr_location_name" class="select2 required" muliplte
+                    style="width:100%;">
+                    <option value="all"> All </option>
+                    <option *ngFor="let data of qrLocationList" value="{{ data.location_id }}">
+                      {{ data.location_code }} - {{ data.location_name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-sm-4" for="qr_asset_name"> Asset Name
+                  <sup><i class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+                <div class="col-sm-8">
+                  <select id="qr_asset_name" name="qr_asset_name" class="multiselect required" multiple
+                    style="width:100%;">
+                    <option value="all"> All </option>
+                    <option *ngFor="let data of qrAssetList" value="{{ data.asset_id }}">
+                      {{ data.asset_code }} - {{ data.asset_name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-12 text-right">
+              <button type="button" class="btn btn-sm btn-primary mr-2" (click)="generateQR()">Generate</button>
+              <button type="button" class="btn btn-sm btn-info mr-2" (click)="printQR()">Print</button>
+              <button type="reset" class="btn btn-sm btn-default" (click)="cancel()">Cancel</button>
+            </div>
+            <div class="col-sm-12" id="qr_div" style="display: none">
+              <div class="flexbox">
+                <div class="qr_detail_div" *ngFor="let data of assetQRList">
+                  <p>{{ data.asset_group_name }}</p>
+                  <p><img src="{{ data.asset_image }}" width="100px" height="100px" /></p>
+                  <p>{{ data.asset_code }} - {{ data.asset_name }}</p>
+                  <p>{{ data.location_name }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modal_docs">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header p-1 pl-2 pr-2">
+        <h4 class="modal-title"> Documents </h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">
+            &times;
+          </span>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        <iframe id="document_manual" src="assets/images/dummy.pdf" width="100%" style="border: none"></iframe>
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>

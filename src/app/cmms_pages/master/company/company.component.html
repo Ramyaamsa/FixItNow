@@ -1,0 +1,215 @@
+<div class="col-sm-12 pt-2">
+  <div class="card card-outline card-cyan" [hidden]="companyCard">
+    <div class="card-header">
+      <h3 class="card-title pt-1"> Company </h3>
+      <div class="card-tools">
+        <button type="button" class="btn btn-sm btn-outline-info" (click)="addCompany()" *ngIf="masterOperation['add']">
+          <i class="fas fa-plus fa-sm mr-1"></i> Add
+        </button>
+        <button class="btn btn-secondary btn-sm ml-2" type="button" id="toggle_icon">
+          <i class="fa fa-toggle-off" id="toggleIcon"></i>
+        </button>
+        <button class="btn btn-secondary btn-sm ml-2" type="button" (click)="textWrap()">
+          <i class="fas fa-text-width"></i>
+        </button>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table id="dataTable" class="table table-sm table-bordered">
+          <thead>
+            <tr>
+              <th>Operation</th>
+              <th>Status</th>
+              <th>Company Code </th>
+              <th>Company Name </th>
+              <th>Company Logo </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let companyList of companyListdata">
+              <td>
+                <div class="btn-group">
+                  <button class="btn" title="Edit Company" (click)="editCompanyLists(companyList)"
+                    *ngIf="masterOperation['edit']">
+                    <i class="fas fa-pencil-alt"></i>
+                  </button>
+                  <button *ngIf="companyList.is_assigned == 'yes' ? false : masterOperation['delete'] ? true : false"
+                    class="btn" title="Remove Company" (click)="activeInactive(companyList.company_id,'delete')">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </td>
+              <td>
+                <button class="btn" title="Active/InActive company"
+                  (click)="activeInactive(companyList.company_id,companyList.status)">
+                  <i
+                    [ngClass]="companyList.status == 'active' ? 'far fa-thumbs-up text-success' : 'far fa-thumbs-down text-danger'"></i>
+                </button>
+              </td>
+              <td>{{ companyList.company_code }}</td>
+              <td>{{ companyList.company_name }}</td>
+              <td><button type="button" title="Company logo" class="btn btn-sm"
+                  [ngClass]="companyList.company_logo == 'placeholder.jpg' ? 'btn-outline-danger' : 'btn-outline-success'"
+                  file_type="image" (click)="modelImage(companyList)"><i class="fas fa-eye"></i></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="list-style: none;" *ngIf="listView">
+        <li class="card p-2">
+          <div class="row">
+            <div class="col-sm-2"><b>Operation</b></div>
+            <div class="col-sm-2"><b>Status</b></div>
+            <div class="col-sm-3"><b>Company Code</b></div>
+            <div class="col-sm-3"><b>Company Name</b></div>
+            <div class="col-sm-2"><b>Company Logo</b></div>
+          </div>
+        </li>
+        <div style="height: 70vh;overflow-y: auto;">
+          <li class="callout callout-info p-2" *ngFor="let companyList of companyListdata">
+            <div class="row align-items-center">
+              <div class="col-sm-2">
+                <div class="btn-group">
+                  <button class="btn" title="Edit Company" (click)="editCompanyLists(companyList)"
+                    *ngIf="masterOperation['edit']">
+                    <i class="fas fa-pencil-alt"></i>
+                  </button>
+                  <button *ngIf="companyList.is_assigned == 'yes' ? false : masterOperation['delete'] ? true : false"
+                    class="btn" title="Remove Company" (click)="activeInactive(companyList.company_id,'delete')"> <i
+                      class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="col-sm-2">
+                <button class="btn" title="Active/InActive company"
+                  (click)="activeInactive(companyList.company_id,companyList.status)">
+                  <i
+                    [ngClass]="companyList.status == 'active' ? 'far fa-thumbs-up text-success' : 'far fa-thumbs-down text-danger'"></i>
+                </button>
+              </div>
+              <div class="col-sm-3">
+                <h6 class="m-0">{{ companyList.company_code }}</h6>
+              </div>
+              <div class="col-sm-3">
+                <h6 class="m-0">{{ companyList.company_name }}</h6>
+              </div>
+              <div class="col-sm-2">
+                <button type="button" title="Company logo" class="btn btn-sm"
+                  [ngClass]="companyList.company_logo == 'placeholder.jpg' ? 'btn-outline-danger' : 'btn-outline-success'"
+                  file_type="image" (click)="modelImage(companyList)"><i class="fas fa-eye"></i></button>
+              </div>
+            </div>
+          </li>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card card-outline card-cyan" [hidden]="!companyCard">
+    <div class="card-header">
+      <h3 class="card-title pt-1"> Company </h3>
+    </div>
+    <form id="company_master_form" autocomplete="off">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group row">
+              <label for="created_on" class="col-sm-4"> Created On </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm" id="created_on" name="created_on"
+                  [(ngModel)]="created_on" disabled />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="modified_on" class="col-sm-4"> Last Modified
+                On </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm" id="modified_on" name="modified_on"
+                  [(ngModel)]="modified_on" disabled />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="company_code" class="col-sm-4">Company Code <sup><i
+                    class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm required" id="company_code" name="company_code"
+                  value="" [(ngModel)]="company_code" (input)="convertToUpperCase()" />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="company_logo" id="company_logo_label" class="col-sm-4">Company Logo </label>
+              <div class="col-sm-8">
+                <div class="custom-file custom-file-sm">
+                  <input type="file" class="form-control custom-file-input" id="company_logo" name="company_logo"
+                    (change)="companyLogo($event)">
+                  <input type="hidden" id="company_logo_old" name="company_logo_old" [(ngModel)]="company_logo_old">
+                  <label class="custom-file-label" for="company_logo" id="company_logo_name">Choose
+                    file</label>
+                </div>
+                <span class="text-orange text-xs"><b> * Accept Images alone. Upto: 1200 * 600</b></span>
+              </div>
+              <div class="col-sm-4"></div>
+              <div class="col-sm-8 mt-2">
+                <img id="pre_company_logo" [src]="company_image_file" width="250px" height="150px" />
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group row">
+              <label for="created_by" class="col-sm-4"> Created By </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm" id="created_by" name="created_by" value=""
+                  [(ngModel)]="created_by" disabled />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="modified_by" class="col-sm-4"> Last Modified By
+              </label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm" id="modified_by" name="modified_by" value=""
+                  [(ngModel)]="modified_by" disabled />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="company_name" class="col-sm-4">Company Name <sup><i
+                    class="fas fa-asterisk fa-xs text-red"></i></sup></label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control form-control-sm required" id="company_name" name="company_name"
+                  value="" [(ngModel)]="company_name" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer text-center">
+        <button type="submit" class="btn btn-sm btn-info mr-2" (click)="saveCompany()"> Save </button>
+        <button type="button" class="btn btn-sm btn-default" (click)="cancel()"> Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal fade" id="modal-image">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header p-1 pl-2 pr-2">
+        <h4 class="modal-title"> Company Logo </h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">
+            &times;
+          </span>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        <img id="image_data" [src]="model_image" alt="Company image" height="150px" width="300px" />
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- split,
+replace -->

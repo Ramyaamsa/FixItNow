@@ -1,0 +1,113 @@
+<div class="col-sm-12 pt-2">
+  <div class="card card-outline card-cyan">
+    <div class="card-header">
+      <h3 class="card-title">Notification</h3>
+    </div>
+    <form id="custom_notification_form">
+      <div class="card-body">
+        <form id="menu_form" autocomplete="off">
+          <div class="row align-items-center">
+            <div class="col-sm-3">
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group row">
+                <label for="company_name" class="col-sm-4">Company</label>
+                <div class="col-sm-8">
+                  <select name="company_name" id="company_name" class="select2 required" style="width: 100%;">
+                    <option value="">~~ Select Company ~~</option>
+                    <option *ngFor="let data of companyList" value="{{ data.company_id }}">
+                      {{ data.company_code }} - {{ data.company_name }}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <div class="form-group row">
+                <div class="custom-control custom-checkbox">
+                  <input class="custom-control-input custom-control-input-info" type="checkbox" id="is_multiple"
+                    name="is_multiple" [(ngModel)]="isNotification" />
+                  <label for="is_multiple" class="custom-control-label">Is Notification</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="table-responsive">
+          <table class="table table-sm table-striped table-bordered">
+            <thead>
+              <tr class="text-center" id="designation_list">
+                <th rowspan="2"></th>
+                <th colspan="3">Plant Head</th>
+                <th colspan="3">Department Head</th>
+                <th colspan="3">Maintenance Head</th>
+                <th colspan="3">Engineer</th>
+              </tr>
+              <tr class="text-center" id="head_list">
+                <th>Email</th>
+                <th>App</th>
+                <th>Push</th>
+                <th>Email</th>
+                <th>App</th>
+                <th>Push</th>
+                <th>Email</th>
+                <th>App</th>
+                <th>Push</th>
+                <th>Email</th>
+                <th>App</th>
+                <th>Push</th>
+              </tr>
+            </thead>
+            <tbody id="notification_tbody">
+              <tr *ngFor="let data of statusList; let i = index">
+                <td><input type="hidden" id="status_id{{ i }}" value="{{ data.id }}" />
+                  <span id="status_name{{ i }}">{{ data.name }}</span></td>
+                <td>
+                  <input type="checkbox" id="plant_head_email{{ i }}" class="status_checkbox">
+                </td>
+                <td>
+                  <input type="checkbox" id="plant_head_app{{ i }}" class="status_checkbox">
+                </td>
+                <td>
+                  <input type="checkbox" id="plant_head_push{{ i }}" class="status_checkbox">
+                </td>
+                <td>
+                  <input type="checkbox" id="department_head_email{{ i }}" class="status_checkbox">
+                </td>
+                <td>
+                  <input type="checkbox" id="department_head_app{{ i }}" class="status_checkbox">
+                </td>
+                <td>
+                  <input type="checkbox" id="department_head_push{{ i }}" class="status_checkbox">
+                </td>
+                <td>
+                  <input type="checkbox" id="head_engineer_email{{ i }}" class="status_checkbox">
+                </td>
+                <td>
+                  <input type="checkbox" id="head_engineer_app{{ i }}" class="status_checkbox">
+                </td>
+                <td>
+                  <input type="checkbox" id="head_engineer_push{{ i }}" class="status_checkbox">
+                </td>
+                <td>
+                  <input type="checkbox" id="engineer_email{{ i }}" class="status_checkbox">
+                </td>
+                <td>
+                  <input type="checkbox" id="engineer_app{{ i }}" class="status_checkbox">
+                </td>
+                <td>
+                  <input type="checkbox" id="engineer_push{{ i }}" class="status_checkbox">
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card-footer text-center">
+        <button type="submit" class="btn btn-sm btn-info mr-2" (click)="saveCustomnotification()"> Save
+        </button>
+        <button type="button" class="btn btn-sm btn-default" id="btn_cancel" (click)="cancel()"> Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

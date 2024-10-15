@@ -1,0 +1,744 @@
+<div class="col-sm-12 pt-2">
+  <!-- <app-quick-ball></app-quick-ball> -->
+  <div class="card" *ngIf="!isPMDetail">
+    <div class="card-header p-2">
+      <h3 class="card-title">PM Checklist</h3>
+    </div>
+    <div class="card-body p-2 pl-4 pr-4">
+      <div class="row" id="pm_status_bar" style="align-items: center;justify-content: space-between;">
+        <ul class="nav nav-tabs nav-active" style="margin-right: 10px;padding-right: 20px;">
+          <li class="nav-item week_sub_tab" (click)="getPmCheckList('open','')">
+            <a class="nav-link active" id="open_tab" data-toggle="pill" href="#completed_week" role="tab">Open
+              {{ openCount }}</a>
+          </li>
+          <li class="nav-item week_sub_tab" (click)="getPmCheckList('assign','')">
+            <a class="nav-link" id="assign_tab" data-toggle="pill" role="tab">Assigned {{ assignCount }}</a>
+          </li>
+          <li class="nav-item week_sub_tab" (click)="getPmCheckList('reassign','')">
+            <a class="nav-link" id="reassign_tab" data-toggle="pill" role="tab">Re-assigned {{ reassignCount }} </a>
+          </li>
+          <li class="nav-item week_sub_tab" (click)="getPmCheckList('inprogress','')">
+            <a class="nav-link" id="on_progress_tab" data-toggle="pill" role="tab">On Progress {{ progressCount }} </a>
+          </li>
+          <li class="nav-item week_sub_tab" (click)="getPmCheckList('acknowledge','')">
+            <a class="nav-link" id="closed_tab" data-toggle="pill" role="tab">Acknowledge {{ acknowledgeCount }}</a>
+          </li>
+          <li class="nav-item week_sub_tab" (click)="getPmCheckList('fixed','')">
+            <a class="nav-link" id="closed_tab" data-toggle="pill" role="tab">Closed {{ closedCount }}</a>
+          </li>
+          <li class="nav-item week_sub_tab" (click)="getPmCheckList('upcoming','')">
+            <a class="nav-link" id="upcoming_tab" data-toggle="pill" role="tab">Upcoming {{ upcomingCount }}</a>
+          </li>
+          <li class="nav-item week_sub_tab" (click)="getPmCheckList('overdue','')">
+            <a class="nav-link" id="overdue_tab" data-toggle="pill" role="tab">Overdue {{ overdueCount }}</a>
+          </li>
+        </ul>
+      </div>
+      <div class="tab-content mt-2">
+        <div class="col-sm-12 mt-1">
+          <div class="row">
+            <div class="col-sm-4">
+              <!-- <div class="form-group row" id="from_date_div">
+                <label class="col-sm-4">From </label>
+                <div class="col-sm-8 input-group">
+                  <input type="text" class="form-control form-control-sm datepicker" id="from_date" name="from_date"
+                    value="" />
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <i class="far fa-calendar"></i>
+                    </div>
+                  </div>
+                </div>
+              </div> -->
+            </div>
+            <div class="col-sm-4">
+              <!-- <div class="form-group row" id="to_date_div">
+                <label class="col-sm-2">To </label>
+                <div class="col-sm-8">
+                  <div class="input-group">
+                    <input type="text" class="form-control form-control-sm datepicker" id="to_date" name="to_date"
+                      value="" />
+                    <div class="input-group-append">
+                      <div class="input-group-text">
+                        <i class="far fa-calendar"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-2">
+                  <button type="button" class="btn btn-sm btn-info" (click)="getBreakdownList('closed','')"> Apply
+                  </button></div>
+              </div> -->
+            </div>
+            <div class="col-sm-4">
+              <input type="text" id="search_breakdown" [(ngModel)]="searchTerm" (input)="searchPM()"
+                placeholder="Search Breakdown..." class="form-control form-control-sm" />
+            </div>
+          </div>
+        </div>
+        <div class="table-responsive" style="height: 80vh;">
+          <table class="table table-sm m-0 Pm-table" id="table_view">
+            <thead>
+              <tr>
+                <th>S.No</th>
+                <th>Service</th>
+                <th>Asset</th>
+                <th>Schedule</th>
+                <th>Department</th>
+                <th>Owner</th>
+                <th *ngIf="pmStatus=='inprogress' || pmStatus=='overdue' || pmStatus=='fixed'">Status</th>
+                <th>Detail</th>
+                <th>Plant</th>
+              </tr>
+            </thead>
+            <tbody id="pm_list_tbody">
+              <tr *ngFor="let pm of pmCheckList;let x=index">
+                <td>{{ x+1 }}</td>
+                <td> {{ pm.service_name }} </td>
+                <td> {{ pm.asset_name }} </td>
+                <td>{{ pm.schedule_date }} <br /> {{ pm.schedule_type }}</td>
+                <td>{{ pm.department_name }}</td>
+                <td>{{ pm.assigned_onwer_name }}</td>
+                <td *ngIf="pmStatus=='inprogress' || pmStatus=='overdue' || pmStatus=='fixed'">{{ pm.pm_status_name }}
+                </td>
+                <td>
+                  <!-- <i class="fas fa-comments"
+                    (click)="openComment(pm.checklist_id, pm.status_id, pm.assigned_owner, pm)"></i> -->
+                  <i class="fa fa-eye ml-2" (click)="viewPMDetail(pm)"></i>
+                </td>
+                <td>{{ pm.plant_name }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card" *ngIf="isPMDetail">
+    <div class="card-header">
+      <h3 class="card-title">PM Checklist - {{ pmDetail.service_name }}</h3>
+    </div>
+    <form id="pm_checklist_form" name="pm_checklist_form" method="post" class="form-horizontal">
+      <div class="card-body p-2">
+        <ul class="nav nav-tabs" style="background: #ebebeb;">
+          <li class="nav-item">
+            <a class="nav-link active" id="information-tab" data-toggle="pill" href="#general" role="tab">
+              <div class="progres">
+                <i class="fas fa-info"></i>
+                <p>General Info</p>
+              </div>
+            </a>
+          </li>
+          <li class="nav-item" *ngIf="generalList.length != 0">
+            <a class="nav-link" id="general-task-tab" data-toggle="pill" href="#general-task" role="tab">
+              <div class="progres two">
+                <i class="fas fa-user-cog"></i> <span>&nbsp; ({{ generalList.length }})</span>
+                <p>General Task</p>
+              </div>
+            </a>
+          </li>
+          <li class="nav-item" *ngIf="monitoringList.length != 0">
+            <a class="nav-link" id="monitoring-task-tab" data-toggle="pill" href="#monitoring-task" role="tab">
+              <div class="progres three">
+                <i class="fas fa-tasks"></i> <span>&nbsp; ({{ monitoringList.length }})</span>
+                <p>Monitoring Task</p>
+              </div>
+            </a>
+          </li>
+          <li class="nav-item" *ngIf="pmDetail.status_id >= 4">
+            <a class="nav-link" id="spares-tab" data-toggle="pill" href="#spares" role="tab">
+              <div class="progres four">
+                <i class="fas fa-tools"></i>
+                <p>Spares</p>
+              </div>
+            </a>
+          </li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane text-left fade show active" id="general" role="tabpanel">
+            <div *ngIf="pmDetail.status_id == 11" class="text-center mb-2">
+              <button type="button" class="btn btn-sm btn-success" (click)="updatePM(12)"
+                [attr.disabled]="(loginId == pmDetail.assigned_owner ) ? null : true">
+                Acknowledge <i class="fas fa-thumbs-up"></i>
+              </button>
+            </div>
+            <div class="card" style="background: #f1f1f1;">
+              <div class="card-header">
+                <h4 class="card-title">
+                  <i class="fas fa-circle-info"></i>&nbsp; General Information
+                </h4>
+              </div>
+              <div class="card-body p-2">
+                <h6 class="bg-light p-2"> PM Detail </h6>
+                <div class="row pl-3 pr-3">
+                  <div class="col-sm-4">
+                    <p class="mb-1"> PM No </p>
+                    <h6> {{ pmDetail.pm_no }} </h6>
+                    <p class="mb-1"> Service </p>
+                    <h6> {{ pmDetail.service_name }} </h6>
+                    <p class="mb-1"> Estimated Time (Hr) </p>
+                    <h6> {{ pmDetail.estimate_time }} </h6>
+                  </div>
+                  <div class="col-sm-4">
+                    <p class="mb-1"> Schedule Type </p>
+                    <h6> {{ pmDetail.schedule_type }} </h6>
+                    <p class="mb-1"> Created By </p>
+                    <h6>
+                      {{ pmDetail.created_user }}
+                    </h6>
+                    <p class="mb-1"> Completed Time </p>
+                    <h6> {{ pmDetail.complete_duration }} </h6>
+                  </div>
+                  <div class="col-sm-4">
+                    <p class="mb-1"> Schedule Date </p>
+                    <h6> {{ pmDetail.schedule_date }} </h6>
+                    <p class="mb-1"> Responsible Owner </p>
+                    <h6>
+                      <div class="select_box mb-0">
+                        <input type="hidden" name="assign_owner_id" id="assign_owner_id"
+                          value="{{ pmDetail.assigned_owner }}" />
+                        <p id="assign_owner_name" class="form_dropdown"
+                          [ngClass]="((pmDetail.assigned_owner != 0) && (pmDetail.status_id != 3)) ? 'disabled' : (engineerId == loginId || (userType != 'Super Admin' && userType != 'Engineer' && userType != 'Operator')) ? '' : 'disabled'"
+                          (click)="loadSelectBox('assign_owner')">{{ pmDetail.assigned_onwer_name }}
+                        </p>
+                        <i class="fas fa-sort-down dropdown_icon"></i>
+                      </div>
+                    </h6>
+                    <p class="mb-1"> Status </p>
+                    <h6> {{ pmDetail.pm_status_name }} </h6>
+                  </div>
+                </div>
+                <h6 class="bg-light p-2"> Asset Detail </h6>
+                <div class="row pl-3 pr-3">
+                  <div class="col-sm-4">
+                    <p class="mb-1">Plant</p>
+                    <h6> {{ pmDetail.plant_name }} </h6>
+                    <p class="mb-1"> Asset Group </p>
+                    <h6> {{ pmDetail.asset_group_name }} </h6>
+                  </div>
+                  <div class="col-sm-4">
+                    <p class="mb-1"> Department </p>
+                    <h6> {{ pmDetail.department_name }} </h6>
+                    <p class="mb-1"> Asset Model </p>
+                    <h6> {{ pmDetail.assigned_model_name }} </h6>
+                  </div>
+                  <div class="col-sm-4">
+                    <p class="mb-1"> Location </p>
+                    <h6> {{ pmDetail.location_name }} </h6>
+                    <p class="mb-1"> Asset </p>
+                    <h6> {{ pmDetail.asset_name }} </h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane text-left fade show" id="general-task" role="tabpanel"
+            aria-labelledby="general-task-tab">
+            <div class="card">
+              <div class="card-header">
+                <h4 class="card-title">
+                  <i class="fas fa-user-cog"></i>&nbsp; General List
+                </h4>
+              </div>
+              <div class="card-body p-2">
+                <div class="table-responsive">
+                  <table class="task-table">
+                    <thead>
+                      <tr>
+                        <th width="30%"> Task Name </th>
+                        <th width="20%"> Assign User </th>
+                        <th width="5%" *ngIf="pmDetail.status_id != 0"> Status </th>
+                        <th width="20%" *ngIf="pmDetail.status_id != 0"> Actions </th>
+                        <th width="10%" *ngIf="pmDetail.status_id != 0"> Yes / No </th>
+                        <th width="10%" *ngIf="pmDetail.status_id != 0"> Comments / Remarks </th>
+                        <th width="5%" *ngIf="pmDetail.status_id != 0"> </th>
+                      </tr>
+                    </thead>
+                    <tbody id="general_tbody">
+                      <tr *ngFor="let task of generalList;let x=index">
+                        <td class="text-left">
+                          <input type="hidden" id="task_status_{{ x+1 }}_id" value="{{ task.task_status_id }}" />
+                          <input type="hidden" id="pm_general{{ x+1 }}_id" value="{{ task.id }}" />
+                          <input type="hidden" id="task_id_{{ x+1 }}" value="{{ task.task_id }}" />
+                          <p class="text-primary mb-0">{{ task.task_name }}</p>
+                          <p class="mb-0">{{ task.task_description }}</p>
+                        </td>
+                        <td>
+                          <div class="d-flex align-items-center">
+                            <div class="select_box mb-0">
+                              <input type="hidden" name="general_engineer_{{ x+1 }}_id"
+                                id="general_engineer_{{ x+1 }}_id" value="{{ task.assigned_to }}" />
+                              <p id="general_engineer_{{ x+1 }}_name" class="form_dropdown"
+                                [ngClass]="((task.task_status_id == 14 || task.assigned_to != 0 || task.assigned_to != '') && (task.task_status_id != 3)) ? 'disabled' : (engineerId == loginId || (userType != 'Super Admin' && userType != 'Engineer' && userType != 'Operator')) ? '' : 'disabled'"
+                                (click)="loadSelectBox('general_engineer_'+(x+1))">{{ task.assigned_to_name }}
+                              </p>
+                              <i class="fas fa-sort-down dropdown_icon"></i>
+                            </div>
+                            <button
+                              *ngIf="task.task_status_id < 11 && task.task_status_id != 3 && task.task_status_id != 1"
+                              type="button" class="btn btn-sm btn-info btn-flat ml-2"
+                              [attr.disabled]="loginId == engineerId || userType == 'Department Head' || userType == 'Plant Head'|| userType == 'Engineer' ? null : true"
+                              id="general_reassign_{{ x+1 }}"
+                              (click)="updateStatus(3,'task_status_'+(x+1)+'_id',task)"><i class="fas fa-user-edit"
+                                style="font-size: 1rem;"></i>
+                            </button>
+                          </div>
+                        </td>
+                        <td *ngIf="pmDetail.status_id != 0"> {{ task.pm_status_name }} </td>
+                        <td *ngIf="pmDetail.status_id != 0">
+                          <div class="btn-group"
+                            *ngIf="task.task_status_id == 2 || task.task_status_id == 4 || task.task_status_id == 7 || task.task_status_id == 8">
+                            <button type="button" class="btn btn-sm" id="task_check_in_{{ x+1 }}"
+                              [ngClass]="(task.task_status_id == 2 || task.task_status_id == 7 || task.task_status_id == 8) ? 'btn-success' : 'btn-danger'"
+                              (click)="updateStatus(4,'task_status_'+(x+1)+'_id')"
+                              [attr.disabled]="(task.assigned_to == loginId && task.task_status_id != 4) ? null : true">
+                              Check In</button>
+                            <button type="button" class="btn btn-sm"
+                              [ngClass]="task.task_status_id == 4 ? 'btn-success' : 'btn-danger'"
+                              (click)="showpmStatus('general_check_out_div_'+(x+1))"
+                              [attr.disabled]="(task.assigned_to == loginId && task.task_status_id == 4) ? null : true">
+                              Check Out</button>
+                          </div>
+                          <div style="display: none;" id="general_check_out_div_{{ x+1 }}">
+                            <div class="d-flex align-items-center justify-content-center">
+                              <div class="custom-control custom-radio mr-2">
+                                <input class="custom-control-input" type="radio" name="check_out_{{ x+1 }}"
+                                  (change)="updateStatus(7,'task_status_'+(x+1)+'_id')" id="hold_{{ x+1 }}"
+                                  value="hold" />
+                                <label for="hold_{{ x+1 }}" class="custom-control-label">Hold</label>
+                              </div>
+                              <div class="custom-control custom-radio mr-2">
+                                <input class="custom-control-input" type="radio" name="check_out_{{ x+1 }}"
+                                  (change)="updateStatus(8,'task_status_'+(x+1)+'_id')" id="pending_{{ x+1 }}"
+                                  value="pending" />
+                                <label for="pending_{{ x+1 }}" class="custom-control-label">Pending</label>
+                              </div>
+                              <div class="custom-control custom-radio">
+                                <input class="custom-control-input" type="radio" name="check_out_{{ x+1 }}"
+                                  (change)="updateStatus(11,'task_status_'+(x+1)+'_id')" id="complete_{{ x+1 }}"
+                                  value="complete" />
+                                <label for="complete_{{ x+1 }}" class="custom-control-label">Complete</label>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td *ngIf="pmDetail.status_id != 0" class="d-flex justify-content-center align-items-center"
+                          style="margin-top: 0.6rem !important">
+                          <label class="yes_no">
+                            <input type="radio" name="general_status_{{ x+1 }}" id="general_status_{{ x+1 }}_yes"
+                              value="yes" [attr.checked]="task.task_status_val == 'yes' ? true : null"
+                              [attr.disabled]="(task.task_status_id == 4 && task.assigned_to == loginId) ? null : true">
+                            <span class="check"></span>
+                          </label>
+                          <label class="yes_no">
+                            <input type="radio" name="general_status_{{ x+1 }}" id="general_status_{{ x+1 }}_no"
+                              value="no" [attr.checked]="task.task_status_val == 'no' ? true : null"
+                              [attr.disabled]="(task.task_status_id == 4 && task.assigned_to == loginId) ? null : true">
+                            <span class="cross"></span>
+                          </label>
+                        </td>
+                        <td *ngIf="pmDetail.status_id != 0">
+                          <textarea rows="3" class="form-control form-control-sm" id="task_comment_{{ x+1 }}"
+                            [attr.disabled]="(task.task_status_id == 4 && task.assigned_to == loginId) ? null : true"
+                            name="task_comment_{{ x+1 }}" value="">{{ task.comment }}</textarea>
+                        </td>
+                        <td *ngIf="pmDetail.status_id != 0">
+                          <button *ngIf="task.task_status_id < 11" type="button" class="btn btn-sm btn-danger"
+                            id="general_cancel_{{ x+1 }}"
+                            [attr.disabled]="loginId == engineerId || userType == 'Department Head' || userType == 'Plant Head'|| userType == 'Engineer' ? null : true"
+                            (click)="updateStatus(14,'task_status_'+(x+1)+'_id',task)"><i
+                              class="fas fa-times"></i></button>
+                          <button type="button" title="Attachment" class="btn btn-sm" (click)="modelImage(task)"><i
+                              class="fas fa-images" style="font-size: 1rem;"></i></button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane text-left fade" id="monitoring-task" role="tabpanel"
+            aria-labelledby="monitoring-task-tab">
+            <div class="card">
+              <div class="card-header">
+                <h4 class="card-title">
+                  <i class="fas fa-desktop"></i>&nbsp; Monitoring List
+                </h4>
+              </div>
+              <div class="card-body p-2">
+                <div class="table-responsive">
+                  <table class="task-table">
+                    <thead>
+                      <tr>
+                        <th width="30%"> Task Name </th>
+                        <th width="20%"> Assign User </th>
+                        <th *ngIf="pmDetail.status_id != 0" width="5%"> Status </th>
+                        <th *ngIf="pmDetail.status_id != 0" width="20%"> Actions </th>
+                        <th *ngIf="pmDetail.status_id != 0" width="10%"> Value </th>
+                        <th *ngIf="pmDetail.status_id != 0" width="10%"> Comments / Remarks </th>
+                        <th *ngIf="pmDetail.status_id != 0" width="5%"> </th>
+                      </tr>
+                    </thead>
+                    <tbody id="monitoring_tbody">
+                      <tr *ngFor="let task of monitoringList;let x=index">
+                        <td class="text-left">
+                          <input type="hidden" id="monitor_status_{{ x+1 }}_id" value="{{ task.task_status_id }}" />
+                          <input type="hidden" id="pm_monitor{{ x+1 }}_id" value="{{ task.id }}" />
+                          <input type="hidden" id="monitor_task_id_{{ x+1 }}" value="{{ task.task_id }}" />
+                          <p class="text-primary mb-0">{{ task.task_name }}</p>
+                          <p class="mb-0">{{ task.task_description }}</p>
+                          <p class="mb-0">
+                            <span *ngIf="task.task_condition == 'less_than'">Less than or equal to</span>
+                            <span *ngIf="task.task_condition == 'greater_than'">Greater than or equal to</span>
+                            <span *ngIf="task.task_condition == 'on'">Equal to</span>
+                            <span *ngIf="task.task_condition == 'range'">Range from </span>
+                            <span> {{ task.mt_task_value }} </span>
+                            <span *ngIf="task.task_condition == 'range'"> to {{ task.mt_task_max_value }}</span>
+                          </p>
+                        </td>
+                        <td>
+                          <div class="d-flex align-items-center">
+                            <div class="select_box mb-0">
+                              <input type="hidden" name="monitor_engineer_{{ x+1 }}_id"
+                                id="monitor_engineer_{{ x+1 }}_id" value="{{ task.assigned_to }}" />
+                              <p id="monitor_engineer_{{ x+1 }}_name" class="form_dropdown"
+                                [ngClass]="((task.task_status_id == 14 || task.assigned_to != 0 || task.assigned_to != '') && (task.task_status_id != 3)) ? 'disabled' : (engineerId == loginId ||(userType != 'Super Admin' && userType != 'Engineer' && userType != 'Operator')) ? '' : 'disabled'"
+                                (click)="loadSelectBox('monitor_engineer_'+(x+1))">{{ task.assigned_to_name }}
+                              </p>
+                              <i class="fas fa-sort-down dropdown_icon"></i>
+                            </div>
+                            <button
+                              *ngIf="task.task_status_id < 11 && task.task_status_id != 3 && task.task_status_id != 1"
+                              type="button" class="btn btn-sm btn-info btn-flat ml-2"
+                              [attr.disabled]="loginId == engineerId || userType == 'Department Head' || userType == 'Plant Head'|| userType == 'Engineer' ? null : true"
+                              id="monitor_reassign_{{ x+1 }}"
+                              (click)="updateStatus(3,'monitor_status_'+(x+1)+'_id',task)"><i class="fas fa-user-edit"
+                                style="font-size: 1rem;"></i>
+                            </button>
+                          </div>
+                        </td>
+                        <td *ngIf="pmDetail.status_id != 0"> {{ task.pm_status_name }} </td>
+                        <td *ngIf="pmDetail.status_id != 0">
+                          <div class="btn-group"
+                            *ngIf="task.task_status_id == 2 || task.task_status_id == 4 || task.task_status_id == 7 || task.task_status_id == 8">
+                            <button type="button" class="btn btn-sm" id="monitor_check_in_{{ x+1 }}"
+                              [ngClass]="(task.task_status_id == 2 || task.task_status_id == 7 || task.task_status_id == 8) ? 'btn-success' : 'btn-danger'"
+                              (click)="updateStatus(4,'monitor_status_'+(x+1)+'_id')"
+                              [attr.disabled]="(task.assigned_to == loginId && task.task_status_id != 4) ? null : true">
+                              Check In</button>
+                            <button type="button" class="btn btn-sm"
+                              [ngClass]="task.task_status_id == 4 ? 'btn-success' : 'btn-danger'"
+                              (click)="showpmStatus('monitoring_check_out_div_'+(x+1))"
+                              [attr.disabled]="(task.assigned_to == loginId && task.task_status_id == 4) ? null : true">
+                              Check Out</button>
+                          </div>
+                          <div style="display: none;" id="monitoring_check_out_div_{{ x+1 }}">
+                            <div class="d-flex align-items-center justify-content-center">
+                              <div class="custom-control custom-radio mr-2">
+                                <input class="custom-control-input" type="radio" name="monitor_check_out_{{ x+1 }}"
+                                  (change)="updateStatus(7, 'monitor_status_'+(x+1)+'_id')" id="monitor_hold_{{ x+1 }}"
+                                  value="hold" />
+                                <label for="monitor_hold_{{ x+1 }}" class="custom-control-label">Hold</label>
+                              </div>
+                              <div class="custom-control custom-radio mr-2">
+                                <input class="custom-control-input" type="radio" name="monitor_check_out_{{ x+1 }}"
+                                  id="monitor_pending_{{ x+1 }}" value="pending"
+                                  (change)="updateStatus(8,'monitor_status_'+(x+1)+'_id')" />
+                                <label for="monitor_pending_{{ x+1 }}" class="custom-control-label">Pending</label>
+                              </div>
+                              <div class="custom-control custom-radio">
+                                <input class="custom-control-input" type="radio" name="monitor_check_out_{{ x+1 }}"
+                                  id="monitor_complete_{{ x+1 }}" value="complete"
+                                  (change)="updateStatus(11,'monitor_status_'+(x+1)+'_id')" />
+                                <label for="monitor_complete_{{ x+1 }}" class="custom-control-label">Complete</label>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td *ngIf="pmDetail.status_id != 0" class="d-flex justify-content-center align-items-center"
+                          style="margin-top: 0.6rem !important">
+                          <input type="text" class="form-control form-control-sm numeric_dot"
+                            id="monitoring_value_{{ x+1 }}" name="monitoring_value_{{ x+1 }}"
+                            [attr.disabled]="(task.task_status_id == 4 && task.assigned_to == loginId) ? null : true"
+                            value="{{ task.task_value }}" style="margin-top: 0.7rem;" />
+                        </td>
+                        <td *ngIf="pmDetail.status_id != 0">
+                          <textarea rows="3" class="form-control form-control-sm" id="monitor_comment_{{ x+1 }}"
+                            [attr.disabled]="(task.task_status_id == 4 && task.assigned_to == loginId) ? null : true"
+                            name="monitor_comment_{{ x+1 }}" value="">{{ task.comment }}</textarea>
+                        </td>
+                        <td *ngIf="pmDetail.status_id != 0">
+                          <button *ngIf="task.task_status_id < 11" type="button" class="btn btn-sm btn-danger"
+                            id="monitor_cancel_{{ x+1 }}"
+                            [attr.disabled]="loginId == engineerId || userType == 'Department Head' || userType == 'Plant Head'|| userType == 'Engineer' ? null : true"
+                            (click)="updateStatus(14,'monitor_status_'+(x+1)+'_id')"><i
+                              class="fas fa-times"></i></button>
+                          <button type="button" title="Attachment" class="btn btn-sm" (click)="modelImage(task)"><i
+                              class="fas fa-images" style="font-size: 1rem;"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane text-left fade" id="spares" role="tabpanel" aria-labelledby="spares-tab">
+            <div class="card">
+              <div class="card-header">
+                <h4 class="card-title">
+                  <i class="fas fa-cogs"></i>&nbsp; Spare List
+                </h4>
+                <div class="card-tools">
+                  <button type="button" class="btn btn-sm btn-primary mb-2" (click)="addSpare()"
+                    *ngIf="pmDetail.status_id == 4">
+                    <i class="fas fa-plus"></i> Spare </button>
+                </div>
+              </div>
+              <div class="card-body p-2">
+                <form id="spare_form" name="spare_form" autocomplete="off">
+                  <div class="table-responsive bg-white mb-2">
+                    <table class="table table-sm text-center mb-0 border-none">
+                      <thead>
+                        <tr>
+                          <th width="5%">
+                            <p *ngIf="(pmDetail.status_id == 4) && (userType == 'Engineer' || userType == 'Head/Engineer')"
+                              class="mb-0 text-primary" style="font-size: 1rem;" (click)="saveSpare()">
+                              <i class="far fa-save"></i>
+                            </p>
+                          </th>
+                          <th width="30%">Task</th>
+                          <th width="35%">Spare</th>
+                          <th width="10%">Hand Stock</th>
+                          <th width="10%">Unit Price</th>
+                          <th width="10%">Quantity</th>
+                        </tr>
+                      </thead>
+                      <tbody id="spare_tbody">
+                        <tr *ngFor="let data of sparePMList;let x = index" id="row_{{ x+1 }}">
+                          <td class="d-flex justify-content-center align-items-center">
+                            <div class="custom-control custom-checkbox">
+                              <input class="custom-control-input custom-control-input-info" type="checkbox"
+                                id="spare_check_{{ x+1 }}" name="spare_check_{{ x+1 }}" checked="true" />
+                              <label for="spare_check_{{ x+1 }}" class="custom-control-label"></label>
+                            </div>
+                            <button type="button" class="btn text-danger" title="Delete Spare"
+                              (click)="deleteSpare((x+1))"><i class="fas fa-trash"></i></button>
+                          </td>
+                          <td>
+                            <div class="select_box mb-0">
+                              <input type="hidden" name="task{{ x+1 }}_id" id="task{{ x+1 }}_id"
+                                value="{{ data.pm_task_id }}" />
+                              <p id="task{{ x+1 }}_name" class="form_dropdown" (click)="loadSelectBox('task'+(x+1))"
+                                [ngClass]="(data.spare_id == '') && (userType == 'Engineer' || userType == 'Head/Engineer') ? '' : 'disabled'">
+                                {{ data.task_name }}</p>
+                              <i class="fas fa-sort-down dropdown_icon"></i>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="select_box mb-0">
+                              <input type="hidden" name="spare{{ x+1 }}_id" id="spare{{ x+1 }}_id"
+                                value="{{ data.spare_id }}" />
+                              <p id="spare{{ x+1 }}_name" class="form_dropdown" (click)="loadSpareList((x+1))"
+                                [ngClass]="(data.spare_id == '') && (userType == 'Engineer' || userType == 'Head/Engineer') ? '' : 'disabled'">
+                                {{ data.spare_name }}</p>
+                              <i class="fas fa-sort-down dropdown_icon"></i>
+                            </div>
+                          </td>
+                          <td>
+                            <input type="hidden" id="hand_stock_{{ x+1 }}" value="{{ data.updated_stock }}" />
+                            <p class="m-0" id="available_qty_{{ x+1 }}">{{
+                                                                            data.spare_stock }}</p>
+                          </td>
+                          <td>
+                            <p class="m-0" id="unit_price_{{ x+1 }}">{{ data.spare_unit_price }}</p>
+                          </td>
+                          <td><input class="form-control numeric_dot" id="quantity_{{ x+1 }}" name="quantity_{{ x+1 }}"
+                              value="{{ data.consumed_qty }}" (input)="checkQuantity((x+1), $event)" />
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="text-center"
+                    *ngIf="(pmDetail.status_id == 4) && (userType == 'Engineer' || userType == 'Head/Engineer')">
+                    <button type="button" class="btn btn-sm btn-info mr-3" (click)="saveSpare()">Save</button>
+                    <button type="reset" class="btn btn-sm btn-default" (click)="cancel()">Cancel</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer text-center" *ngIf="pmDetail.status_id < 11">
+        <button type="submit" class="btn btn-sm btn-info mr-2" (click)="updatePM()"> Save </button>
+        <button type="button" class="btn btn-sm btn-default" (click)="cancel()"> Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Dropdown View -->
+<div class="modal fade" id="spare_list_modal" role="dialog" data-backdrop="static">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body p-2">
+        <button type="button" class="close float-right" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+        <h5 class="mb-3 text-info">Spare</h5>
+
+        <ul class="nav nav-tabs pt-2" style="background: #ebebeb;">
+          <li class="nav-item">
+            <a class="nav-link active pb-1" data-toggle="pill" href="#map_spare" role="tab">Mapping
+              Spares</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link pb-1" data-toggle="pill" href="#general_spare" role="tab">General Spares</a>
+          </li>
+        </ul>
+        <div class="tab-content p-2">
+          <div class="tab-pane fade show active" id="map_spare">
+            <div class="col-sm-12" style="position: relative;top: 0">
+              <input type="text" id="spare_search_box" (keyup)="searchSelectBox('spare_search_box','spare_list')"
+                placeholder="Search ..." class="form-control"
+                style="background: #dbdbdb;border:1px solid #ddd !important;padding-left: 2rem;" />
+              <i class="fas fa-search" style="position: absolute;top: 33%;left: 2%;color: #888"></i>
+            </div>
+            <ul class="search_dropdown" id="spare_list" *ngIf="spareMappingList.length > 0; else noData">
+              <li *ngFor="let item of spareMappingList" (click)="updateSpare(item)"> {{ item.spare_code }}
+                -
+                {{ item.spare_name }}
+              </li>
+            </ul>
+            <ng-template #noData>
+              <h5 class="text-center mt-2"> No Data Available </h5>
+            </ng-template>
+          </div>
+          <div class="tab-pane fade" id="general_spare">
+            <div class="col-sm-12" style="position: relative;top: 0">
+              <input type="text" id="general_spare_box"
+                (keyup)="searchSelectBox('general_spare_box','general_spare_list')" placeholder="Search ..."
+                class="form-control" style="background: #dbdbdb;border:1px solid #ddd !important;padding-left: 2rem;" />
+              <i class="fas fa-search" style="position: absolute;top: 33%;left: 2%;color: #888"></i>
+            </div>
+            <ul class="search_dropdown" id="general_spare_list" *ngIf="spareGeneralList.length > 0; else noInfo">
+              <li *ngFor="let data of spareGeneralList" (click)="updateSpare(data)"> {{ data.spare_code }}
+                -
+                {{ data.spare_name }}
+              </li>
+            </ul>
+            <ng-template #noInfo>
+              <h5 class="text-center mt-2"> No Data Available </h5>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modal-image">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header p-1 pl-2 pr-2">
+        <h4 class="modal-title"> Attachment </h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">
+            &times;
+          </span>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        <ul class="nav nav-tabs" style="background: #ebebeb;">
+          <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#image_div" role="tab">
+              Image
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#video_div" role="tab">
+              Video
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="pill" href="#doc_div" role="tab">
+              Document
+            </a>
+          </li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane text-left fade show active" id="image_div" role="tabpanel">
+            <img id="image_data" [src]="model_attachment" alt="Attachment" height="150px" width="300px" />
+          </div>
+          <div class="tab-pane text-left fade" id="video_div" role="tabpanel">
+            <video width="100%" height="auto" controls>
+              <source id="task_video_file" src="assets/images/dummy.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="tab-pane text-left fade" id="doc_div" role="tabpanel">
+            <iframe id="task_manual_file" src="assets/document/dummy.pdf" width="100%" height="400px"
+              style="border: none"></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Comment Ticket -->
+<div class="modal fade" id="comment_modal" data-backdrop="static">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content light">
+      <div class="modal-header bg-info p-1 pl-2 pr-3">
+        <h6 class="modal-title">
+          <span class="pl-2 text-white"> Comments </span>
+        </h6>
+      </div>
+      <form id="comment_form" name="comment_form" method="post">
+        <div class="modal-body p-3">
+          <textarea rows="3" class="form-control form-control-sm required" name="comment_desc" id="comment_desc"
+            [(ngModel)]="comments"></textarea>
+        </div>
+        <div class="modal-footer text-right p-1">
+          <button type="button" class="btn btn-sm btn-primary" (click)="commentSave()">Save</button>
+          <button type="reset" class="btn btn-sm btn-default">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Dropdown View -->
+<div class="modal fade" id="list_view_popup" role="dialog" data-backdrop="static">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body p-2">
+        <button type="button" class="close float-right" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+        <h5 class="mb-3 text-info">{{ listTitle }}</h5>
+        <div class="col-sm-12" style="position: relative;top: 0" *ngIf="listTitle != 'UOM'">
+          <input type="text" id="search_box" (keyup)="searchSelectBox('search_box','dropdown')" placeholder="Search ..."
+            class="form-control" style="background: #dbdbdb;border:1px solid #ddd !important;padding-left: 2rem;" />
+          <i class="fas fa-search" style="position: absolute;top: 33%;left: 2%;color: #888"></i>
+        </div>
+        <ul class="search_dropdown" id="dropdown" *ngIf="dropdownList.length > 0; else noData">
+          <li *ngFor="let item of dropdownList"
+            (click)="updateSelectBox(item.reason_id, item.reason_name, item.reason_div_id)">
+            {{ item.reason_name }}
+          </li>
+        </ul>
+        <ng-template #noData>
+          <h5 class="text-center mt-2"> No Data Available </h5>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>
